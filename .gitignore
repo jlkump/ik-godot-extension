@@ -1,0 +1,5 @@
+.sconsign.dblite
+Project/bin/libgdproject.windows.template_debug.x86_64.*
+/src/*.x86_64.obj
+.vscode/
+*.pdb
