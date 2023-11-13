@@ -1,15 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://cerbfg0qccj1i"]
+[gd_scene load_steps=4 format=3 uid="uid://cerbfg0qccj1i"]
 
 [ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/test_floor.tscn" id="1_7kdvu"]
 [ext_resource type="PackedScene" uid="uid://c55g5r0gxivp1" path="res://scenes/cog_walker.tscn" id="2_bmlo3"]
+[ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/player_cam.tscn" id="3_lnpyf"]
 
 [node name="Node3D" type="Node3D"]
 
 [node name="test_floor" parent="." instance=ExtResource("1_7kdvu")]
 transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
 
+[node name="player_cam" parent="." instance=ExtResource("3_lnpyf")]
+focus_object_path = NodePath("../CogWalker")
+focus_height_offset = 1.0
+orbit_distance = 3.8
+orbit_rotation = 0.001
+dead_zone_radius = 0.5
+
 [node name="CogWalker" parent="." instance=ExtResource("2_bmlo3")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -1.9812, -0.0741096, -0.473445)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.708906, 0.705303, 0, -0.705303, 0.708906, 0, 7.49629, 0)

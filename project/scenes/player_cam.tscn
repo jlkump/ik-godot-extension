@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dmlanl6sym1x7"]
+
+[node name="player_cam" type="CameraController3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D"]

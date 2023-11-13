@@ -18,14 +18,14 @@ sources = Glob("src/*.cpp")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "Project/bin/libgdproject.{}.{}.framework/libproject.{}.{}".format(
+        "project/bin/libgdproject.{}.{}.framework/libproject.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
     )
 else:
     library = env.SharedLibrary(
-        "Project/bin/libgdproject{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "project/bin/libgdproject{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 

@@ -6,14 +6,16 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/godot.hpp>
 
+// Project Includes
+#include "camera_controler_3d.h"
+
 using namespace godot;
 
 void initialize_project_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
-    // Register future classes here
-    // ClassDB::register_class<AudioManager>();
+    ClassDB::register_class<CameraController3D>();
 }
 
 void uninitialize_project_module(ModuleInitializationLevel p_level) {
