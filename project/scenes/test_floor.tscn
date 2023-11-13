@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://r8cvva0ef4ox"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_gat7f"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_os6sk"]
+size = Vector3(2.0072, 0.0880617, 1.95881)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a1o7b"]
+
+[node name="test_floor" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0359723, 0)
+physics_material_override = SubResource("PhysicsMaterial_gat7f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_os6sk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0359723, 0)
+mesh = SubResource("PlaneMesh_a1o7b")
+skeleton = NodePath("")

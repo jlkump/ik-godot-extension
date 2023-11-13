@@ -26,6 +26,9 @@ surface_material_override/0 = ExtResource("2_ibqa2")
 [node name="LegPoint_002" parent="cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003" index="1"]
 surface_material_override/0 = ExtResource("2_ibqa2")
 
+[node name="BodyBar_002" parent="cog_walker/Empty_002/Armature/Bone/Bone_001" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
 [node name="Cog Octo_008" parent="cog_walker/Empty_002/Armature/Bone/Bone_001" index="2"]
 surface_material_override/0 = ExtResource("2_ibqa2")
 
@@ -42,6 +45,9 @@ transform = Transform3D(0.995588, -0.0347666, -0.0871556, 0.0348994, 0.999391, 8
 surface_material_override/0 = ExtResource("2_ibqa2")
 
 [node name="LegPoint_003" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012/Bone_0022/Bone_0032" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="BodyBar_003" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012" index="1"]
 surface_material_override/0 = ExtResource("2_ibqa2")
 
 [node name="Cog Octo_010" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012" index="2"]
@@ -62,6 +68,9 @@ surface_material_override/0 = ExtResource("2_ibqa2")
 [node name="LegPoint" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013/Bone_0023/Bone_0033" index="1"]
 surface_material_override/0 = ExtResource("2_ibqa2")
 
+[node name="BodyBar" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
 [node name="Cog Octo_002" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013" index="2"]
 surface_material_override/0 = ExtResource("2_ibqa2")
 
@@ -78,6 +87,9 @@ transform = Transform3D(0.992546, -9.74253e-08, 0.121869, 8.74228e-08, 1, 8.7422
 surface_material_override/0 = ExtResource("2_ibqa2")
 
 [node name="LegPoint_001" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014/Bone_0024/Bone_0034" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="BodyBar_001" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014" index="1"]
 surface_material_override/0 = ExtResource("2_ibqa2")
 
 [node name="Cog Octo_006" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014" index="2"]
@@ -97,5 +109,8 @@ surface_material_override/0 = ExtResource("2_ibqa2")
 
 [node name="Eye" parent="cog_walker/Empty_002" index="10"]
 surface_material_override/0 = ExtResource("3_hngiq")
+
+[node name="Pipe" parent="cog_walker/Empty_002" index="17"]
+surface_material_override/0 = ExtResource("2_ibqa2")
 
 [editable path="cog_walker"]

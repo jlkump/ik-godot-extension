@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cerbfg0qccj1i"]
+
+[ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/test_floor.tscn" id="1_7kdvu"]
+[ext_resource type="PackedScene" uid="uid://c55g5r0gxivp1" path="res://scenes/cog_walker.tscn" id="2_bmlo3"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="test_floor" parent="." instance=ExtResource("1_7kdvu")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
+
+[node name="CogWalker" parent="." instance=ExtResource("2_bmlo3")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.708906, 0.705303, 0, -0.705303, 0.708906, 0, 7.49629, 0)
+light_energy = 0.3
