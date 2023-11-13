@@ -1,0 +1,101 @@
+[gd_scene load_steps=4 format=3 uid="uid://c55g5r0gxivp1"]
+
+[ext_resource type="PackedScene" uid="uid://bti7pn1ootrtb" path="res://resources/cog_walker.glb" id="1_uppwy"]
+[ext_resource type="Material" uid="uid://beegm71sesr6n" path="res://resources/materials/temp_metal.tres" id="2_ibqa2"]
+[ext_resource type="Material" uid="uid://78j8wsnbhyes" path="res://resources/materials/temp_eye.tres" id="3_hngiq"]
+
+[node name="CogWalker" type="Node3D"]
+
+[node name="cog_walker" parent="." instance=ExtResource("1_uppwy")]
+
+[node name="Bone" parent="cog_walker/Empty_002/Armature" index="0"]
+transform = Transform3D(1, -1.74846e-07, 3.82137e-15, 3.82137e-15, 4.37114e-08, 1, -1.74846e-07, -1, 4.37114e-08, 0, 0, 0.49984)
+
+[node name="Bone_001" parent="cog_walker/Empty_002/Armature/Bone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08035e-11, 0.456477, 1.30577e-10)
+
+[node name="Bone_002" parent="cog_walker/Empty_002/Armature/Bone/Bone_001" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37799e-09, 1.24999, 1.38716e-09)
+
+[node name="Bone_003" parent="cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002" index="0"]
+transform = Transform3D(0.999907, 0.0104714, 0.00872664, -0.0104718, 0.999945, 8.74228e-08, -0.00872616, -9.14709e-05, 0.999962, 1.8466e-09, 1.69988, -9.52209e-13)
+
+[node name="Cog Octo_007" parent="cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003" index="0"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="LegPoint_002" parent="cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Octo_008" parent="cog_walker/Empty_002/Armature/Bone/Bone_001" index="2"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Bone_0012" parent="cog_walker/Empty_002/Armature_001/Bone2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662678, 0)
+
+[node name="Bone_0022" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.01577e-10, 1.20658, -6.0051e-10)
+
+[node name="Bone_0032" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012/Bone_0022" index="0"]
+transform = Transform3D(0.995588, -0.0347666, -0.0871556, 0.0348994, 0.999391, 8.74228e-08, 0.0871025, -0.00304177, 0.996195, -5.28645e-09, 1.69988, 2.65478e-08)
+
+[node name="Cog Octo_009" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012/Bone_0022/Bone_0032" index="0"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="LegPoint_003" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012/Bone_0022/Bone_0032" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Octo_010" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012" index="2"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Bone_0013" parent="cog_walker/Empty_002/Armature_003/Bone3" index="0"]
+transform = Transform3D(-0.902586, 0, 0.430511, 0, 1, 0, -0.430511, 0, -0.902586, 3.82516e-10, 0.762638, -6.62121e-10)
+
+[node name="Bone_0023" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013" index="0"]
+transform = Transform3D(-0.900307, 0.00471404, -0.435231, 0.00523597, 0.999986, 0, 0.435225, -0.00227885, -0.900319, -1.84629e-08, 1.20658, 1.52015e-08)
+
+[node name="Bone_0033" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013/Bone_0023" index="0"]
+transform = Transform3D(-0.992472, -0.0121258, -0.121869, -0.0122169, 0.999925, 8.74228e-08, 0.12186, 0.00148895, -0.992546, -1.48985e-08, 1.69988, 2.16923e-09)
+
+[node name="Cog Octo_001" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013/Bone_0023/Bone_0033" index="0"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="LegPoint" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013/Bone_0023/Bone_0033" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Octo_002" parent="cog_walker/Empty_002/Armature_003/Bone3/Bone_0013" index="2"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Bone_0014" parent="cog_walker/Empty_002/Armature_005/Bone4" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05155e-10, 0.80869, 7.65262e-10)
+
+[node name="Bone_0024" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.31291e-08, 1.20658, -2.63554e-09)
+
+[node name="Bone_0034" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014/Bone_0024" index="0"]
+transform = Transform3D(0.992546, -9.74253e-08, 0.121869, 8.74228e-08, 1, 8.74228e-08, -0.121869, -7.6117e-08, 0.992546, 6.16331e-12, 1.69988, -1.75919e-10)
+
+[node name="Cog Octo_005" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014/Bone_0024/Bone_0034" index="0"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="LegPoint_001" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014/Bone_0024/Bone_0034" index="1"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Octo_006" parent="cog_walker/Empty_002/Armature_005/Bone4/Bone_0014" index="2"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Base Cog_001" parent="cog_walker/Empty_002" index="5"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Octo_003" parent="cog_walker/Empty_002" index="6"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Octo_004" parent="cog_walker/Empty_002" index="7"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Cog Quad_001" parent="cog_walker/Empty_002" index="8"]
+surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="Eye" parent="cog_walker/Empty_002" index="10"]
+surface_material_override/0 = ExtResource("3_hngiq")
+
+[editable path="cog_walker"]
