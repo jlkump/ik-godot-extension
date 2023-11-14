@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="CS354R_FinalProject"
+run/main_scene="res://scenes/test_scene.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameManagerSingleton="*res://scenes/singletons/game_manager_singleton.tscn"
 
 [dotnet]
 

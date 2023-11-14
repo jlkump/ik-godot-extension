@@ -10,6 +10,8 @@
 transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
 
 [node name="player_cam" parent="." instance=ExtResource("3_lnpyf")]
+input_lateral_rotation_speed = 0.0401
+input_vertical_rotation_speed = 0.0251
 focus_object_path = NodePath("../CogWalker")
 focus_height_offset = 1.0
 orbit_distance = 3.8

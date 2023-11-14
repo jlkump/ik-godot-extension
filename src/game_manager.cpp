@@ -1,5 +1,10 @@
 #include "game_manager.h"
 
+#include <godot_cpp/classes/window.hpp>
+
+// Utility includes
+#include <godot_cpp/variant/utility_functions.hpp>
+
 using namespace godot;
 
 GameManager* GameManager::instance;
@@ -23,6 +28,7 @@ bool GameManager::is_valid_state(State s) {
         case MENU:
             return true;
     }
+    return false;
 }
 
 GameManager* GameManager::get_singleton() {
@@ -34,6 +40,20 @@ GameManager* GameManager::get_singleton() {
 }
 
 void GameManager::set_game_state(State s) {
+    switch (game_state_) {
+        case PAUSED:
+            if (s == PLAYING) {
+                if (Input::get_singleton() != nullptr) {
+                    Input::get_singleton()->set_mouse_mode(Input::MOUSE_MODE_CONFINED_HIDDEN);
+                }
+            }
+        case PLAYING:
+            if (s == MENU || s == PAUSED) {
+                if (Input::get_singleton() != nullptr) {
+                    Input::get_singleton()->set_mouse_mode(Input::MOUSE_MODE_VISIBLE);
+                }
+            }
+    }
     game_state_ = s;
 }
 
@@ -49,6 +69,9 @@ void GameManager::toggle_pause() {
 
 void GameManager::_ready() {
     instance = this;
+    if (Engine::get_singleton() != nullptr && !Engine::get_singleton()->is_editor_hint()) {
+        set_game_state(game_state_);
+    }
 }
 
 void GameManager::_process(double delta) {

@@ -4,7 +4,9 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/classes/engine.hpp>
-#include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/input_event.hpp>
+#include <godot_cpp/classes/input_event_mouse_motion.hpp>
+#include <godot_cpp/classes/window.hpp>
 
 // Utility includes
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -19,6 +21,8 @@ void CameraController3D::_bind_methods() {
 
     BIND_GETTER_SETTER(CameraController3D, cam_move_speed, PropertyInfo(Variant::FLOAT, "cam_move_speed", PROPERTY_HINT_RANGE, "0.1,10,0.1"));
     BIND_GETTER_SETTER(CameraController3D, cam_rotation_speed, PropertyInfo(Variant::FLOAT, "cam_rotation_speed", PROPERTY_HINT_RANGE, "0.1,10,0.1"));
+    BIND_GETTER_SETTER(CameraController3D, input_lateral_rotation_speed, PropertyInfo(Variant::FLOAT, "input_lateral_rotation_speed", PROPERTY_HINT_RANGE, "0.0001,0.4,0.001"));
+    BIND_GETTER_SETTER(CameraController3D, input_vertical_rotation_speed, PropertyInfo(Variant::FLOAT, "input_vertical_rotation_speed", PROPERTY_HINT_RANGE, "0.0001,0.4,0.001"));
 
     BIND_GETTER_SETTER(CameraController3D, focus_object_path, PropertyInfo(Variant::NODE_PATH, "focus_object_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
 
@@ -61,6 +65,8 @@ CameraController3D::CameraController3D() :
     cam_(nullptr),
     cam_move_speed_(3.0f),
     cam_rotation_speed_(3.0f),
+    input_lateral_rotation_speed_(0.001f),
+    input_vertical_rotation_speed_(0.001f),
     is_paused_(false),
     is_input_responsive_(true),
     focus_object_path_(""),
@@ -142,7 +148,19 @@ void CameraController3D::_process(double delta) {
             view_ray_->set_target_position(view_ray_->get_global_transform().xform_inv(focus_object_->get_global_position()));
         }
     }
+}
 
+void CameraController3D::_input(const Ref<InputEvent>& event) {
+    if (!event.is_null() && event.is_valid() && Input::get_singleton() != nullptr) {
+        InputEventMouseMotion* e = Object::cast_to<InputEventMouseMotion>(event.ptr());
+        if (e != nullptr && !is_paused_ && is_input_responsive_ && get_window() != nullptr) {
+            static Vector2 center = get_window()->get_size() / 2.0f;
+            Vector2 mouse_movement = (e->get_position() - center).normalized();
+            orbit_angle_ = Math::clamp((float) mouse_movement.y * input_vertical_rotation_speed_ + orbit_angle_, -0.1f, (3.14f / 180.0f) * 70.0f);
+            orbit_rotation_ = fmod(Math::clamp(mouse_movement.x * input_lateral_rotation_speed_, -1.0f, 1.0f) + orbit_rotation_, 6.28);
+            get_viewport()->warp_mouse(center);
+        }
+    }
 }
 
 void CameraController3D::add_ignore_collision_object(CollisionObject3D* ignore_obj) {
@@ -177,6 +195,20 @@ float CameraController3D::get_cam_rotation_speed() const {
 }
 void CameraController3D::set_cam_rotation_speed(const float speed) {
     cam_rotation_speed_ = speed;
+}
+
+float CameraController3D::get_input_lateral_rotation_speed() const {
+    return input_lateral_rotation_speed_;
+}
+void CameraController3D::set_input_lateral_rotation_speed(const float speed) {
+    input_lateral_rotation_speed_ = speed;
+}
+
+float CameraController3D::get_input_vertical_rotation_speed() const {
+    return input_vertical_rotation_speed_;
+}
+void CameraController3D::set_input_vertical_rotation_speed(const float speed) {
+    input_vertical_rotation_speed_ = speed;
 }
 
 NodePath CameraController3D::get_focus_object_path() const {

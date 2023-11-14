@@ -5,6 +5,7 @@
 #include <godot_cpp/classes/ray_cast3d.hpp>
 #include <godot_cpp/classes/collision_object3d.hpp>
 #include <godot_cpp/classes/remote_transform3d.hpp>
+#include <godot_cpp/classes/input.hpp>
 
 #include <unordered_set>
 
@@ -18,6 +19,9 @@ namespace godot {
         Camera3D* cam_;
         float cam_move_speed_;
         float cam_rotation_speed_;
+        float input_lateral_rotation_speed_;
+        float input_vertical_rotation_speed_;
+
         bool is_paused_;
         bool is_input_responsive_; 
 
@@ -52,6 +56,7 @@ namespace godot {
 
         void _ready();
         void _process(double delta);
+        void _input(const Ref<InputEvent>& event);
 
 
         void add_ignore_collision_object(CollisionObject3D* ignore_obj);
@@ -61,6 +66,8 @@ namespace godot {
 
         DECLARE_GETTER_SETTER(float, cam_move_speed);
         DECLARE_GETTER_SETTER(float, cam_rotation_speed);
+        DECLARE_GETTER_SETTER(float, input_lateral_rotation_speed);
+        DECLARE_GETTER_SETTER(float, input_vertical_rotation_speed);
 
         DECLARE_GETTER_SETTER(NodePath, focus_object_path);
         DECLARE_GETTER_SETTER(float, focus_height_offset);
