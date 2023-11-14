@@ -1,4 +1,4 @@
-#include "camera_controler_3d.h"
+#include "camera_controller_3d.h"
 
 // Godot includes
 #include <godot_cpp/core/class_db.hpp>
@@ -18,6 +18,8 @@ using namespace godot;
 
 void CameraController3D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_paused_state", "is_paused"), &CameraController3D::set_paused_state);
+
+    ADD_SIGNAL(MethodInfo("camera_transform_updated", PropertyInfo(Variant::TRANSFORM3D, "cam_transform")));
 
     BIND_GETTER_SETTER(CameraController3D, cam_move_speed, PropertyInfo(Variant::FLOAT, "cam_move_speed", PROPERTY_HINT_RANGE, "0.1,10,0.1"));
     BIND_GETTER_SETTER(CameraController3D, cam_rotation_speed, PropertyInfo(Variant::FLOAT, "cam_rotation_speed", PROPERTY_HINT_RANGE, "0.1,10,0.1"));
@@ -147,6 +149,7 @@ void CameraController3D::_process(double delta) {
         if (view_ray_ != nullptr) {
             view_ray_->set_target_position(view_ray_->get_global_transform().xform_inv(focus_object_->get_global_position()));
         }
+        emit_signal("camera_transform_updated", current);
     }
 }
 
