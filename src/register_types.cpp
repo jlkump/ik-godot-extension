@@ -7,7 +7,8 @@
 #include <godot_cpp/godot.hpp>
 
 // Project Includes
-#include "camera_controler_3d.h"
+#include "camera_controller_3d.h"
+#include "player_controller_3d.h"
 #include "game_manager.h"
 
 using namespace godot;
@@ -17,6 +18,7 @@ void initialize_project_module(ModuleInitializationLevel p_level) {
         return;
     }
     ClassDB::register_class<CameraController3D>();
+    ClassDB::register_class<PlayerController3D>();
     ClassDB::register_class<GameManager>();
 }
 
