@@ -9,6 +9,7 @@
 // Project Includes
 #include "camera_controller_3d.h"
 #include "player_controller_3d.h"
+#include "inverse_kinematic_controller.h"
 #include "game_manager.h"
 
 using namespace godot;
@@ -19,6 +20,7 @@ void initialize_project_module(ModuleInitializationLevel p_level) {
     }
     ClassDB::register_class<CameraController3D>();
     ClassDB::register_class<PlayerController3D>();
+    ClassDB::register_class<InverseKinematicController>();
     ClassDB::register_class<GameManager>();
 }
 

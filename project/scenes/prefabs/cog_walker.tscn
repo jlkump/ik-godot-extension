@@ -12,6 +12,9 @@ size = Vector3(4.55625, 2.40814, 4.10588)
 [node name="cog_walker" parent="." instance=ExtResource("1_uppwy")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
+[node name="Armature" parent="cog_walker/Empty_002" index="0"]
+transform = Transform3D(0.493871, 0, 0, 0, 0.493871, 0, 0, 0, 0.493871, 0, -1.97284, -0.995024)
+
 [node name="Bone" parent="cog_walker/Empty_002/Armature" index="0"]
 transform = Transform3D(1, -1.74846e-07, 3.82137e-15, 3.82137e-15, 4.37114e-08, 1, -1.74846e-07, -1, 4.37114e-08, 0, 0, 0.49984)
 
@@ -43,7 +46,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662678, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.01577e-10, 1.20658, -6.0051e-10)
 
 [node name="Bone_0032" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012/Bone_0022" index="0"]
-transform = Transform3D(0.995588, -0.0347666, -0.0871556, 0.0348994, 0.999391, 8.74228e-08, 0.0871025, -0.00304177, 0.996195, -5.28645e-09, 1.69988, 2.65478e-08)
+transform = Transform3D(0.994371, -0.0173568, -0.104528, 0.0174524, 0.999848, 0, 0.104513, -0.00182427, 0.994522, -5.28645e-09, 1.69988, 2.65478e-08)
 
 [node name="Cog Octo_009" parent="cog_walker/Empty_002/Armature_001/Bone2/Bone_0012/Bone_0022/Bone_0032" index="0"]
 surface_material_override/0 = ExtResource("2_ibqa2")
@@ -120,5 +123,7 @@ surface_material_override/0 = ExtResource("2_ibqa2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.404894, 0)
 shape = SubResource("BoxShape3D_kbeh4")
+
+[node name="InverseKinematicController" type="InverseKinematicController" parent="."]
 
 [editable path="cog_walker"]
