@@ -156,8 +156,10 @@ void CameraController3D::_input(const Ref<InputEvent>& event) {
         if (e != nullptr && !is_paused_ && is_input_responsive_ && get_window() != nullptr) {
             static Vector2 center = get_window()->get_size() / 2.0f;
             Vector2 mouse_movement = (e->get_position() - center).normalized();
-            orbit_angle_ = Math::clamp((float) mouse_movement.y * input_vertical_rotation_speed_ + orbit_angle_, -0.1f, (3.14f / 180.0f) * 70.0f);
-            orbit_rotation_ = fmod(Math::clamp(mouse_movement.x * input_lateral_rotation_speed_, -1.0f, 1.0f) + orbit_rotation_, 6.28);
+            float lateral_rotate_angle = Math::clamp(mouse_movement.x * input_lateral_rotation_speed_, -1.0f, 1.0f);
+            orbit_angle_ = Math::clamp((float) mouse_movement.y * input_vertical_rotation_speed_ + orbit_angle_, -(3.14f / 180.0f) * 10.0f, (3.14f / 180.0f) * 45.0f);
+            orbit_rotation_ = fmod(lateral_rotate_angle + orbit_rotation_, 6.28f);
+            focus_rotation_offset_ = fmod(lateral_rotate_angle + focus_rotation_offset_, 6.28f);
             get_viewport()->warp_mouse(center);
         }
     }

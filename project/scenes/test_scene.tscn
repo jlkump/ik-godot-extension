@@ -14,8 +14,10 @@ input_lateral_rotation_speed = 0.0401
 input_vertical_rotation_speed = 0.0251
 focus_object_path = NodePath("../CogWalker")
 focus_height_offset = 1.0
+focus_radius_offset = 2.0
+focus_rotation_offset = 1.501
 orbit_distance = 3.8
-orbit_rotation = 0.001
+orbit_rotation = 3.141
 dead_zone_radius = 0.5
 
 [node name="CogWalker" parent="." instance=ExtResource("2_bmlo3")]
