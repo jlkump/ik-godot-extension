@@ -8,10 +8,9 @@
 #include "helpers.h"
 
 namespace godot {
-    class PlayerController3D : public Node {
-        GDCLASS(PlayerController3D, Node)
+    class PlayerController3D : public CharacterBody3D {
+        GDCLASS(PlayerController3D, CharacterBody3D)
     private:
-        CharacterBody3D* player_;
 
         CameraController3D* camera_controller_;
         NodePath camera_controller_path_;
@@ -48,6 +47,8 @@ namespace godot {
         void set_paused_state(bool is_paused);
 
         DECLARE_GETTER_SETTER(NodePath, camera_controller_path)
+        DECLARE_GETTER_SETTER(float, move_speed)
+        DECLARE_GETTER_SETTER(float, run_speed)
     };
 }
 

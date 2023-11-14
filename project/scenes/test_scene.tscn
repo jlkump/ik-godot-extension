@@ -10,7 +10,9 @@
 transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
 
 [node name="player_cam" parent="." instance=ExtResource("3_lnpyf")]
-input_lateral_rotation_speed = 0.0401
+cam_move_speed = 10.0
+cam_rotation_speed = 10.0
+input_lateral_rotation_speed = 0.0701
 input_vertical_rotation_speed = 0.0251
 focus_object_path = NodePath("../CogWalker")
 focus_height_offset = 1.0
@@ -21,7 +23,9 @@ orbit_rotation = 3.141
 dead_zone_radius = 0.5
 
 [node name="CogWalker" parent="." instance=ExtResource("2_bmlo3")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -1.9812, -0.0741096, -0.473445)
+camera_controller_path = NodePath("../player_cam")
+move_speed = 4.1
+run_speed = 6.1
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.708906, 0.705303, 0, -0.705303, 0.708906, 0, 7.49629, 0)

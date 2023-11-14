@@ -15,10 +15,12 @@ void PlayerController3D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("on_camera_transform_updated", "transform"), &PlayerController3D::on_camera_transform_updated);
 
     BIND_GETTER_SETTER(PlayerController3D, camera_controller_path, PropertyInfo(Variant::NODE_PATH, "camera_controller_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "CameraController3D"))
+    BIND_GETTER_SETTER(PlayerController3D, move_speed, PropertyInfo(Variant::FLOAT, "move_speed", PROPERTY_HINT_RANGE, "0.1,20.0,0.5"));
+    BIND_GETTER_SETTER(PlayerController3D, run_speed, PropertyInfo(Variant::FLOAT, "run_speed", PROPERTY_HINT_RANGE, "0.1,20.0,0.5"));
 }
 
 bool PlayerController3D::is_valid() {
-    return player_ != nullptr;
+    return is_node_ready();
 }
 
 bool PlayerController3D::is_valid_state(State s) {
@@ -34,7 +36,6 @@ void PlayerController3D::on_camera_transform_updated(Transform3D transform) {
 }
 
 PlayerController3D::PlayerController3D() :
-    player_(nullptr),
     player_state_(IDLE),
     is_paused_(false),
     movement_speed_(1.0f),
@@ -46,15 +47,6 @@ PlayerController3D::PlayerController3D() :
 PlayerController3D::~PlayerController3D() {}
 
 void PlayerController3D::_ready() {
-    TypedArray<Node> children = get_children();
-    for (int i = 0; i < children.size(); i++) {
-        if (Object::cast_to<CharacterBody3D>(children[i]) != nullptr) {
-            player_ = Object::cast_to<CharacterBody3D>(children[i]);
-        }
-    }
-    if (player_ == nullptr) {
-        UtilityFunctions::printerr("Player Controller: Player controller requires a CharacterBody3D as a child.");
-    }
     if (GameManager::get_singleton() != nullptr) {
         GameManager* gm = GameManager::get_singleton();
         gm->connect("game_pause", Callable(this, "set_paused_state"));
@@ -72,7 +64,7 @@ void PlayerController3D::_process(double delta) {
     if (Input::get_singleton()->is_action_pressed("move_forward")) {
         input_vector.y += 1;
     }
-    if (Input::get_singleton()->is_action_pressed("move_backward")) {
+    if (Input::get_singleton()->is_action_pressed("move_back")) {
         input_vector.y -= 1;
     }
     if (Input::get_singleton()->is_action_pressed("move_left")) {
@@ -101,14 +93,17 @@ void PlayerController3D::_process(double delta) {
     }
 
     Vector3 move_vector = Vector3(0, 0, 0);
-    if (!player_->is_on_floor()) {
+    if (!is_on_floor()) {
         move_vector.y = -9.8f;
     }
     switch (player_state_) {
         case IDLE:
             break;
         case MOVE:
-            move_vector = (input_vector.y * movement_basis_.xform(Vector3(0, 0, 1)) + input_vector.x * movement_basis_.xform(Vector3(1, 0, 0))).normalized();
+            move_vector = (
+                -input_vector.y * Vector3(movement_basis_.xform(Vector3(0, 0, 1)).x, 0, movement_basis_.xform(Vector3(0, 0, 1)).z)
+                + input_vector.x * Vector3(movement_basis_.xform(Vector3(1, 0, 0)).x, 0, movement_basis_.xform(Vector3(1, 0, 0)).z)
+            ).normalized();
             if (is_running_) {
                 move_vector *= running_speed_;
             } else {
@@ -118,9 +113,9 @@ void PlayerController3D::_process(double delta) {
         case JUMP:
             break;
     }
-    player_->set_velocity(move_vector);
-    player_->move_and_slide();
-    if (player_->is_on_floor() && player_state_ == JUMP) {
+    set_velocity(move_vector);
+    move_and_slide();
+    if (is_on_floor() && player_state_ == JUMP) {
         set_player_state(IDLE);
     }
 }
@@ -137,13 +132,28 @@ NodePath PlayerController3D::get_camera_controller_path() const {
     return camera_controller_path_;
 }
 void PlayerController3D::set_camera_controller_path(const NodePath path) {
+    camera_controller_path_ = path;
     if (camera_controller_ != nullptr) {
         camera_controller_->disconnect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
     }
-    camera_controller_ = get_node<CameraController3D>(path);
+    camera_controller_ = get_node<CameraController3D>(camera_controller_path_);
     if (camera_controller_ == nullptr) {
         UtilityFunctions::printerr("Player Controller: Could not find CameraController3D at given path: ", path);
     } else {
-        camera_controller_->connect("camera_transorm_updated", Callable(this, "on_camera_transform_updated"));
+        camera_controller_->connect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
     }
+}
+
+float PlayerController3D::get_move_speed() const {
+    return movement_speed_;
+}
+void PlayerController3D::set_move_speed(const float speed) {
+    movement_speed_ = speed;
+}
+
+float PlayerController3D::get_run_speed() const {
+    return running_speed_;
+}
+void PlayerController3D::set_run_speed(const float speed) {
+    running_speed_ = speed;
 }

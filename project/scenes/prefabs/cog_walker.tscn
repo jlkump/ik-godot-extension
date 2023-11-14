@@ -1,12 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://c55g5r0gxivp1"]
+[gd_scene load_steps=5 format=3 uid="uid://c55g5r0gxivp1"]
 
 [ext_resource type="PackedScene" uid="uid://bti7pn1ootrtb" path="res://resources/cog_walker.glb" id="1_uppwy"]
 [ext_resource type="Material" uid="uid://beegm71sesr6n" path="res://resources/materials/temp_metal.tres" id="2_ibqa2"]
 [ext_resource type="Material" uid="uid://78j8wsnbhyes" path="res://resources/materials/temp_eye.tres" id="3_hngiq"]
 
-[node name="CogWalker" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_kbeh4"]
+size = Vector3(4.55625, 2.40814, 4.10588)
+
+[node name="CogWalker" type="PlayerController3D"]
 
 [node name="cog_walker" parent="." instance=ExtResource("1_uppwy")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Bone" parent="cog_walker/Empty_002/Armature" index="0"]
 transform = Transform3D(1, -1.74846e-07, 3.82137e-15, 3.82137e-15, 4.37114e-08, 1, -1.74846e-07, -1, 4.37114e-08, 0, 0, 0.49984)
@@ -112,5 +116,9 @@ surface_material_override/0 = ExtResource("3_hngiq")
 
 [node name="Pipe" parent="cog_walker/Empty_002" index="17"]
 surface_material_override/0 = ExtResource("2_ibqa2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.404894, 0)
+shape = SubResource("BoxShape3D_kbeh4")
 
 [editable path="cog_walker"]
