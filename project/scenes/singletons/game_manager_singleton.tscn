@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://un7uhr6g4xr1"]
+
+[node name="game_manager_singleton" type="GameManager"]

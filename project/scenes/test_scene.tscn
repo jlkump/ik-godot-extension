@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cerbfg0qccj1i"]
 
-[ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/test_floor.tscn" id="1_7kdvu"]
-[ext_resource type="PackedScene" uid="uid://c55g5r0gxivp1" path="res://scenes/cog_walker.tscn" id="2_bmlo3"]
-[ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/player_cam.tscn" id="3_lnpyf"]
+[ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/prefabs/test_floor.tscn" id="1_7kdvu"]
+[ext_resource type="PackedScene" uid="uid://c55g5r0gxivp1" path="res://scenes/prefabs/cog_walker.tscn" id="2_bmlo3"]
+[ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_lnpyf"]
 
 [node name="Node3D" type="Node3D"]
 

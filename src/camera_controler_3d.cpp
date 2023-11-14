@@ -4,15 +4,19 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/input.hpp>
 
 // Utility includes
 #include <godot_cpp/variant/utility_functions.hpp>
 
 // Project includes
+#include "game_manager.h"
 
 using namespace godot;
 
 void CameraController3D::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_paused_state", "is_paused"), &CameraController3D::set_paused_state);
+
     BIND_GETTER_SETTER(CameraController3D, cam_move_speed, PropertyInfo(Variant::FLOAT, "cam_move_speed", PROPERTY_HINT_RANGE, "0.1,10,0.1"));
     BIND_GETTER_SETTER(CameraController3D, cam_rotation_speed, PropertyInfo(Variant::FLOAT, "cam_rotation_speed", PROPERTY_HINT_RANGE, "0.1,10,0.1"));
 
@@ -94,15 +98,16 @@ void CameraController3D::_ready() {
             UtilityFunctions::printerr("Camera Controller: could not find a RayCast3D child.");
         }
     }
+    if (GameManager::get_singleton() != nullptr) {
+        GameManager* gm = GameManager::get_singleton();
+        gm->connect("game_pause", Callable(this, "set_paused_state"));
+    }
     set_focus_object_path(focus_object_path_);
 }
 
 void CameraController3D::_process(double delta) {
     if (!is_valid() || is_paused_) {
         return;
-    }
-    if (is_input_responsive_) {
-        // TODO
     }
     if (view_ray_ != nullptr) {
         view_ray_->force_raycast_update();
