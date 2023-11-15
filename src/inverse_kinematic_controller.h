@@ -3,14 +3,16 @@
 
 #include <godot_cpp/classes/area3d.hpp>
 
+#include <vector>
+
 #include "helpers.h"
+#include "inverse_kinematic_chain.h"
 
 namespace godot {
     class InverseKinematicController : public Node {
         GDCLASS(InverseKinematicController, Node)
     private:
-        Array collision_rays_;
-        Array bone_roots_;
+        std::vector<InverseKinematicChain*> ik_chains_;
         // Questions:
         //      How to apply constraints on a bone from the editor?
         //          - Use array of strings, where the format is 
@@ -18,15 +20,7 @@ namespace godot {
         //          for example: "0.0,0.0,0.0, 0.0,0.0,0.0, 0.0,90.0,0.0"
         //          could allow for rotation only in the local-y axis by an 
         //          offset of 90 degrees from the initial rotation. 
-        Array bone_constraints_;
 
-        struct Bone {
-            Node3D* node_;
-            float length_;
-            Vector3 rotation_constraint_init_;
-            Vector3 rotation_constraint_min_;
-            Vector3 rotation_constraint_max_; 
-        };
     protected:
         static void _bind_methods();
 
@@ -39,12 +33,7 @@ namespace godot {
         
 
         // Future methods
-        // std::vector<Vector3> get_bone_target_positions();
-        // void set_bone_target_positions(std::vector<Vector3> targets);
-
-        DECLARE_GETTER_SETTER(Array, collision_rays)
-        DECLARE_GETTER_SETTER(Array, bone_roots)
-        DECLARE_GETTER_SETTER(Array, bone_constraints)
+        // std::vector<Node3D*> get_bone_target_positions();
     };
 }
 
