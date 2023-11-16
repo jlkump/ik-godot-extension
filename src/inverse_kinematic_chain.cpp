@@ -92,7 +92,11 @@ void InverseKinematicChain::update_bones() {
         UtilityFunctions::print("    y_basis: ", y_basis);
         UtilityFunctions::print("    z_basis: ", z_basis);
         old_global_trans.origin = joints_[i];
+        UtilityFunctions::print("Final pos: ");
+        UtilityFunctions::print("    pos: ", joints_[i]);
+        Vector3 old_scale = old_global_trans.basis.get_scale();
         old_global_trans.basis = Basis(x_basis, y_basis, z_basis);
+        old_global_trans.basis.scale(old_scale);
         bone_node->set_global_transform(old_global_trans);
     }
 }
