@@ -55,6 +55,9 @@ void InverseKinematicBone::set_bone_path(const NodePath path) {
     bone_ = get_node<Node3D>(bone_path_);
     if (bone_ == nullptr) {
         UtilityFunctions::printerr("IK Bone: given path to begin is not valid: ", path);
+    } else {
+        UtilityFunctions::print("Found begin bone at path: ", path);
+        initial_pos_ = bone_->get_global_position();
     }
 }
 
@@ -66,6 +69,8 @@ void InverseKinematicBone::set_bone_end_path(const NodePath path) {
     bone_end_ = get_node<Node3D>(bone_end_path_);
     if (bone_end_ == nullptr) {
         UtilityFunctions::printerr("IK Bone: given path to end is not valid: ", path);
+    } else {
+        UtilityFunctions::print("Found end bone at path: ", path);
     }
 }
 

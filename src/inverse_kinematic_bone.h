@@ -16,6 +16,7 @@ namespace godot {
         Vector3 rotation_constraint_init_;
         Vector3 rotation_constraint_min_;
         Vector3 rotation_constraint_max_;
+        Vector3 initial_pos_;
     protected:
         static void _bind_methods();
 

@@ -5,9 +5,10 @@
 
 #include "helpers.h"
 
-class InverseKinematicBone;
 
 namespace godot {
+    class InverseKinematicBone;
+
     class InverseKinematicChain : public Node {
         GDCLASS(InverseKinematicChain, Node)
     private:
@@ -23,10 +24,15 @@ namespace godot {
         float target_threshold_;
         int max_iterations_;
 
+
         void perform_ik();
         void update_bones();
         void update_bone_vec_recursive(InverseKinematicBone* current);
         void update_joints_and_distances();
+
+
+        bool is_paused_;
+        void set_paused_state(bool is_paused);
     protected:
         static void _bind_methods();
 
