@@ -67,7 +67,6 @@ mesh = SubResource("SphereMesh_epb4b")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="InverseKinematicChain" parent="CogWalker/InverseKinematicController" index="0"]
-target = NodePath("../../../Target")
 calculation_threshold = 0.01
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
