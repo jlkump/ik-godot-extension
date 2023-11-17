@@ -3,6 +3,8 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/window.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
@@ -76,35 +78,31 @@ void InverseKinematicChain::perform_ik() {
 }
 
 void InverseKinematicChain::update_bones() {
-    Transform3D cumulative_trans = model_hierarchy_transform_;
     for (int i = 0; i < joints_.size() - 1; i++) {
         Node3D* bone_node = ik_bones_[i]->get_bone_node();
         if (bone_node == nullptr) {
             continue;
         }
         
-        Transform3D old_global_trans =  bone_node->get_transform() * cumulative_trans;
-        Transform3D old_local_trans = bone_node->get_transform();
-        UtilityFunctions::print("Update Bones: Cumulative global transform: ", old_global_trans);
-        Vector3 y_basis = old_global_trans.basis.xform(joints_[i].direction_to(joints_[i + 1]).normalized());
-        UtilityFunctions::print("Dir for joint ", i, " is ", joints_[i].direction_to(joints_[i+1]), " in local space: ", y_basis);
-        Vector3 z_basis = y_basis.cross(old_local_trans.basis[0]).normalized();
+        Transform3D old_global_trans = bone_node->get_global_transform() * model_hierarchy_transform_;
+        // Transform3D old_global_trans = bone_node->get_global_transform();
+        // Transform3D old_local_trans = bone_node->get_transform();
+        Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
+        // Vector3 y_basis = model_hierarchy_transform_.basis.xform(joints_[i].direction_to(joints_[i + 1]).normalized());
+        UtilityFunctions::print("Dir for joint ", i, " is ", y_basis);
+        Vector3 z_basis = y_basis.cross(old_global_trans.basis.xform(Vector3(1, 0, 0))).normalized();
         Vector3 x_basis = y_basis.cross(z_basis).normalized();
-
         UtilityFunctions::print("Final basis vecs: ");
-        UtilityFunctions::print("    x_basis: ", x_basis, ". In global: ", old_global_trans.basis.xform_inv(x_basis));
-        UtilityFunctions::print("    y_basis: ", y_basis, ". In global: ", old_global_trans.basis.xform_inv(y_basis));
-        UtilityFunctions::print("    z_basis: ", z_basis, ". In global: ", old_global_trans.basis.xform_inv(z_basis));
-        // old_local_trans.origin = old_global_trans.xform(joints_[i]);
-        UtilityFunctions::print("Final pos: ");
-        UtilityFunctions::print("    pos: ", joints_[i]);
-        UtilityFunctions::print("Old basis: ", old_local_trans);
-        Vector3 old_scale = old_local_trans.basis.get_scale();
-        old_local_trans.basis = Basis(x_basis, y_basis, z_basis);
-        old_local_trans.basis.scale(old_scale);
-        bone_node->set_transform(old_local_trans);
-        cumulative_trans = old_local_trans * cumulative_trans;
-        UtilityFunctions::print("New transform: ", old_local_trans);
+        UtilityFunctions::print("    x_basis: ", x_basis);
+        UtilityFunctions::print("    y_basis: ", y_basis);
+        UtilityFunctions::print("    z_basis: ", z_basis);
+        // old_global_trans.origin = model_hierarchy_transform_.xform(joints_[i]);
+        old_global_trans.origin = joints_[i];
+        Vector3 old_scale = bone_node->get_global_transform().basis.get_scale();
+        old_global_trans.basis = Basis(x_basis, y_basis, z_basis);
+        old_global_trans.basis.scale(old_scale);
+        bone_node->set_global_transform(old_global_trans);
+
     }
 }
 
@@ -144,7 +142,7 @@ void InverseKinematicChain::update_joints_and_distances() {
 }
 
 Transform3D InverseKinematicChain::update_model_hierarchy_transform_recursive(Node3D* root, Node3D* cur) {
-    if (cur == nullptr) {
+    if (cur == nullptr || cur == Object::cast_to<Node3D>(get_tree()->get_root())) {
         UtilityFunctions::printerr("IK Chain: Some parent or grandparent of a bone is not a Node3D.");
         return root->get_transform(); // Will make an invalid transform
     }
@@ -156,7 +154,7 @@ Transform3D InverseKinematicChain::update_model_hierarchy_transform_recursive(No
 }
 
 void InverseKinematicChain::update_model_hierarchy_transform() {
-    if (model_root_ != nullptr) {
+    if (model_root_ != nullptr && ik_bones_.size() > 0 && ik_bones_[0]->get_bone_node() != nullptr) {
         Node3D* parent_of_root_bone = Object::cast_to<Node3D>(ik_bones_[0]->get_bone_node()->get_parent());
         if (parent_of_root_bone == nullptr) {
             UtilityFunctions::printerr("IK Chain: Parent of root bone is not a Node3D.");
@@ -175,6 +173,7 @@ void InverseKinematicChain::set_paused_state(bool is_paused) {
 
 InverseKinematicChain::InverseKinematicChain() :
     target_pos_(nullptr),
+    model_root_(nullptr),
     calculation_threshold_(0.1f),
     target_threshold_(0.01f),
     max_iterations_(10),
@@ -196,11 +195,11 @@ void InverseKinematicChain::_ready() {
 void InverseKinematicChain::_process(double delta) {
     if (joints_.size() <= 1 || target_pos_ == nullptr || 
             ik_bones_.size() <= 1 || ik_bones_.size() + 1 != joints_.size() || 
-            Engine::get_singleton()->is_editor_hint() || is_paused_) {
+            Engine::get_singleton()->is_editor_hint() || is_paused_ || ik_bones_[ik_bones_.size() - 1]->get_bone_node() == nullptr) {
         // UtilityFunctions::print("Returing early", joints_.size() <= 1, target_pos_ == nullptr, ik_bones_.size() <= 1, ik_bones_.size() != joints_.size());
         return;
     }
-    if (joints_[joints_.size() - 1].distance_to(target_pos_->get_global_position()) > calculation_threshold_) {
+    if (ik_bones_[ik_bones_.size() - 1]->get_bone_node()->get_global_position().distance_to(target_pos_->get_global_position()) > calculation_threshold_) {
         perform_ik();
         update_bones();
         update_model_hierarchy_transform();

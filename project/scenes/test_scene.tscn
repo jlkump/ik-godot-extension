@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cerbfg0qccj1i"]
+[gd_scene load_steps=12 format=3 uid="uid://cerbfg0qccj1i"]
 
 [ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/prefabs/test_floor.tscn" id="1_7kdvu"]
 [ext_resource type="PackedScene" uid="uid://c55g5r0gxivp1" path="res://scenes/prefabs/cog_walker.tscn" id="2_bmlo3"]
@@ -14,6 +14,11 @@
 [sub_resource type="SphereMesh" id="SphereMesh_nee1j"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_epb4b"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_diae2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fg5qv"]
+albedo_color = Color(1, 0.160784, 1, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -67,6 +72,8 @@ mesh = SubResource("SphereMesh_epb4b")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="InverseKinematicChain" parent="CogWalker/InverseKinematicController" index="0"]
+target_path = NodePath("../../../Target")
+model_root_path = NodePath("../../cog_walker")
 calculation_threshold = 0.01
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -74,7 +81,12 @@ transform = Transform3D(1, 0, 0, 0, 0.708906, 0.705303, 0, -0.705303, 0.708906, 
 light_energy = 0.3
 
 [node name="Target" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163047, -0.0933903, -1.96007)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163047, 0.286426, -1.33777)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Target"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_diae2")
+surface_material_override/0 = SubResource("StandardMaterial3D_fg5qv")
 
 [editable path="CogWalker"]
 [editable path="CogWalker/cog_walker"]
