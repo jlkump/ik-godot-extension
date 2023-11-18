@@ -73,7 +73,7 @@ surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="InverseKinematicChain" parent="CogWalker/InverseKinematicController" index="0"]
 target_path = NodePath("../../../Target")
-model_root_path = NodePath("../../cog_walker")
+model_root_path = NodePath("../..")
 calculation_threshold = 0.01
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

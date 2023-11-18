@@ -30,7 +30,7 @@ void InverseKinematicChain::perform_ik() {
         // Must have at least 2 bones
         return;
     }
-    Vector3 target = target_pos_->get_global_position();
+    Vector3 target = model_hierarchy_transform_.affine_inverse().xform(target_pos_->get_global_position());
     UtilityFunctions::print("Target pos is ", target);
     // distances_.size() == joints.size() - 1
     float reach = 0;
@@ -48,61 +48,81 @@ void InverseKinematicChain::perform_ik() {
     } else {
         // We can reach, so perform FABRIK
         Vector3 initial = joints_[0];
-        float dif_a = initial.distance_to(target);
-        UtilityFunctions::print("Initial joint pos: ", initial, ". Initial dist: ", dif_a);
+        float dif_a = joints_[joints_.size() - 1].distance_to(target);
+        // UtilityFunctions::print("Initial joint pos: ", initial, ". Initial dist: ", dif_a);
         int iteration = 0;
         while (dif_a > target_threshold_ && iteration < max_iterations_) {
             joints_[joints_.size() - 1] = target;
-            UtilityFunctions::print("Joint end set to target: ", target);
+            // UtilityFunctions::print("Joint end set to target: ", target);
             for (int i = joints_.size() - 2; i >= 0; i--) {
+                // if (i == joints_.size() - 1) {
+                //     float r_i = joints_[i].distance_to(target);
+                //     float gam_i = (distances_[i - 1] / r_i);
+                //     joints_[i] = (1.0f - gam_i) * target + gam_i * joints_[i];
+                // } else {                    
+                // }
                 float r_i = joints_[i].distance_to(joints_[i + 1]);
                 float gam_i = distances_[i] / r_i;
                 joints_[i] = (1.0f - gam_i) * joints_[i + 1] + gam_i * joints_[i];
-                UtilityFunctions::print("Forward: Joint ", i, " set to ", joints_[i]);
+                // UtilityFunctions::print("Forward: Joint ", i, " set to ", joints_[i]);
             }
             joints_[0] = initial;
             for (int i = 0; i < joints_.size() - 1; i++) {
+                // if (i == joints_.size() - 1) {
+                //     float r_i = joints_[i - 1].distance_to(target);
+                //     float gam_i = (distances_[i - 1] / r_i);
+                //     joints_[i] = (1.0f - gam_i) * target + gam_i * joints_[i - 1];
+                // } else if (i == 0) {
+                //     float r_i = joints_[i].distance_to(initial);
+                //     float gam_i = (distances_[i] / r_i);
+                //     joints_[i] = (1.0f - gam_i) * initial + gam_i * joints_[i];
+                // } else {
+                // }
                 float r_i = joints_[i].distance_to(joints_[i + 1]);
                 float gam_i  = distances_[i] / r_i;
                 joints_[i] = (1.0f - gam_i) * joints_[i + 1] + gam_i * joints_[i];
-                UtilityFunctions::print("Back: Joint ", i, " set to ", joints_[i]);
+                // UtilityFunctions::print("Back: Joint ", i, " set to ", joints_[i]);
             }
             dif_a = joints_[joints_.size() - 1].distance_to(target);
             iteration++;
         }
     }
-    UtilityFunctions::print("Performed IK, final positions for bones: ");
-    for (int i = 0; i < joints_.size(); i++) {
-        UtilityFunctions::print("   ", joints_[i]);
-    }
+    // UtilityFunctions::print("Performed IK, final positions for bones: ");
+    // for (int i = 0; i < joints_.size(); i++) {
+    //     UtilityFunctions::print("   ", joints_[i]);
+    // }
 }
 
 void InverseKinematicChain::update_bones() {
+    Transform3D cumulative = Transform3D();
     for (int i = 0; i < joints_.size() - 1; i++) {
         Node3D* bone_node = ik_bones_[i]->get_bone_node();
         if (bone_node == nullptr) {
             continue;
         }
         
-        Transform3D old_global_trans = bone_node->get_global_transform() * model_hierarchy_transform_;
+        Transform3D old_global_trans = bone_node->get_global_transform();
         // Transform3D old_global_trans = bone_node->get_global_transform();
         // Transform3D old_local_trans = bone_node->get_transform();
-        Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
+        Vector3 y_basis = model_hierarchy_transform_.basis.xform(joints_[i].direction_to(joints_[i + 1])).normalized();
         // Vector3 y_basis = model_hierarchy_transform_.basis.xform(joints_[i].direction_to(joints_[i + 1]).normalized());
-        UtilityFunctions::print("Dir for joint ", i, " is ", y_basis);
-        Vector3 z_basis = y_basis.cross(old_global_trans.basis.xform(Vector3(1, 0, 0))).normalized();
+        // UtilityFunctions::print("Dir for joint ", i, " is ", y_basis);
+        Vector3 z_basis = y_basis.cross(old_global_trans.basis.xform_inv(Vector3(1, 0, 0))).normalized();
         Vector3 x_basis = y_basis.cross(z_basis).normalized();
-        UtilityFunctions::print("Final basis vecs: ");
-        UtilityFunctions::print("    x_basis: ", x_basis);
-        UtilityFunctions::print("    y_basis: ", y_basis);
-        UtilityFunctions::print("    z_basis: ", z_basis);
+        // UtilityFunctions::print("Final basis vecs: ");
+        // UtilityFunctions::print("    x_basis: ", x_basis);
+        // UtilityFunctions::print("    y_basis: ", y_basis);
+        // UtilityFunctions::print("    z_basis: ", z_basis);
         // old_global_trans.origin = model_hierarchy_transform_.xform(joints_[i]);
-        old_global_trans.origin = joints_[i];
-        Vector3 old_scale = bone_node->get_global_transform().basis.get_scale();
+        Vector3 old_scale = model_hierarchy_transform_.basis.get_scale();
+        // UtilityFunctions::print("Old scale is: ", old_scale);
+        // old_global_trans.basis.scale(old_scale);
         old_global_trans.basis = Basis(x_basis, y_basis, z_basis);
         old_global_trans.basis.scale(old_scale);
+        old_global_trans.origin = model_hierarchy_transform_.xform(joints_[i]);
+        UtilityFunctions::print("New global pos is: ", old_global_trans.origin, " from old joint pos: ", joints_[i]);
         bone_node->set_global_transform(old_global_trans);
-
+        cumulative = cumulative * bone_node->get_transform();
     }
 }
 
@@ -122,17 +142,33 @@ void InverseKinematicChain::update_bone_vec_recursive(InverseKinematicBone* curr
 }
 
 void InverseKinematicChain::update_joints_and_distances() {
+    if (model_root_ == nullptr) {
+        UtilityFunctions::printerr("IK Chain: model hierarchy null.");
+        return;
+    }
     joints_.clear();
     distances_.clear();
+    Transform3D model_inv = model_hierarchy_transform_.affine_inverse();
+    UtilityFunctions::print("Inverse model is ", model_inv);
     for (int i = 0; i < ik_bones_.size(); i++) {
         if (ik_bones_[i]->get_bone_node() != nullptr && ik_bones_[i]->get_end_bone_node() != nullptr) {
-            joints_.push_back(ik_bones_[i]->get_bone_node()->get_global_position());
-            distances_.push_back(ik_bones_[i]->get_bone_node()->get_global_position().distance_to(ik_bones_[i]->get_end_bone_node()->get_global_position()));
+            Vector3 start =  model_inv.xform(ik_bones_[i]->get_bone_node()->get_global_position());
+            Vector3 end = model_inv.xform(ik_bones_[i]->get_end_bone_node()->get_global_position());
+            joints_.push_back(start);
+            distances_.push_back(start.distance_to(end));
+            // joints_.push_back(
+            //     ik_bones_[i]->get_bone_node()->get_global_position()
+            // );
+            // distances_.push_back(
+            //     ik_bones_[i]->get_bone_node()->get_global_position()
+            //     .distance_to(ik_bones_[i]->get_end_bone_node()->get_global_position()));
             UtilityFunctions::print("Updating bone ", i, " with new position ", joints_[i], " and distance ", distances_[i]);
+            UtilityFunctions::print("Current model hierarchy transform: ", model_hierarchy_transform_);
         }
     }
     if (ik_bones_[ik_bones_.size() - 1]->get_end_bone_node() != nullptr) {
-        joints_.push_back(ik_bones_[ik_bones_.size() - 1]->get_end_bone_node()->get_global_position());
+        Vector3 end = model_inv.xform(ik_bones_[ik_bones_.size() - 1]->get_end_bone_node()->get_global_position());
+        joints_.push_back(end);
         UtilityFunctions::print("Updating last bone ", ik_bones_.size(), " with new position ", joints_[ik_bones_.size()]);
     }
     UtilityFunctions::print("Final joints are:");
@@ -142,6 +178,7 @@ void InverseKinematicChain::update_joints_and_distances() {
 }
 
 Transform3D InverseKinematicChain::update_model_hierarchy_transform_recursive(Node3D* root, Node3D* cur) {
+    UtilityFunctions::print("Recursive call with root, ", root, " and cur ", cur);
     if (cur == nullptr || cur == Object::cast_to<Node3D>(get_tree()->get_root())) {
         UtilityFunctions::printerr("IK Chain: Some parent or grandparent of a bone is not a Node3D.");
         return root->get_transform(); // Will make an invalid transform
@@ -149,7 +186,7 @@ Transform3D InverseKinematicChain::update_model_hierarchy_transform_recursive(No
     if (root == cur) {
         return root->get_transform();
     } else {
-        return cur->get_transform() * update_model_hierarchy_transform_recursive(root, Object::cast_to<Node3D>(cur->get_parent()));
+        return update_model_hierarchy_transform_recursive(root, Object::cast_to<Node3D>(cur->get_parent())) *  cur->get_transform();
     }
 }
 
@@ -190,16 +227,19 @@ void InverseKinematicChain::_ready() {
     set_root_bone_path(root_bone_path_);
     set_target_pos_path(target_pos_path_);
     set_model_root_path(model_root_path_);
+    update_joints_and_distances();
 }
 
 void InverseKinematicChain::_process(double delta) {
     if (joints_.size() <= 1 || target_pos_ == nullptr || 
             ik_bones_.size() <= 1 || ik_bones_.size() + 1 != joints_.size() || 
-            Engine::get_singleton()->is_editor_hint() || is_paused_ || ik_bones_[ik_bones_.size() - 1]->get_bone_node() == nullptr) {
+            Engine::get_singleton()->is_editor_hint() || is_paused_ 
+            || ik_bones_[ik_bones_.size() - 1]->get_end_bone_node() == nullptr) {
         // UtilityFunctions::print("Returing early", joints_.size() <= 1, target_pos_ == nullptr, ik_bones_.size() <= 1, ik_bones_.size() != joints_.size());
         return;
     }
-    if (ik_bones_[ik_bones_.size() - 1]->get_bone_node()->get_global_position().distance_to(target_pos_->get_global_position()) > calculation_threshold_) {
+    if (ik_bones_[ik_bones_.size() - 1]->get_end_bone_node()->get_global_position().distance_to(target_pos_->get_global_position()) > calculation_threshold_) {
+        // joints_[0] = model_hierarchy_transform_.xform(ik_bones_[ik_bones_.size() - 1]->get_bone_node()->get_global_position());
         perform_ik();
         update_bones();
         update_model_hierarchy_transform();
@@ -227,7 +267,6 @@ void InverseKinematicChain::set_root_bone_path(const NodePath path) {
             UtilityFunctions::print("IK Chain: found root bone at path with child. ", path);
             ik_bones_.clear();
             update_bone_vec_recursive(root);
-            update_joints_and_distances();
         }
     }
 }
@@ -251,8 +290,10 @@ void InverseKinematicChain::set_model_root_path(const NodePath path) {
     model_root_ = get_node<Node3D>(model_root_path_);
     if (model_root_ == nullptr) {
         UtilityFunctions::printerr("IK Chain: could not find model root Node3D at the given path: ", path);
+    } else {
+        UtilityFunctions::print("IK Chain: Found model root at path ", path);
+        update_model_hierarchy_transform();
     }
-    update_model_hierarchy_transform();
 }
 
 float InverseKinematicChain::get_target_threshold() const {
