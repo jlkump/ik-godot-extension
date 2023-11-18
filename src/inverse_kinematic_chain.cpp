@@ -49,48 +49,26 @@ void InverseKinematicChain::perform_ik() {
         // We can reach, so perform FABRIK
         Vector3 initial = joints_[0];
         float dif_a = joints_[joints_.size() - 1].distance_to(target);
-        // UtilityFunctions::print("Initial joint pos: ", initial, ". Initial dist: ", dif_a);
         int iteration = 0;
         while (dif_a > target_threshold_ && iteration < max_iterations_) {
+            // Forward reaching
             joints_[joints_.size() - 1] = target;
-            // UtilityFunctions::print("Joint end set to target: ", target);
             for (int i = joints_.size() - 2; i >= 0; i--) {
-                // if (i == joints_.size() - 1) {
-                //     float r_i = joints_[i].distance_to(target);
-                //     float gam_i = (distances_[i - 1] / r_i);
-                //     joints_[i] = (1.0f - gam_i) * target + gam_i * joints_[i];
-                // } else {                    
-                // }
                 float r_i = joints_[i].distance_to(joints_[i + 1]);
                 float gam_i = distances_[i] / r_i;
                 joints_[i] = (1.0f - gam_i) * joints_[i + 1] + gam_i * joints_[i];
-                // UtilityFunctions::print("Forward: Joint ", i, " set to ", joints_[i]);
             }
+            // Backward reaching
             joints_[0] = initial;
             for (int i = 0; i < joints_.size() - 1; i++) {
-                // if (i == joints_.size() - 1) {
-                //     float r_i = joints_[i - 1].distance_to(target);
-                //     float gam_i = (distances_[i - 1] / r_i);
-                //     joints_[i] = (1.0f - gam_i) * target + gam_i * joints_[i - 1];
-                // } else if (i == 0) {
-                //     float r_i = joints_[i].distance_to(initial);
-                //     float gam_i = (distances_[i] / r_i);
-                //     joints_[i] = (1.0f - gam_i) * initial + gam_i * joints_[i];
-                // } else {
-                // }
                 float r_i = joints_[i].distance_to(joints_[i + 1]);
                 float gam_i  = distances_[i] / r_i;
-                joints_[i] = (1.0f - gam_i) * joints_[i + 1] + gam_i * joints_[i];
-                // UtilityFunctions::print("Back: Joint ", i, " set to ", joints_[i]);
+                joints_[i + 1] = (1.0f - gam_i) * joints_[i] + gam_i * joints_[i + 1];
             }
             dif_a = joints_[joints_.size() - 1].distance_to(target);
             iteration++;
         }
     }
-    // UtilityFunctions::print("Performed IK, final positions for bones: ");
-    // for (int i = 0; i < joints_.size(); i++) {
-    //     UtilityFunctions::print("   ", joints_[i]);
-    // }
 }
 
 void InverseKinematicChain::update_bones() {

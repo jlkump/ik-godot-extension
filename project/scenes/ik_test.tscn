@@ -49,13 +49,13 @@ orbit_angle = 0.201
 orbit_rotation = 1.501
 
 [node name="Camera3D" parent="player_cam" index="0"]
-transform = Transform3D(0.997565, -0.0139235, 0.0683357, 8.3819e-09, 0.979867, 0.199649, -0.0697398, -0.199163, 0.977482, 1.85505, 0.399299, 1.95496)
+transform = Transform3D(0.997565, -0.0139235, 0.0683356, 1.86265e-09, 0.979867, 0.199649, -0.0697396, -0.199163, 0.977482, 1.85504, 0.399299, 2.1685)
 
 [node name="PlayerController3D" type="PlayerController3D" parent="."]
 camera_controller_path = NodePath("../player_cam")
 move_speed = 1.6
 run_speed = 7.1
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 1.71837, 0, 0)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 1.71837, 0, 0.213556)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerController3D"]
 shape = SubResource("BoxShape3D_v2u2l")
@@ -71,7 +71,7 @@ transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0.163366, -0.177226, 0.0462
 transform = Transform3D(1, 0, 0, 0, 0.656836, 0.754034, 0, -0.754034, 0.656836, 0, 1.48929, 0)
 
 [node name="Scale" type="Node3D" parent="."]
-transform = Transform3D(-2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Root" type="Node3D" parent="Scale"]
 
