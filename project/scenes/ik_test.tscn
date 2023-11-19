@@ -71,7 +71,7 @@ transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0.163366, -0.177226, 0.0462
 transform = Transform3D(1, 0, 0, 0, 0.656836, 0.754034, 0, -0.754034, 0.656836, 0, 1.48929, 0)
 
 [node name="Scale" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1.70439, 1.04646, 0, -1.04646, 1.70439, 0, 0, 0, 2, -1.80624, -0.0524642, -0.161372)
 
 [node name="Root" type="Node3D" parent="Scale"]
 

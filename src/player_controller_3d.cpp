@@ -105,9 +105,9 @@ void PlayerController3D::_process(double delta) {
                 + input_vector.x * Vector3(movement_basis_.xform(Vector3(1, 0, 0)).x, 0, movement_basis_.xform(Vector3(1, 0, 0)).z)
             ).normalized();
             if (is_running_) {
-                move_vector *= running_speed_;
+                move_vector *= running_speed_ * delta;
             } else {
-                move_vector *= movement_speed_;
+                move_vector *= movement_speed_ * delta;
             }
             break;
         case JUMP:
