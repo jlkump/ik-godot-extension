@@ -28,6 +28,7 @@ namespace godot {
         int max_iterations_;
 
 
+        Vector3 project_point_onto_line(Vector3 point, Vector3 line_dir, Vector3 line_pos);
         void perform_ik();
         void update_bones();
         void update_bone_vec_recursive(InverseKinematicBone* current);
@@ -37,6 +38,7 @@ namespace godot {
 
         bool is_paused_;
         void set_paused_state(bool is_paused);
+
     protected:
         static void _bind_methods();
 

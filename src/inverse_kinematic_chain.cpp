@@ -25,6 +25,13 @@ void InverseKinematicChain::_bind_methods() {
     BIND_GETTER_SETTER(InverseKinematicChain, calculation_threshold, PropertyInfo(Variant::FLOAT, "calculation_threshold", PROPERTY_HINT_RANGE, "0.001,2.0,0.001"));
 }
 
+Vector3 InverseKinematicChain::project_point_onto_line(Vector3 point, Vector3 line_dir, Vector3 line_pos) {
+    // Note: Might not be correct, so check later
+    point -= line_pos;
+    return (point.dot(line_dir) / line_dir.dot(line_dir) ) * line_dir.normalized() + line_pos;
+}
+
+
 void InverseKinematicChain::perform_ik() {
     if (joints_.size() <= 1) {
         // Must have at least 2 bones
@@ -52,7 +59,12 @@ void InverseKinematicChain::perform_ik() {
         int iteration = 0;
         while (dif_a > target_threshold_ && iteration < max_iterations_) {
             // Forward reaching
-            joints_[joints_.size() - 1] = target;
+            joints_[joints_.size() - 1] = target; 
+            // Move to target
+            // For first bone, don't worry about rotational constraints
+            // For subsequent bones, construct a line from 
+
+            Vector3 back_line;
             for (int i = joints_.size() - 2; i >= 0; i--) {
                 float r_i = joints_[i].distance_to(joints_[i + 1]);
                 float gam_i = distances_[i] / r_i;
@@ -87,6 +99,9 @@ void InverseKinematicChain::update_bones() {
         // UtilityFunctions::print("Dir for joint ", i, " is ", y_basis);
         Vector3 z_basis = y_basis.cross(old_global_trans.basis.xform_inv(Vector3(1, 0, 0))).normalized();
         Vector3 x_basis = y_basis.cross(z_basis).normalized();
+
+        // The following doesn't seem to do much, but the goal is to have
+        // no spin on the bones
         if (z_basis.dot(old_global_trans.xform(Vector3(0, 0, 1))) < 0.0f) {
             z_basis = -z_basis;
         }
@@ -104,7 +119,7 @@ void InverseKinematicChain::update_bones() {
         old_global_trans.basis = Basis(x_basis, y_basis, z_basis);
         old_global_trans.basis.scale(old_scale);
         old_global_trans.origin = model_hierarchy_transform_.xform(joints_[i]);
-        UtilityFunctions::print("New global pos is: ", old_global_trans.origin, " from old joint pos: ", joints_[i]);
+        // UtilityFunctions::print("New global pos is: ", old_global_trans.origin, " from old joint pos: ", joints_[i]);
         bone_node->set_global_transform(old_global_trans);
         cumulative = cumulative * bone_node->get_transform();
     }
