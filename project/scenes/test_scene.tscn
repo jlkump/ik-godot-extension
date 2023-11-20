@@ -34,32 +34,36 @@ focus_object_path = NodePath("../CogWalker")
 focus_height_offset = 1.0
 focus_radius_offset = 2.0
 focus_rotation_offset = 1.501
-orbit_distance = 3.8
+orbit_distance = 2.0
 orbit_rotation = 3.141
 dead_zone_radius = 0.5
 
 [node name="CogWalker" parent="." instance=ExtResource("2_bmlo3")]
 camera_controller_path = NodePath("../player_cam")
-move_speed = 4.1
-run_speed = 6.1
+move_speed = 100.0
+run_speed = 200.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003/Point" index="0"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
 mesh = SubResource("SphereMesh_lyq7l")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003" index="5"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
 mesh = SubResource("SphereMesh_xl8g1")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="indicator" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002" index="2"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
 mesh = SubResource("SphereMesh_0wfpf")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="Indicator" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001" index="4"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
 mesh = SubResource("SphereMesh_nee1j")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
@@ -68,12 +72,12 @@ transform = Transform3D(-0.173407, 5.27584e-08, -8.61874e-08, -1.02367e-07, -0.0
 
 [node name="BoneIndicator" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature" index="1"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+visible = false
 mesh = SubResource("SphereMesh_epb4b")
 surface_material_override/0 = ExtResource("4_bjkrd")
 
 [node name="InverseKinematicChain" parent="CogWalker/InverseKinematicController" index="0"]
 target_path = NodePath("../../../Target")
-model_root_path = NodePath("../..")
 calculation_threshold = 0.01
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -81,7 +85,7 @@ transform = Transform3D(1, 0, 0, 0, 0.708906, 0.705303, 0, -0.705303, 0.708906, 
 light_energy = 0.3
 
 [node name="Target" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163047, 0.286426, -1.33777)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163047, 0.00305885, -0.873625)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Target"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

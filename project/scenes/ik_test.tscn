@@ -53,8 +53,8 @@ transform = Transform3D(0.997565, -0.0139235, 0.0683356, 1.86265e-09, 0.979867, 
 
 [node name="PlayerController3D" type="PlayerController3D" parent="."]
 camera_controller_path = NodePath("../player_cam")
-move_speed = 1.6
-run_speed = 7.1
+move_speed = 100.0
+run_speed = 200.0
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 1.71837, 0, 0.213556)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerController3D"]

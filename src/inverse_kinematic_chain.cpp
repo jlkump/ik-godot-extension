@@ -87,6 +87,12 @@ void InverseKinematicChain::update_bones() {
         // UtilityFunctions::print("Dir for joint ", i, " is ", y_basis);
         Vector3 z_basis = y_basis.cross(old_global_trans.basis.xform_inv(Vector3(1, 0, 0))).normalized();
         Vector3 x_basis = y_basis.cross(z_basis).normalized();
+        if (z_basis.dot(old_global_trans.xform(Vector3(0, 0, 1))) < 0.0f) {
+            z_basis = -z_basis;
+        }
+        if (x_basis.dot(old_global_trans.xform(Vector3(1, 0, 0))) < 0.0f) {
+            x_basis = -x_basis;
+        }
         // UtilityFunctions::print("Final basis vecs: ");
         // UtilityFunctions::print("    x_basis: ", x_basis);
         // UtilityFunctions::print("    y_basis: ", y_basis);
