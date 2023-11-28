@@ -1,0 +1,370 @@
+[gd_scene load_steps=10 format=3 uid="uid://cmsw1yedwjm4b"]
+
+[ext_resource type="Material" uid="uid://beegm71sesr6n" path="res://resources/materials/temp_metal.tres" id="1_my7eh"]
+[ext_resource type="Material" uid="uid://78j8wsnbhyes" path="res://resources/materials/temp_eye.tres" id="2_4yb3t"]
+[ext_resource type="Material" uid="uid://c4bbkfxfsr53x" path="res://resources/materials/test_joint_indicator.tres" id="3_q7dly"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34bau"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_56n4f"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rcom2"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_txsyi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ualii"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_exrjl"]
+
+[node name="test_walker" type="PlayerController3D"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_34bau")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_56n4f")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Eye" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(-2.18557e-08, -0.05, 0, 0.5, -2.18557e-09, 0, 0, 0, 0.5, 0.53487, 0.0972908, 0)
+mesh = SubResource("CylinderMesh_rcom2")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Eyepiece" type="MeshInstance3D" parent="Body/Eye"]
+transform = Transform3D(0.8, 0, 0, -2.84217e-14, 0.8, 0, 0, 0, 0.8, 0, -1.69006, 0)
+mesh = SubResource("CylinderMesh_rcom2")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_4yb3t")
+
+[node name="Leg1" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.4, 0.5)
+
+[node name="StartLeg" type="MeshInstance3D" parent="Body/Leg1"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("SphereMesh_txsyi")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="BodyHinge_L1" type="Node3D" parent="Body/Leg1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="MidHinge_L1" type="Node3D" parent="Body/Leg1/BodyHinge_L1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Point hinge_L1" type="Node3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+
+[node name="Point_L1" type="Node3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1/Point_L1"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+skeleton = NodePath("../Point_L1")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.0150831)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1"]
+transform = Transform3D(0.1, 0, 0, 0, 0.2, 0, 0, 0, 0.1, 0, 0.2, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg1/BodyHinge_L1/MidHinge_L1"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.022589)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg1/BodyHinge_L1"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Leg2" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.4, -0.5)
+
+[node name="StartLeg" type="MeshInstance3D" parent="Body/Leg2"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("SphereMesh_txsyi")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="BodyHinge_L2" type="Node3D" parent="Body/Leg2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="MidHinge_L2" type="Node3D" parent="Body/Leg2/BodyHinge_L2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="PointHinge_L2" type="Node3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+
+[node name="Point_L2" type="Node3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2/Point_L2"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+skeleton = NodePath("../Point_L2")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.0150831)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2"]
+transform = Transform3D(0.1, 0, 0, 0, 0.2, 0, 0, 0, 0.1, 0, 0.2, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg2/BodyHinge_L2/MidHinge_L2"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.022589)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg2/BodyHinge_L2"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Leg3" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, 0)
+
+[node name="StartLeg" type="MeshInstance3D" parent="Body/Leg3"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("SphereMesh_txsyi")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="BodyHinge_L3" type="Node3D" parent="Body/Leg3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="MidHinge_L3" type="Node3D" parent="Body/Leg3/BodyHinge_L3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="PointHinge_L3" type="Node3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+
+[node name="Point_L3" type="Node3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3/Point_L3"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+skeleton = NodePath("../Point_L3")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.0150831)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3"]
+transform = Transform3D(0.1, 0, 0, 0, 0.2, 0, 0, 0, 0.1, 0, 0.2, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg3/BodyHinge_L3/MidHinge_L3"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.022589)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg3/BodyHinge_L3"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Leg4" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.4, 0)
+
+[node name="StartLeg" type="MeshInstance3D" parent="Body/Leg4"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("SphereMesh_txsyi")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="BodyHinge_L4" type="Node3D" parent="Body/Leg4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="MidHinge_L4" type="Node3D" parent="Body/Leg4/BodyHinge_L4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="PointHinge_L4" type="Node3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+
+[node name="Point_L4" type="Node3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4/Point_L4"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+skeleton = NodePath("../Point_L4")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.0150831)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4"]
+transform = Transform3D(0.1, 0, 0, 0, 0.2, 0, 0, 0, 0.1, 0, 0.2, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="Sphere" type="MeshInstance3D" parent="Body/Leg4/BodyHinge_L4/MidHinge_L4"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -0.022589)
+mesh = SubResource("SphereMesh_ualii")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_q7dly")
+
+[node name="Bar" type="MeshInstance3D" parent="Body/Leg4/BodyHinge_L4"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_exrjl")
+surface_material_override/0 = ExtResource("1_my7eh")
+
+[node name="InverseKinematicController" type="InverseKinematicController" parent="."]
+ik_update_dist = 0.6
+ik_walking_speed = 10.0
+ik_chain_paths = [NodePath("Leg_1"), NodePath("Leg_2"), NodePath("Leg_3"), NodePath("Leg_4")]
+ik_ray_paths = [NodePath("../Leg1_ray"), NodePath("../Leg2_ray"), NodePath("../Leg3_ray"), NodePath("../Leg4_ray")]
+
+[node name="Leg_1" type="InverseKinematicChain" parent="InverseKinematicController"]
+root_bone_path = NodePath("Root/bodyHinge")
+model_root_path = NodePath("../..")
+target_threshold = 0.001
+calculation_threshold = 0.01
+
+[node name="Root" type="InverseKinematicBone" parent="InverseKinematicController/Leg_1"]
+bone_path = NodePath("../../../Body/Leg1")
+bone_endpoint_path = NodePath("../../../Body/Leg1/BodyHinge_L1")
+
+[node name="bodyHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_1/Root"]
+bone_path = NodePath("../../../../Body/Leg1/BodyHinge_L1")
+bone_endpoint_path = NodePath("../../../../Body/Leg1/BodyHinge_L1/MidHinge_L1")
+
+[node name="MidHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_1/Root/bodyHinge"]
+bone_path = NodePath("../../../../../Body/Leg1/BodyHinge_L1/MidHinge_L1")
+bone_endpoint_path = NodePath("../../../../../Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1")
+
+[node name="PointHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_1/Root/bodyHinge/MidHinge"]
+bone_path = NodePath("../../../../../../Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1")
+bone_endpoint_path = NodePath("../../../../../../Body/Leg1/BodyHinge_L1/MidHinge_L1/Point hinge_L1/Point_L1")
+
+[node name="Leg_2" type="InverseKinematicChain" parent="InverseKinematicController"]
+root_bone_path = NodePath("Root2")
+model_root_path = NodePath("../..")
+target_threshold = 0.001
+calculation_threshold = 0.01
+
+[node name="Root2" type="InverseKinematicBone" parent="InverseKinematicController/Leg_2"]
+bone_path = NodePath("../../../Body/Leg2")
+bone_endpoint_path = NodePath("../../../Body/Leg2/BodyHinge_L2")
+
+[node name="bodyHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_2/Root2"]
+bone_path = NodePath("../../../../Body/Leg2/BodyHinge_L2")
+bone_endpoint_path = NodePath("../../../../Body/Leg2/BodyHinge_L2/MidHinge_L2")
+
+[node name="MidHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_2/Root2/bodyHinge"]
+bone_path = NodePath("../../../../../Body/Leg2/BodyHinge_L2/MidHinge_L2")
+bone_endpoint_path = NodePath("../../../../../Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2")
+
+[node name="PointHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_2/Root2/bodyHinge/MidHinge"]
+bone_path = NodePath("../../../../../../Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2")
+bone_endpoint_path = NodePath("../../../../../../Body/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2/Point_L2")
+
+[node name="Leg_3" type="InverseKinematicChain" parent="InverseKinematicController"]
+root_bone_path = NodePath("Root3")
+model_root_path = NodePath("../..")
+target_threshold = 0.001
+calculation_threshold = 0.01
+
+[node name="Root3" type="InverseKinematicBone" parent="InverseKinematicController/Leg_3"]
+bone_path = NodePath("../../../Body/Leg3")
+bone_endpoint_path = NodePath("../../../Body/Leg3/BodyHinge_L3")
+
+[node name="bodyHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_3/Root3"]
+bone_path = NodePath("../../../../Body/Leg3/BodyHinge_L3")
+bone_endpoint_path = NodePath("../../../../Body/Leg3/BodyHinge_L3/MidHinge_L3")
+
+[node name="MidHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_3/Root3/bodyHinge"]
+bone_path = NodePath("../../../../../Body/Leg3/BodyHinge_L3/MidHinge_L3")
+bone_endpoint_path = NodePath("../../../../../Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3")
+
+[node name="PointHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_3/Root3/bodyHinge/MidHinge"]
+bone_path = NodePath("../../../../../../Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3")
+bone_endpoint_path = NodePath("../../../../../../Body/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3/Point_L3")
+
+[node name="Leg_4" type="InverseKinematicChain" parent="InverseKinematicController"]
+root_bone_path = NodePath("Root4")
+model_root_path = NodePath("../..")
+target_threshold = 0.001
+calculation_threshold = 0.01
+
+[node name="Root4" type="InverseKinematicBone" parent="InverseKinematicController/Leg_4"]
+bone_path = NodePath("../../../Body/Leg4")
+bone_endpoint_path = NodePath("../../../Body/Leg4/BodyHinge_L4")
+
+[node name="bodyHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_4/Root4"]
+bone_path = NodePath("../../../../Body/Leg4/BodyHinge_L4")
+bone_endpoint_path = NodePath("../../../../Body/Leg4/BodyHinge_L4/MidHinge_L4")
+
+[node name="MidHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_4/Root4/bodyHinge"]
+bone_path = NodePath("../../../../../Body/Leg3/BodyHinge_L3/MidHinge_L3")
+bone_endpoint_path = NodePath("../../../../../Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4")
+
+[node name="PointHinge" type="InverseKinematicBone" parent="InverseKinematicController/Leg_4/Root4/bodyHinge/MidHinge"]
+bone_path = NodePath("../../../../../../Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4")
+bone_endpoint_path = NodePath("../../../../../../Body/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4/Point_L4")
+
+[node name="Leg1_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.4)
+target_position = Vector3(0, -1.3, 0)
+
+[node name="Leg2_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.4)
+target_position = Vector3(0, -1.3, 0)
+
+[node name="Leg3_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1, 0)
+target_position = Vector3(0, -1.3, 0)
+
+[node name="Leg4_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1, 0)
+target_position = Vector3(0, -1.3, 0)

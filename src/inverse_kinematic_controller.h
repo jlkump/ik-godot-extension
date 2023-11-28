@@ -2,6 +2,7 @@
 #define INVERSE_KINEMATIC_CONTROLLER_H
 
 #include <godot_cpp/classes/area3d.hpp>
+#include <godot_cpp/classes/ray_cast3d.hpp>
 
 #include <vector>
 
@@ -12,14 +13,18 @@ namespace godot {
     class InverseKinematicController : public Node {
         GDCLASS(InverseKinematicController, Node)
     private:
+        Array ik_chain_paths_;
         std::vector<InverseKinematicChain*> ik_chains_;
-        // Questions:
-        //      How to apply constraints on a bone from the editor?
-        //          - Use array of strings, where the format is 
-        //          "initial_rotation_xyz,min_rotation_xyz,max_rotation_xyz"
-        //          for example: "0.0,0.0,0.0, 0.0,0.0,0.0, 0.0,90.0,0.0"
-        //          could allow for rotation only in the local-y axis by an 
-        //          offset of 90 degrees from the initial rotation. 
+
+        Array ik_ray_paths_;
+        std::vector<RayCast3D*> ik_rays_;
+        
+        float ik_update_distance_;
+        float walking_speed_;
+
+        std::vector<Vector3> starting_pos_;
+        std::vector<Vector3> desired_pos_;
+        std::vector<float> parametric_deltas_;
 
     protected:
         static void _bind_methods();
@@ -31,9 +36,10 @@ namespace godot {
         void _ready();
         void _process(double delta);
         
-
-        // Future methods
-        // std::vector<Node3D*> get_bone_target_positions();
+        DECLARE_GETTER_SETTER(Array, ik_chain_paths)
+        DECLARE_GETTER_SETTER(Array, ik_ray_paths)
+        DECLARE_GETTER_SETTER(float, ik_update_dist)
+        DECLARE_GETTER_SETTER(float, ik_walking_speed)
     };
 }
 

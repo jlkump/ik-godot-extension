@@ -1,24 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cerbfg0qccj1i"]
+[gd_scene load_steps=4 format=3 uid="uid://cerbfg0qccj1i"]
 
 [ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/prefabs/test_floor.tscn" id="1_7kdvu"]
-[ext_resource type="PackedScene" uid="uid://c55g5r0gxivp1" path="res://scenes/prefabs/cog_walker.tscn" id="2_bmlo3"]
 [ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_lnpyf"]
-[ext_resource type="Material" uid="uid://c4bbkfxfsr53x" path="res://resources/materials/test_joint_indicator.tres" id="4_bjkrd"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_lyq7l"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_xl8g1"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_0wfpf"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_nee1j"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_epb4b"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_diae2"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fg5qv"]
-albedo_color = Color(1, 0.160784, 1, 1)
+[ext_resource type="PackedScene" uid="uid://cmsw1yedwjm4b" path="res://scenes/prefabs/test_walker.tscn" id="3_qcy2s"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -30,67 +14,52 @@ cam_move_speed = 10.0
 cam_rotation_speed = 10.0
 input_lateral_rotation_speed = 0.0701
 input_vertical_rotation_speed = 0.0251
-focus_object_path = NodePath("../CogWalker")
+focus_object_path = NodePath("../test_walker")
 focus_height_offset = 1.0
-focus_radius_offset = 2.0
+focus_radius_offset = 1.012
 focus_rotation_offset = 1.501
-orbit_distance = 2.0
-orbit_rotation = 3.141
+orbit_distance = 1.2
+orbit_angle = 0.421
+orbit_rotation = 2.851
 dead_zone_radius = 0.5
 
-[node name="CogWalker" parent="." instance=ExtResource("2_bmlo3")]
+[node name="Camera3D" parent="player_cam" index="0"]
+transform = Transform3D(0.286511, 0.39154, -0.874418, 7.45058e-08, 0.912681, 0.408673, 0.958077, -0.11709, 0.261493, -0.978725, 1.49041, 1.32333)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.179317, 0.983791, 0, -0.983791, 0.179317, 0, 7.49629, 0)
+light_energy = 1.85
+
+[node name="test_walker" parent="." instance=ExtResource("3_qcy2s")]
 camera_controller_path = NodePath("../player_cam")
 move_speed = 100.0
 run_speed = 200.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003/Point" index="0"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-visible = false
-mesh = SubResource("SphereMesh_lyq7l")
-surface_material_override/0 = ExtResource("4_bjkrd")
+[node name="Leg_1" parent="test_walker/InverseKinematicController" index="0"]
+target_path = NodePath("../../../walker_targets/target_leg1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002/Bone_003" index="5"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-visible = false
-mesh = SubResource("SphereMesh_xl8g1")
-surface_material_override/0 = ExtResource("4_bjkrd")
+[node name="Leg_2" parent="test_walker/InverseKinematicController" index="1"]
+target_path = NodePath("../../../walker_targets/target_leg2")
 
-[node name="indicator" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001/Bone_002" index="2"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-visible = false
-mesh = SubResource("SphereMesh_0wfpf")
-surface_material_override/0 = ExtResource("4_bjkrd")
+[node name="Leg_3" parent="test_walker/InverseKinematicController" index="2"]
+target_path = NodePath("../../../walker_targets/target_leg3")
 
-[node name="Indicator" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature/Bone/Bone_001" index="4"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-visible = false
-mesh = SubResource("SphereMesh_nee1j")
-surface_material_override/0 = ExtResource("4_bjkrd")
+[node name="Leg_4" parent="test_walker/InverseKinematicController" index="3"]
+target_path = NodePath("../../../walker_targets/target_leg4")
 
-[node name="BodyConnect_002" parent="CogWalker/cog_walker/Empty_002/Armature/Bone" index="1"]
-transform = Transform3D(-0.173407, 5.27584e-08, -8.61874e-08, -1.02367e-07, -0.0101375, 0.146694, 1.96917e-08, 0.411896, 0.00361039, -4.56436e-07, 0.499688, 0.0122974)
+[node name="walker_targets" type="Node" parent="."]
 
-[node name="BoneIndicator" type="MeshInstance3D" parent="CogWalker/cog_walker/Empty_002/Armature" index="1"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-visible = false
-mesh = SubResource("SphereMesh_epb4b")
-surface_material_override/0 = ExtResource("4_bjkrd")
+[node name="target_leg1" type="Node3D" parent="walker_targets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0467883, 0.0947593, 1.08242)
 
-[node name="InverseKinematicChain" parent="CogWalker/InverseKinematicController" index="0"]
-target_path = NodePath("../../../Target")
-calculation_threshold = 0.01
+[node name="target_leg2" type="Node3D" parent="walker_targets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37566, 0, 0)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.708906, 0.705303, 0, -0.705303, 0.708906, 0, 7.49629, 0)
-light_energy = 0.3
+[node name="target_leg3" type="Node3D" parent="walker_targets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6719)
 
-[node name="Target" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163047, 0.00305885, -0.873625)
+[node name="target_leg4" type="Node3D" parent="walker_targets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37227, 0, 0.0608051)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Target"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
-mesh = SubResource("SphereMesh_diae2")
-surface_material_override/0 = SubResource("StandardMaterial3D_fg5qv")
-
-[editable path="CogWalker"]
-[editable path="CogWalker/cog_walker"]
+[editable path="player_cam"]
+[editable path="test_walker"]

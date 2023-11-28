@@ -64,11 +64,21 @@ void InverseKinematicChain::perform_ik() {
             // For first bone, don't worry about rotational constraints
             // For subsequent bones, construct a line from 
 
-            Vector3 back_line;
+            Vector3 back_line_dir_;
+            Vector3 back_line_pos_;
             for (int i = joints_.size() - 2; i >= 0; i--) {
+                // Ignore the first joint in the back track for constraints
+                if (i != joints_.size() - 2) {
+                    // Perform joint constraint in the range
+                }
+
+                // Limit bone length to the right range
                 float r_i = joints_[i].distance_to(joints_[i + 1]);
                 float gam_i = distances_[i] / r_i;
                 joints_[i] = (1.0f - gam_i) * joints_[i + 1] + gam_i * joints_[i];
+                // Record the resultant back_line for the next iteration.
+                back_line_pos_ = joints_[i];
+                back_line_dir_ = joints_[i] - joints_[i + 1];
             }
             // Backward reaching
             joints_[0] = initial;
