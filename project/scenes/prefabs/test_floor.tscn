@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://r8cvva0ef4ox"]
+[gd_scene load_steps=5 format=3 uid="uid://r8cvva0ef4ox"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_gat7f"]
 
@@ -6,6 +6,10 @@
 size = Vector3(2.0072, 0.0880617, 1.95881)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_a1o7b"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6his"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.160784)
 
 [node name="test_floor" type="Node3D"]
 
@@ -20,3 +24,4 @@ shape = SubResource("BoxShape3D_os6sk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0359723, 0)
 mesh = SubResource("PlaneMesh_a1o7b")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_s6his")

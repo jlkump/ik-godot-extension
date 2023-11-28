@@ -12,9 +12,9 @@ namespace godot {
     class InverseKinematicChain : public Node {
         GDCLASS(InverseKinematicChain, Node)
     private:
-        NodePath model_root_path_;
-        Node3D* model_root_;
-        Transform3D model_hierarchy_transform_;
+        // NodePath model_root_path_;
+        // Node3D* model_root_;
+        // Transform3D model_hierarchy_transform_;
         NodePath root_bone_path_;
         std::vector<InverseKinematicBone*> ik_bones_;
         std::vector<Vector3> joints_; // Positions
@@ -33,8 +33,8 @@ namespace godot {
         void update_bones();
         void update_bone_vec_recursive(InverseKinematicBone* current);
         void update_joints_and_distances();
-        Transform3D update_model_hierarchy_transform_recursive(Node3D* root, Node3D* cur);
-        void update_model_hierarchy_transform();
+        // Transform3D update_model_hierarchy_transform_recursive(Node3D* root, Node3D* cur);
+        // void update_model_hierarchy_transform();
 
         bool is_paused_;
         void set_paused_state(bool is_paused);
@@ -53,7 +53,7 @@ namespace godot {
 
         DECLARE_GETTER_SETTER(NodePath, root_bone_path)
         DECLARE_GETTER_SETTER(NodePath, target_pos_path)
-        DECLARE_GETTER_SETTER(NodePath, model_root_path)
+        // DECLARE_GETTER_SETTER(NodePath, model_root_path)
         DECLARE_GETTER_SETTER(float, target_threshold)
         DECLARE_GETTER_SETTER(float, calculation_threshold)
         DECLARE_GETTER_SETTER(int, max_iterations)

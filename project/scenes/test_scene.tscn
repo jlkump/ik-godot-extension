@@ -1,8 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://cerbfg0qccj1i"]
+[gd_scene load_steps=9 format=3 uid="uid://cerbfg0qccj1i"]
 
 [ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/prefabs/test_floor.tscn" id="1_7kdvu"]
 [ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_lnpyf"]
 [ext_resource type="PackedScene" uid="uid://cmsw1yedwjm4b" path="res://scenes/prefabs/test_walker.tscn" id="3_qcy2s"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_4g3w5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rvtyg"]
+albedo_color = Color(1, 0.12549, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5b46"]
+albedo_color = Color(1, 1, 0.309804, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mdxgu"]
+albedo_color = Color(0.454902, 1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8q5ya"]
+albedo_color = Color(1, 0.419608, 0.45098, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -35,6 +49,9 @@ camera_controller_path = NodePath("../player_cam")
 move_speed = 100.0
 run_speed = 200.0
 
+[node name="InverseKinematicController" parent="test_walker" index="2"]
+ik_update_dist = 0.4
+
 [node name="Leg_1" parent="test_walker/InverseKinematicController" index="0"]
 target_path = NodePath("../../../walker_targets/target_leg1")
 
@@ -52,14 +69,34 @@ target_path = NodePath("../../../walker_targets/target_leg4")
 [node name="target_leg1" type="Node3D" parent="walker_targets"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0467883, 0.0947593, 1.08242)
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg1"]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
+mesh = SubResource("SphereMesh_4g3w5")
+surface_material_override/0 = SubResource("StandardMaterial3D_rvtyg")
+
 [node name="target_leg2" type="Node3D" parent="walker_targets"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37566, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg2"]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
+mesh = SubResource("SphereMesh_4g3w5")
+surface_material_override/0 = SubResource("StandardMaterial3D_f5b46")
 
 [node name="target_leg3" type="Node3D" parent="walker_targets"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6719)
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg3"]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
+mesh = SubResource("SphereMesh_4g3w5")
+surface_material_override/0 = SubResource("StandardMaterial3D_mdxgu")
+
 [node name="target_leg4" type="Node3D" parent="walker_targets"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37227, 0, 0.0608051)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg4"]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
+mesh = SubResource("SphereMesh_4g3w5")
+surface_material_override/0 = SubResource("StandardMaterial3D_8q5ya")
 
 [editable path="player_cam"]
 [editable path="test_walker"]
