@@ -7,22 +7,21 @@
 
 
 namespace godot {
-    class InverseKinematicBone;
-
     class InverseKinematicChain : public Node {
         GDCLASS(InverseKinematicChain, Node)
     private:
-        // NodePath model_root_path_;
-        // Node3D* model_root_;
-        // Transform3D model_hierarchy_transform_;
-        NodePath root_bone_path_;
-        std::vector<InverseKinematicBone*> ik_bones_;
+
+        Array ik_joint_paths_;
+        std::vector<Node3D*> ik_joints_;
         std::vector<Vector3> joints_; // Positions
         std::vector<float> distances_;
-        // std::vector<BoneConstraints*> constraints_; // TODO
+        Array constraint_mins_; // An array of Vector3, one for each joint which specifies the constraints on rotation
+        Array constraint_maxs_; // Same as min, specifies constraint max for each joint. 
 
+        NodePath root_pos_node_path_;
+        Node3D* root_pos_node_;
         NodePath target_pos_path_;
-        Node3D* target_pos_;
+        Node3D* target_pos_node_;
         float calculation_threshold_;
         float target_threshold_;
         int max_iterations_;
@@ -30,9 +29,12 @@ namespace godot {
 
         Vector3 project_point_onto_line(Vector3 point, Vector3 line_dir, Vector3 line_pos);
         void perform_ik();
-        void update_bones();
-        void update_bone_vec_recursive(InverseKinematicBone* current);
-        void update_joints_and_distances();
+        // void update_bones();
+        // void update_bone_vec_recursive(InverseKinematicBone* current);
+        void update_joint_nodes();
+        void update_joints();
+        void update_distances();
+        // void update_joints_and_distances();
         // Transform3D update_model_hierarchy_transform_recursive(Node3D* root, Node3D* cur);
         // void update_model_hierarchy_transform();
 
@@ -51,9 +53,12 @@ namespace godot {
         
         Node3D* get_target_pos_node();
 
-        DECLARE_GETTER_SETTER(NodePath, root_bone_path)
+        DECLARE_GETTER_SETTER(Array, joint_paths)
+        DECLARE_GETTER_SETTER(Array, constraint_mins)
+        DECLARE_GETTER_SETTER(Array, constraint_maxs)
         DECLARE_GETTER_SETTER(NodePath, target_pos_path)
-        // DECLARE_GETTER_SETTER(NodePath, model_root_path)
+        DECLARE_GETTER_SETTER(NodePath, root_pos_node_path)
+
         DECLARE_GETTER_SETTER(float, target_threshold)
         DECLARE_GETTER_SETTER(float, calculation_threshold)
         DECLARE_GETTER_SETTER(int, max_iterations)

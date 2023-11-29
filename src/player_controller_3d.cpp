@@ -15,8 +15,9 @@ void PlayerController3D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("on_camera_transform_updated", "transform"), &PlayerController3D::on_camera_transform_updated);
 
     BIND_GETTER_SETTER(PlayerController3D, camera_controller_path, PropertyInfo(Variant::NODE_PATH, "camera_controller_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "CameraController3D"))
-    BIND_GETTER_SETTER(PlayerController3D, move_speed, PropertyInfo(Variant::FLOAT, "move_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.1"));
-    BIND_GETTER_SETTER(PlayerController3D, run_speed, PropertyInfo(Variant::FLOAT, "run_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.1"));
+    BIND_GETTER_SETTER(PlayerController3D, move_speed, PropertyInfo(Variant::FLOAT, "move_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.01"));
+    BIND_GETTER_SETTER(PlayerController3D, run_speed, PropertyInfo(Variant::FLOAT, "run_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.01"));
+    BIND_GETTER_SETTER(PlayerController3D, rotate_speed, PropertyInfo(Variant::FLOAT, "rotate_speed", PROPERTY_HINT_RANGE, "0.01,200.0,0.01"));
 }
 
 bool PlayerController3D::is_valid() {
@@ -40,6 +41,7 @@ PlayerController3D::PlayerController3D() :
     is_paused_(false),
     movement_speed_(1.0f),
     running_speed_(1.6f),
+    rotate_speed_(0.01f),
     camera_controller_(nullptr),
     camera_controller_path_("")
 {}
@@ -60,6 +62,7 @@ void PlayerController3D::_process(double delta) {
         return;
     }
 
+    float rotate_value = 0.0f;
     Vector2 input_vector = Vector2(0.0f, 0.0f);
     if (Input::get_singleton()->is_action_pressed("move_forward")) {
         input_vector.y += 1;
@@ -72,6 +75,12 @@ void PlayerController3D::_process(double delta) {
     }
     if (Input::get_singleton()->is_action_pressed("move_right")) {
         input_vector.x += 1;
+    }
+    if (Input::get_singleton()->is_action_pressed("rotate_ccw")) {
+        rotate_value -= 1.0f;
+    }
+    if (Input::get_singleton()->is_action_pressed("rotate_cw")) {
+        rotate_value += 1.0f;
     }
 
     if (Input::get_singleton()->is_action_just_pressed("run")) {
@@ -105,14 +114,18 @@ void PlayerController3D::_process(double delta) {
                 + input_vector.x * Vector3(movement_basis_.xform(Vector3(1, 0, 0)).x, 0, movement_basis_.xform(Vector3(1, 0, 0)).z)
             ).normalized();
             if (is_running_) {
-                move_vector *= running_speed_ * delta;
+                move_vector *= running_speed_;
             } else {
-                move_vector *= movement_speed_ * delta;
+                move_vector *= movement_speed_;
             }
             break;
         case JUMP:
             break;
     }
+    if (player_state_ != JUMP) {
+        rotate_object_local(Vector3(0, 1, 0), rotate_value * rotate_speed_);
+    }
+
     set_velocity(move_vector);
     move_and_slide();
     if (is_on_floor() && player_state_ == JUMP) {
@@ -156,4 +169,11 @@ float PlayerController3D::get_run_speed() const {
 }
 void PlayerController3D::set_run_speed(const float speed) {
     running_speed_ = speed;
+}
+
+float PlayerController3D::get_rotate_speed() const {
+    return rotate_speed_;
+}
+void PlayerController3D::set_rotate_speed(const float speed) {
+    rotate_speed_ = speed;
 }

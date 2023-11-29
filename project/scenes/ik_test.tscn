@@ -11,6 +11,10 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0sbcx"]
 albedo_color = Color(1, 0.490196, 0.490196, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_63eg7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_w4rvg"]
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_k6wwe"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_1607q"]
@@ -21,42 +25,21 @@ albedo_color = Color(1, 0.490196, 0.490196, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_n2elv"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_63eg7"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_w4rvg"]
-
 [node name="ik_test" type="Node3D"]
-
-[node name="InverseKinematicChain" type="InverseKinematicChain" parent="."]
-root_bone_path = NodePath("RootBone")
-target_path = NodePath("../StaticBody3D")
-
-[node name="RootBone" type="InverseKinematicBone" parent="InverseKinematicChain"]
-bone_path = NodePath("../../PlayerController3D/Scale/Root")
-bone_endpoint_path = NodePath("../../PlayerController3D/Scale/Root/Core")
-
-[node name="CoreBone" type="InverseKinematicBone" parent="InverseKinematicChain/RootBone"]
-bone_path = NodePath("../../../PlayerController3D/Scale/Root/Core")
-bone_endpoint_path = NodePath("../../../PlayerController3D/Scale/Root/Core/Point")
-
-[node name="PointBone" type="InverseKinematicBone" parent="InverseKinematicChain/RootBone/CoreBone"]
-bone_path = NodePath("../../../../PlayerController3D/Scale/Root/Core/Point")
-bone_endpoint_path = NodePath("../../../../PlayerController3D/Scale/Root/Core/Point/End")
 
 [node name="player_cam" parent="." instance=ExtResource("1_5ly8b")]
 input_lateral_rotation_speed = 0.0501
 input_vertical_rotation_speed = 0.0501
-focus_object_path = NodePath("../PlayerController3D")
+focus_object_path = NodePath("../Scale/Root/Core/Point/End")
 orbit_distance = 6.0
 orbit_angle = 0.201
 orbit_rotation = 1.501
 
 [node name="Camera3D" parent="player_cam" index="0"]
-transform = Transform3D(0.997565, -0.0139235, 0.0683356, -4.65661e-10, 0.979867, 0.199649, -0.0697396, -0.199163, 0.977482, 2.71822, 1.1979, 5.86489)
+transform = Transform3D(0.997565, -0.0139235, 0.0683357, 1.44355e-08, 0.979867, 0.199649, -0.0697397, -0.199163, 0.977482, 6.64193, 1.1979, 5.86489)
 
 [node name="PlayerController3D" type="PlayerController3D" parent="."]
 camera_controller_path = NodePath("../player_cam")
-move_speed = 100.0
 run_speed = 200.0
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 2.30818, 0, 0)
 
@@ -67,52 +50,6 @@ shape = SubResource("BoxShape3D_v2u2l")
 mesh = SubResource("BoxMesh_x8g85")
 surface_material_override/0 = SubResource("StandardMaterial3D_0sbcx")
 
-[node name="Scale" type="Node3D" parent="PlayerController3D"]
-transform = Transform3D(-2.9141e-07, 6.6667, 0, -6.6667, -2.9141e-07, 0, 0, 0, 6.66667, 0.0650697, 0, 0)
-
-[node name="Root" type="Node3D" parent="PlayerController3D/Scale"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerController3D/Scale/Root"]
-transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
-mesh = SubResource("CylinderMesh_k6wwe")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerController3D/Scale/Root"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
-mesh = SubResource("SphereMesh_1607q")
-surface_material_override/0 = ExtResource("1_junqn")
-
-[node name="Core" type="Node3D" parent="PlayerController3D/Scale/Root"]
-transform = Transform3D(1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0, 1, 0, 0.689279, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerController3D/Scale/Root/Core"]
-transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
-mesh = SubResource("CylinderMesh_k6wwe")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerController3D/Scale/Root/Core"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
-mesh = SubResource("SphereMesh_oinx6")
-surface_material_override/0 = ExtResource("1_junqn")
-
-[node name="Point" type="Node3D" parent="PlayerController3D/Scale/Root/Core"]
-transform = Transform3D(1, -3.55271e-15, 0, 3.55271e-15, 1, 0, 0, 0, 1, 0, 0.659361, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerController3D/Scale/Root/Core/Point"]
-transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
-mesh = SubResource("CylinderMesh_k6wwe")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="PlayerController3D/Scale/Root/Core/Point"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
-mesh = SubResource("SphereMesh_x16q3")
-surface_material_override/0 = ExtResource("1_junqn")
-
-[node name="End" type="Node3D" parent="PlayerController3D/Scale/Root/Core/Point"]
-transform = Transform3D(1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0, 1, -1.06581e-14, 0.603494, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerController3D/Scale/Root/Core/Point/End"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
-mesh = SubResource("SphereMesh_n2elv")
-surface_material_override/0 = ExtResource("1_junqn")
-
 [node name="test_floor" parent="." instance=ExtResource("2_12jhc")]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0.163366, -0.177226, 0.0462954)
 
@@ -120,12 +57,65 @@ transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0.163366, -0.177226, 0.0462
 transform = Transform3D(1, 0, 0, 0, 0.656836, 0.754034, 0, -0.754034, 0.656836, 0, 1.48929, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.588216, 0.761459, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.588216, 0.395858, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_63eg7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("BoxMesh_w4rvg")
+
+[node name="Scale" type="Node3D" parent="."]
+transform = Transform3D(-8.7423e-08, 2.00001, 0, -2.00001, -8.7423e-08, 0, 0, 0, 2, 2.3277, 0, 0)
+
+[node name="Root" type="Node3D" parent="Scale"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scale/Root"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_k6wwe")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Scale/Root"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_1607q")
+surface_material_override/0 = ExtResource("1_junqn")
+
+[node name="Core" type="Node3D" parent="Scale/Root"]
+transform = Transform3D(1, -1.42109e-14, 0, 1.42109e-14, 1, 0, 0, 0, 1, 1.42109e-14, 0.689279, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scale/Root/Core"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_k6wwe")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Scale/Root/Core"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_oinx6")
+surface_material_override/0 = ExtResource("1_junqn")
+
+[node name="Point" type="Node3D" parent="Scale/Root/Core"]
+transform = Transform3D(1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0, 1, -1.06581e-14, 0.659361, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scale/Root/Core/Point"]
+transform = Transform3D(0.1, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0.3, 0)
+mesh = SubResource("CylinderMesh_k6wwe")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Scale/Root/Core/Point"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_x16q3")
+surface_material_override/0 = ExtResource("1_junqn")
+
+[node name="End" type="Node3D" parent="Scale/Root/Core/Point"]
+transform = Transform3D(1, -7.10543e-15, 0, 7.10543e-15, 1, 0, 0, 0, 1, 7.10543e-15, 0.60349, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Scale/Root/Core/Point/End"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("SphereMesh_n2elv")
+surface_material_override/0 = ExtResource("1_junqn")
+
+[node name="InverseKinematicChain" type="InverseKinematicChain" parent="."]
+target_path = NodePath("../PlayerController3D")
+root_pos_node_path = NodePath("../Scale")
+ik_joint_paths = [NodePath("../Scale/Root"), NodePath("../Scale/Root/Core"), NodePath("../Scale/Root/Core/Point"), NodePath("../Scale/Root/Core/Point/End")]
+ik_joint_min_rotations = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+ik_joint_max_rotations = [Vector3(360, 360, 360), Vector3(360, 360, 360), Vector3(360, 360, 360), Vector3(360, 360, 360)]
 
 [editable path="player_cam"]

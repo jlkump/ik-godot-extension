@@ -24,6 +24,7 @@ namespace godot {
         bool is_running_;
         float movement_speed_;
         float running_speed_;
+        float rotate_speed_;
 
         bool is_paused_;
 
@@ -49,6 +50,7 @@ namespace godot {
         DECLARE_GETTER_SETTER(NodePath, camera_controller_path)
         DECLARE_GETTER_SETTER(float, move_speed)
         DECLARE_GETTER_SETTER(float, run_speed)
+        DECLARE_GETTER_SETTER(float, rotate_speed)
     };
 }
 

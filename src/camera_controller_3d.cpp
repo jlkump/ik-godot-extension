@@ -117,24 +117,24 @@ void CameraController3D::_process(double delta) {
     if (!is_valid() || is_paused_) {
         return;
     }
-    if (view_ray_ != nullptr) {
-        view_ray_->force_raycast_update();
-        if (view_ray_->get_collider() != nullptr && view_ray_->get_collider() != focus_object_) {
-            // When we hit an object, make it invisible
-            CollisionObject3D* hit_obj = Object::cast_to<CollisionObject3D>(view_ray_->get_collider());
-            if (hit_obj) {
-                hit_obj->set_visible(false);
-                hidden_objs_.insert(hit_obj);
-            }
-        } else {
-            // When we aren't colliding anymore with anything, unhide objects and clear hidden list.
-            for (CollisionObject3D* obj : hidden_objs_) {
-                if (obj)
-                    obj->set_visible(true);
-            }
-            hidden_objs_.clear();
-        }
-    }
+    // if (view_ray_ != nullptr) {
+    //     view_ray_->force_raycast_update();
+    //     if (view_ray_->get_collider() != nullptr && view_ray_->get_collider() != focus_object_) {
+    //         // When we hit an object, make it invisible
+    //         CollisionObject3D* hit_obj = Object::cast_to<CollisionObject3D>(view_ray_->get_collider());
+    //         if (hit_obj) {
+    //             hit_obj->set_visible(false);
+    //             hidden_objs_.insert(hit_obj);
+    //         }
+    //     } else {
+    //         // When we aren't colliding anymore with anything, unhide objects and clear hidden list.
+    //         for (CollisionObject3D* obj : hidden_objs_) {
+    //             if (obj)
+    //                 obj->set_visible(true);
+    //         }
+    //         hidden_objs_.clear();
+    //     }
+    // }
     if ((focus_object_->get_global_position() + focus_pos_offset_).distance_to(target_lookat_) >= dead_zone_radius_) {
         update_target_transform();
     }
