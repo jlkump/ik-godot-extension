@@ -113,9 +113,6 @@ surface_material_override/0 = ExtResource("1_junqn")
 
 [node name="InverseKinematicChain" type="InverseKinematicChain" parent="."]
 target_path = NodePath("../PlayerController3D")
-root_pos_node_path = NodePath("../Scale")
 ik_joint_paths = [NodePath("../Scale/Root"), NodePath("../Scale/Root/Core"), NodePath("../Scale/Root/Core/Point"), NodePath("../Scale/Root/Core/Point/End")]
-ik_joint_min_rotations = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
-ik_joint_max_rotations = [Vector3(360, 360, 360), Vector3(360, 360, 360), Vector3(360, 360, 360), Vector3(360, 360, 360)]
 
 [editable path="player_cam"]

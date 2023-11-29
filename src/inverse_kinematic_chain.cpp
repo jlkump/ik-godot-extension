@@ -16,20 +16,36 @@ void InverseKinematicChain::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_paused_state", "is_paused"), &InverseKinematicChain::set_paused_state);
 
     BIND_GETTER_SETTER(InverseKinematicChain, target_pos_path, PropertyInfo(Variant::NODE_PATH, "target_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
-    BIND_GETTER_SETTER(InverseKinematicChain, root_pos_node_path, PropertyInfo(Variant::NODE_PATH, "root_pos_node_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
+    BIND_GETTER_SETTER(InverseKinematicChain, root_pos_node_path, PropertyInfo(Variant::NODE_PATH, "marker_pos_node_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
     BIND_GETTER_SETTER(InverseKinematicChain, joint_paths, PropertyInfo(Variant::ARRAY, "ik_joint_paths", PROPERTY_HINT_ARRAY_TYPE, "Node3D"));
-    BIND_GETTER_SETTER(InverseKinematicChain, constraint_mins, PropertyInfo(Variant::ARRAY, "ik_joint_min_rotations", PROPERTY_HINT_ARRAY_TYPE, "Vector3"));
-    BIND_GETTER_SETTER(InverseKinematicChain, constraint_maxs, PropertyInfo(Variant::ARRAY, "ik_joint_max_rotations", PROPERTY_HINT_ARRAY_TYPE, "Vector3"));
+    BIND_GETTER_SETTER(InverseKinematicChain, constraint_mins_horizontal, PropertyInfo(Variant::ARRAY, "ik_joint_min_rotations_horizontal", PROPERTY_HINT_ARRAY_TYPE, "Float"));
+    BIND_GETTER_SETTER(InverseKinematicChain, constraint_mins_vertical, PropertyInfo(Variant::ARRAY, "ik_joint_min_rotations_vertical", PROPERTY_HINT_ARRAY_TYPE, "FLOAT"));
+    BIND_GETTER_SETTER(InverseKinematicChain, constraint_maxs_horizontal, PropertyInfo(Variant::ARRAY, "ik_joint_max_rotations_horizontal", PROPERTY_HINT_ARRAY_TYPE, "Float"));
+    BIND_GETTER_SETTER(InverseKinematicChain, constraint_maxs_vertical, PropertyInfo(Variant::ARRAY, "ik_joint_max_rotations_vertical", PROPERTY_HINT_ARRAY_TYPE, "FLOAT"));
 
     BIND_GETTER_SETTER(InverseKinematicChain, max_iterations, PropertyInfo(Variant::INT, "max_iterations", PROPERTY_HINT_RANGE, "0,1000,1"));
     BIND_GETTER_SETTER(InverseKinematicChain, target_threshold, PropertyInfo(Variant::FLOAT, "target_threshold", PROPERTY_HINT_RANGE, "0.001,2.0,0.001"));
     BIND_GETTER_SETTER(InverseKinematicChain, calculation_threshold, PropertyInfo(Variant::FLOAT, "calculation_threshold", PROPERTY_HINT_RANGE, "0.001,2.0,0.001"));
+
+    BIND_GETTER_SETTER(InverseKinematicChain, end_effector_collider_path, PropertyInfo(Variant::NODE_PATH, "end_effector_collision_area_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
 }
 
 Vector3 InverseKinematicChain::project_point_onto_line(Vector3 point, Vector3 line_dir, Vector3 line_pos) {
     // Note: Might not be correct, so check later
     point -= line_pos;
     return (point.dot(line_dir) / line_dir.dot(line_dir) ) * line_dir.normalized() + line_pos;
+}
+
+void InverseKinematicChain::move_starting_joint_to_marker() {
+    // Move to marker node's position
+    joints_[0] = marker_pos_node_->get_global_position();
+
+    // Update the chain of bones to keep appropriate distances
+    for (int i = 0; i < joints_.size() - 1; i++) {
+        float r_i = joints_[i].distance_to(joints_[i + 1]);
+        float gam_i  = distances_[i] / r_i;
+        joints_[i + 1] = (1.0f - gam_i) * joints_[i] + gam_i * joints_[i + 1];
+    }
 }
 
 void InverseKinematicChain::perform_ik() {
@@ -103,50 +119,6 @@ void InverseKinematicChain::perform_ik() {
     }
 }
 
-// void InverseKinematicChain::update_bones() {
-//     // Transform3D cumulative;
-//     // UtilityFunctions::print("Node updating: ", this->get_name());
-//     for (int i = 0; i < joints_.size() - 1; i++) {
-//         Node3D* bone_node = ik_bones_[i]->get_bone_node();
-//         if (bone_node == nullptr) {
-//             continue;
-//         }
-        
-//         // if (i == 0) {
-//         //     cumulative = bone_node->get_global_transform();
-//         // } else {
-//         //     cumulative = cumulative * bone_node->get_transform();
-//         // }
-
-//         // Vector3 y_basis = cumulative.basis.xform(joints_[i].direction_to(joints_[i + 1])).normalized();
-//         Transform3D old_global_trans = bone_node->get_global_transform();
-//         Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
-//         // Vector3 x_basis_temp = model_hierarchy_transform_.basis.xform(Vector3(1, 0, 0));
-//         Vector3 x_basis_temp = old_global_trans.basis.xform(Vector3(1, 0, 0)).normalized();
-//         if (y_basis.dot(x_basis_temp) >= 0.99) {
-//             x_basis_temp = Vector3(0, 1, 0);
-//         }
-//         // Vector3 x_basis_temp = Vector3(1, 0, 0);
-//         // Vector3 x_basis_temp = old_global_trans.basis.xform(Vector3(1, 0, 0));
-//         Vector3 z_basis = y_basis.cross(x_basis_temp).normalized();
-//         Vector3 x_basis = y_basis.cross(z_basis).normalized();
-//         // UtilityFunctions::print("IK Chain: basis");
-//         // UtilityFunctions::print("IK Chain:    x_basis: ", x_basis);
-//         // UtilityFunctions::print("IK Chain:    y_basis: ", y_basis);
-//         // UtilityFunctions::print("IK Chain:    z_basis: ", z_basis);
-//         Vector3 old_scale = old_global_trans.basis.get_scale();
-//         old_global_trans.basis = Basis(x_basis, y_basis, z_basis);
-//         old_global_trans.basis.scale(old_scale);
-//         // old_global_trans.origin = joints_[i];
-//         if (i != ik_bones_.size() - 1)
-//             UtilityFunctions::print("Previous child transform: ", ik_bones_[i + 1]->get_bone_node()->get_global_transform());
-//         bone_node->set_global_transform(old_global_trans);
-//         bone_node->force_update_transform();
-//         if (i != ik_bones_.size() - 1)
-//             UtilityFunctions::print("New child transform: ", ik_bones_[i + 1]->get_bone_node()->get_global_transform());
-//     }
-// }
-
 void InverseKinematicChain::update_joint_nodes() {
     for (int i = 0; i < ik_joints_.size(); i++) {
         Node3D* joint_node = ik_joints_[i];
@@ -214,59 +186,18 @@ void InverseKinematicChain::update_distances() {
     }
 }
 
-// void InverseKinematicChain::update_bone_vec_recursive(InverseKinematicBone* current) {
-//     ik_bones_.push_back(current);
-//     InverseKinematicBone* child = nullptr;
-//     TypedArray<Node> children = current->get_children();
-//     for (int i = 0; i < children.size(); i++) {
-//         if (Object::cast_to<InverseKinematicBone>(children[i])) {
-//             child = Object::cast_to<InverseKinematicBone>(children[i]);
-//             break;
-//         }
-//     }
-//     if (child != nullptr) {
-//         update_bone_vec_recursive(child);
-//     }
-// }
-
-// Transform3D InverseKinematicChain::update_model_hierarchy_transform_recursive(Node3D* root, Node3D* cur) {
-//     UtilityFunctions::print("Recursive call with root, ", root, " and cur ", cur);
-//     if (cur == nullptr || cur == Object::cast_to<Node3D>(get_tree()->get_root())) {
-//         UtilityFunctions::printerr("IK Chain: Some parent or grandparent of a bone is not a Node3D.");
-//         return root->get_transform(); // Will make an invalid transform
-//     }
-//     if (root == cur) {
-//         return root->get_transform();
-//     } else {
-//         return update_model_hierarchy_transform_recursive(root, Object::cast_to<Node3D>(cur->get_parent())) * cur->get_transform();
-//     }
-// }
-
-// void InverseKinematicChain::update_model_hierarchy_transform() {
-//     if (model_root_ != nullptr && ik_bones_.size() > 0 && ik_bones_[0]->get_bone_node() != nullptr) {
-//         Node3D* parent_of_root_bone = Object::cast_to<Node3D>(ik_bones_[0]->get_bone_node()->get_parent());
-//         if (parent_of_root_bone == nullptr) {
-//             UtilityFunctions::printerr("IK Chain: Parent of root bone is not a Node3D.");
-//         } else {
-//             model_hierarchy_transform_ = update_model_hierarchy_transform_recursive(model_root_, parent_of_root_bone);
-//         }
-//         UtilityFunctions::print("Update_model_heirarchy: Model transform: ", model_hierarchy_transform_);
-//     } else {
-//         UtilityFunctions::printerr("IK Chain: No model root assigned");
-//     }
-// }
-
 void InverseKinematicChain::set_paused_state(bool is_paused) {
     is_paused_ = is_paused;
 }
 
 InverseKinematicChain::InverseKinematicChain() :
     target_pos_node_(nullptr),
-    root_pos_node_(nullptr),
+    marker_pos_node_(nullptr),
     calculation_threshold_(0.001f),
     target_threshold_(0.001f),
     max_iterations_(10),
-    is_paused_(false)
+    is_paused_(false),
+    end_effector_collider_ray_(nullptr)
 {}
 
 InverseKinematicChain::~InverseKinematicChain() {}
@@ -276,26 +207,21 @@ void InverseKinematicChain::_ready() {
         GameManager* gm = GameManager::get_singleton();
         gm->connect("game_pause", Callable(this, "set_paused_state"));
     }
-    // set_root_bone_path(root_bone_path_);
+
     if (Engine::get_singleton() != nullptr && !Engine::get_singleton()->is_editor_hint()) {
         set_target_pos_path(target_pos_path_);
-        set_root_pos_node_path(root_pos_node_path_);
+        set_root_pos_node_path(marker_pos_node_path_);
+        set_end_effector_collider_path(end_effector_collider_path_);
         set_joint_paths(ik_joint_paths_);
         update_distances(); // Do this only once at the begining of the scene to keep distances between joints consistent.
         update_joints();
     }
-    // set_model_root_path(model_root_path_);
-    // update_joints_and_distances();
 }
 
 void InverseKinematicChain::_process(double delta) {
-    if (joints_.size() <= 1 || 
-        target_pos_node_ == nullptr || 
-        root_pos_node_ == nullptr ||
-        ik_joints_.size() <= 1 || 
-        distances_.size() + 1 != joints_.size() || 
-        Engine::get_singleton()->is_editor_hint() || 
-        is_paused_ || 
+    if (joints_.size() <= 1 || target_pos_node_ == nullptr || marker_pos_node_ == nullptr ||
+        ik_joints_.size() <= 1 || distances_.size() + 1 != joints_.size() || 
+        Engine::get_singleton()->is_editor_hint() || is_paused_ || 
         ik_joints_[ik_joints_.size() - 1] == nullptr) {
 
         // UtilityFunctions::print("Returing early", joints_.size() <= 1, 
@@ -304,46 +230,31 @@ void InverseKinematicChain::_process(double delta) {
         //         ik_joints_.size() != joints_.size());
         return;
     }
-    if (ik_joints_[ik_joints_.size() - 1]->get_global_position()
-            .distance_to(target_pos_node_->get_global_position()) > calculation_threshold_) {
-        joints_[0] = root_pos_node_->get_global_position();
-        for (int i = 0; i < joints_.size() - 1; i++) {
-            float r_i = joints_[i].distance_to(joints_[i + 1]);
-            float gam_i  = distances_[i] / r_i;
-            joints_[i + 1] = (1.0f - gam_i) * joints_[i] + gam_i * joints_[i + 1];
-        }
+
+    // If the end effector bone is beyond some threshold from the target, begin calculation for IK
+    if (ik_joints_[ik_joints_.size() - 1]->get_global_position().distance_to(target_pos_node_->get_global_position()) > calculation_threshold_) {
+        move_starting_joint_to_marker();
         perform_ik();
         update_joint_nodes();
         update_joints();
-        // update_model_hierarchy_transform();
-        // update_joints_and_distances();
+        // Update the end_effector collider (if it exists) to be placed at the end of the bone's position.
+        if (end_effector_collider_ray_ != nullptr) {
+            end_effector_collider_ray_->set_global_position(joints_[joints_.size() - 1]);
+        }
     }
 }
-
 
 Node3D* InverseKinematicChain::get_target_pos_node() {
     return target_pos_node_;
 }
 
-// NodePath InverseKinematicChain::get_root_bone_path() const {
-//     return root_bone_path_;
-// }
-// void InverseKinematicChain::set_root_bone_path(const NodePath path) {
-//     root_bone_path_ = path;
-//     InverseKinematicBone* root = get_node<InverseKinematicBone>(root_bone_path_);
-//     if (root == nullptr) {
-//         UtilityFunctions::printerr("IK Chain: could not find an IK Bone child.");
-//     } else {
-//         // Recursively build IK chain
-//         if (root->get_child_count() == 0) {
-//             UtilityFunctions::printerr("IK Chain: could not build chain, root has no child bone.");
-//         } else {
-//             UtilityFunctions::print("IK Chain: found root bone at path with child. ", path);
-//             ik_bones_.clear();
-//             update_bone_vec_recursive(root);
-//         }
-//     }
-// }
+bool InverseKinematicChain::is_end_effector_colliding() {
+    if (end_effector_collider_ray_ == nullptr) {
+        return false;
+    }
+    end_effector_collider_ray_->force_raycast_update();
+    return end_effector_collider_ray_->is_colliding();
+}
 
 Array InverseKinematicChain::get_joint_paths() const {
     return ik_joint_paths_;
@@ -359,30 +270,51 @@ void InverseKinematicChain::set_joint_paths(const Array paths) {
             UtilityFunctions::printerr("Got invalid bone joint for array at index: ", i);
         }
     }
-    while (constraint_mins_.size() >= ik_joints_.size() && constraint_mins_.size() > 0)
-        constraint_mins_.pop_back();
-    while (constraint_maxs_.size() >= ik_joints_.size() && constraint_maxs_.size() > 0)
-        constraint_maxs_.pop_back();
-    while (constraint_mins_.size() < ik_joints_.size())
-        constraint_mins_.push_back(Vector3(0, 0, 0));
-    while (constraint_maxs_.size() < ik_joints_.size())
-        constraint_maxs_.push_back(Vector3(360, 360, 360));
+    while (constraint_mins_horizontal_.size() >= ik_joints_.size() && constraint_mins_horizontal_.size() > 0)
+        constraint_mins_horizontal_.pop_back();
+    while (constraint_mins_vertical_.size() >= ik_joints_.size() && constraint_mins_vertical_.size() > 0)
+        constraint_mins_vertical_.pop_back();
+    while (constraint_maxs_horizontal_.size() >= ik_joints_.size() && constraint_maxs_horizontal_.size() > 0)
+        constraint_maxs_horizontal_.pop_back();
+    while (constraint_maxs_vertical_.size() >= ik_joints_.size() && constraint_maxs_vertical_.size() > 0)
+        constraint_maxs_vertical_.pop_back();
+    
+    while (constraint_mins_horizontal_.size() < ik_joints_.size())
+        constraint_mins_horizontal_.push_back(-180);
+    while (constraint_mins_vertical_.size() < ik_joints_.size())
+        constraint_mins_vertical_.push_back(-180);
+    while (constraint_maxs_horizontal_.size() < ik_joints_.size())
+        constraint_maxs_horizontal_.push_back(180);
+    while (constraint_maxs_vertical_.size() < ik_joints_.size())
+        constraint_maxs_vertical_.push_back(180);
 }
 
 // Constraint mins
-Array InverseKinematicChain::get_constraint_mins() const {
-    return constraint_mins_;
+Array InverseKinematicChain::get_constraint_mins_horizontal() const {
+    return constraint_mins_horizontal_;
 }
-void InverseKinematicChain::set_constraint_mins(const Array constraint) {
-    constraint_mins_ = constraint;
+void InverseKinematicChain::set_constraint_mins_horizontal(const Array constraint) {
+    constraint_mins_horizontal_ = constraint;
+}
+Array InverseKinematicChain::get_constraint_mins_vertical() const {
+    return constraint_mins_vertical_;
+}
+void InverseKinematicChain::set_constraint_mins_vertical(const Array constraint) {
+    constraint_mins_vertical_ = constraint;
 }
 
 // Constraint maxs
-Array InverseKinematicChain::get_constraint_maxs() const {
-    return constraint_maxs_;
+Array InverseKinematicChain::get_constraint_maxs_horizontal() const {
+    return constraint_maxs_horizontal_;
 }
-void InverseKinematicChain::set_constraint_maxs(const Array constraint) {
-    constraint_maxs_ = constraint;
+void InverseKinematicChain::set_constraint_maxs_horizontal(const Array constraint) {
+    constraint_maxs_horizontal_ = constraint;
+}
+Array InverseKinematicChain::get_constraint_maxs_vertical() const {
+    return constraint_maxs_vertical_;
+}
+void InverseKinematicChain::set_constraint_maxs_vertical(const Array constraint) {
+    constraint_maxs_vertical_ = constraint;
 }
 
 // Target pos node path
@@ -401,32 +333,17 @@ void InverseKinematicChain::set_target_pos_path(const NodePath path) {
 
 // Root pos node path
 NodePath InverseKinematicChain::get_root_pos_node_path() const {
-    return root_pos_node_path_;
+    return marker_pos_node_path_;
 }
 void InverseKinematicChain::set_root_pos_node_path(const NodePath path) {
-    root_pos_node_path_ = path;
-    root_pos_node_ = get_node<Node3D>(root_pos_node_path_);
-    if (root_pos_node_ == nullptr) {
+    marker_pos_node_path_ = path;
+    marker_pos_node_ = get_node<Node3D>(marker_pos_node_path_);
+    if (marker_pos_node_ == nullptr) {
         UtilityFunctions::printerr("IK Chain: could not find root pos Node3D at the given path: ", path);
     } else {
         UtilityFunctions::print("Found root pos Node3D node at path: ", path);
     }
 }
-
-
-// NodePath InverseKinematicChain::get_model_root_path() const {
-//     return model_root_path_;
-// }
-// void InverseKinematicChain::set_model_root_path(const NodePath path) {
-//     model_root_path_ = path;
-//     model_root_ = get_node<Node3D>(model_root_path_);
-//     if (model_root_ == nullptr) {
-//         UtilityFunctions::printerr("IK Chain: could not find model root Node3D at the given path: ", path);
-//     } else {
-//         UtilityFunctions::print("IK Chain: Found model root at path ", path);
-//         update_model_hierarchy_transform();
-//     }
-// }
 
 // Target Threshold
 float InverseKinematicChain::get_target_threshold() const {
@@ -450,4 +367,18 @@ int InverseKinematicChain::get_max_iterations() const {
 }
 void InverseKinematicChain::set_max_iterations(const int max) {
     max_iterations_ = max;
+}
+
+// End effector collision area
+NodePath InverseKinematicChain::get_end_effector_collider_path() const {
+    return end_effector_collider_path_;
+}
+void InverseKinematicChain::set_end_effector_collider_path(const NodePath path) {
+    end_effector_collider_path_ = path;
+    end_effector_collider_ray_ = get_node<RayCast3D>(end_effector_collider_path_);
+    if (end_effector_collider_ray_ == nullptr) {
+        UtilityFunctions::printerr("IK Chain: could not end effector RayCast3D at given path: ", path);
+    } else {
+        UtilityFunctions::print("Found end effector RayCast3D node at path: ", path);
+    }
 }

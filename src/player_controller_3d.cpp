@@ -41,9 +41,8 @@ PlayerController3D::PlayerController3D() :
     is_paused_(false),
     movement_speed_(1.0f),
     running_speed_(1.6f),
-    rotate_speed_(0.01f),
-    camera_controller_(nullptr),
-    camera_controller_path_("")
+    rotate_speed_(0.05f),
+    camera_controller_(nullptr)
 {}
 
 PlayerController3D::~PlayerController3D() {}
