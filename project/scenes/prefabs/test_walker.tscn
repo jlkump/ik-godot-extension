@@ -17,6 +17,8 @@
 [sub_resource type="SphereMesh" id="SphereMesh_ualii"]
 
 [node name="test_walker" type="PlayerController3D"]
+move_speed = 1.4
+run_speed = 2.0
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -40,7 +42,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("2_4yb3t")
 
 [node name="Leg1_pos" type="Node3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, 0.5)
 
 [node name="Leg1" type="Node3D" parent="Body/Leg1_pos"]
 transform = Transform3D(-0.99494, -0.0398681, 0.0922231, 0.083794, 0.177198, 0.980601, -0.0554365, 0.983367, -0.172961, 0, 0, 0)
@@ -98,7 +100,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("3_q7dly")
 
 [node name="Leg2_pos" type="Node3D" parent="Body"]
-transform = Transform3D(0.992208, -0.122296, -0.0237897, 0, -0.190946, 0.981601, -0.124589, -0.973953, -0.189458, 0, -0.4, -0.5)
+transform = Transform3D(0.992208, -0.122296, -0.0237897, 0, -0.190946, 0.981601, -0.124589, -0.973953, -0.189458, -0.5, -0.4, -0.5)
 
 [node name="Leg2" type="Node3D" parent="Body/Leg2_pos"]
 transform = Transform3D(0.994049, -0.0277914, -0.105328, -0.0652488, 0.622358, -0.780009, 0.0872292, 0.78224, 0.616841, 0, 0, 0)
@@ -156,7 +158,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("3_q7dly")
 
 [node name="Leg3_pos" type="Node3D" parent="Body"]
-transform = Transform3D(-0.182819, 0.973816, 0.135128, 0, -0.137444, 0.99051, 0.983146, 0.181084, 0.0251275, 0.5, -0.4, 0)
+transform = Transform3D(-0.182819, 0.973816, 0.135128, 0, -0.137444, 0.99051, 0.983146, 0.181084, 0.0251275, 0.5, -0.4, -0.5)
 
 [node name="Leg3" type="Node3D" parent="Body/Leg3_pos"]
 transform = Transform3D(0.980486, 0.0810978, 0.179084, 0.126795, 0.435284, -0.89132, -0.150236, 0.896633, 0.416507, 0, 0, 0)
@@ -214,7 +216,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("3_q7dly")
 
 [node name="Leg4_pos" type="Node3D" parent="Body"]
-transform = Transform3D(0.0508544, -0.998052, -0.0361434, 0, -0.0361902, 0.999345, -0.998706, -0.0508211, -0.00184043, -0.5, -0.4, 0)
+transform = Transform3D(0.0508544, -0.998052, -0.0361434, 0, -0.0361902, 0.999345, -0.998706, -0.0508211, -0.00184043, -0.5, -0.4, 0.5)
 
 [node name="Leg4" type="Node3D" parent="Body/Leg4_pos"]
 transform = Transform3D(0.999104, 0.0162067, 0.0391168, 0.0189937, 0.654131, -0.756143, -0.0378421, 0.756208, 0.653237, 0, 0, 0)
@@ -271,11 +273,28 @@ mesh = SubResource("SphereMesh_ualii")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("3_q7dly")
 
+[node name="Leg1_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 2, 0.8)
+target_position = Vector3(0, -3, 0)
+
+[node name="Leg2_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 2, -0.8)
+target_position = Vector3(0, -3, 0)
+
+[node name="Leg3_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 2, -0.8)
+target_position = Vector3(0, -3, 0)
+
+[node name="Leg4_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 2, 0.8)
+target_position = Vector3(0, -3, 0)
+
 [node name="InverseKinematicController" type="InverseKinematicController" parent="."]
-ik_update_dist = 0.6
-ik_walking_speed = 10.0
 ik_chain_paths = [NodePath("Leg_1"), NodePath("Leg_2"), NodePath("Leg_3"), NodePath("Leg_4")]
 ik_ray_paths = [NodePath("../Leg1_ray"), NodePath("../Leg2_ray"), NodePath("../Leg3_ray"), NodePath("../Leg4_ray")]
+interp_speed = 5.0
+stride = 0.5
+stride_height = 0.1
 
 [node name="Leg_1" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../Body/Leg1_pos")
@@ -296,19 +315,3 @@ calculation_threshold = 0.01
 marker_pos_node_path = NodePath("../../Body/Leg4_pos")
 ik_joint_paths = [NodePath("../../Body/Leg4_pos/Leg4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4/MidHinge_L4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4/Point_L4")]
 calculation_threshold = 0.01
-
-[node name="Leg1_ray" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.4)
-target_position = Vector3(0, -1.3, 0)
-
-[node name="Leg2_ray" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.4)
-target_position = Vector3(0, -1.3, 0)
-
-[node name="Leg3_ray" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1, 0)
-target_position = Vector3(0, -1.3, 0)
-
-[node name="Leg4_ray" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1, 0)
-target_position = Vector3(0, -1.3, 0)

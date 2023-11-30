@@ -4,16 +4,19 @@
 #include <godot_cpp/classes/area3d.hpp>
 #include <godot_cpp/classes/character_body3d.hpp>
 
-#include "camera_controller_3d.h"
 #include "helpers.h"
 
 namespace godot {
+    // class InverseKinematicController;
+    class CameraController3D;
+
     class PlayerController3D : public CharacterBody3D {
         GDCLASS(PlayerController3D, CharacterBody3D)
     private:
 
         CameraController3D* camera_controller_;
         NodePath camera_controller_path_;
+
         enum State {
             IDLE,
             MOVE,

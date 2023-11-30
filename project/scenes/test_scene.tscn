@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cerbfg0qccj1i"]
+[gd_scene load_steps=11 format=3 uid="uid://cerbfg0qccj1i"]
 
 [ext_resource type="PackedScene" uid="uid://r8cvva0ef4ox" path="res://scenes/prefabs/test_floor.tscn" id="1_7kdvu"]
 [ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_lnpyf"]
@@ -17,6 +17,10 @@ albedo_color = Color(0.454902, 1, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8q5ya"]
 albedo_color = Color(1, 0.419608, 0.45098, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_catvi"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oc0rr"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -47,38 +51,34 @@ light_energy = 1.85
 [node name="walker_targets" type="Node" parent="."]
 
 [node name="target_leg1" type="Node3D" parent="walker_targets"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0467883, 0.0947593, 1.08242)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.0467883, 0.0947593, 1.08242)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg1"]
 transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
-visible = false
 mesh = SubResource("SphereMesh_4g3w5")
 surface_material_override/0 = SubResource("StandardMaterial3D_rvtyg")
 
 [node name="target_leg2" type="Node3D" parent="walker_targets"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.37566, 0, 0)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -1.37566, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg2"]
 transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
-visible = false
 mesh = SubResource("SphereMesh_4g3w5")
 surface_material_override/0 = SubResource("StandardMaterial3D_f5b46")
 
 [node name="target_leg3" type="Node3D" parent="walker_targets"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6719)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, -1.6719)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg3"]
 transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
-visible = false
 mesh = SubResource("SphereMesh_4g3w5")
 surface_material_override/0 = SubResource("StandardMaterial3D_mdxgu")
 
 [node name="target_leg4" type="Node3D" parent="walker_targets"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.37227, 0, 0.0608051)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 1.37227, 0, 0.0608051)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="walker_targets/target_leg4"]
 transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, 0)
-visible = false
 mesh = SubResource("SphereMesh_4g3w5")
 surface_material_override/0 = SubResource("StandardMaterial3D_8q5ya")
 
@@ -96,6 +96,17 @@ target_path = NodePath("../../../walker_targets/target_leg3")
 
 [node name="Leg_4" parent="test_walker/InverseKinematicController" index="3"]
 target_path = NodePath("../../../walker_targets/target_leg4")
+
+[node name="Obstacles" type="Node" parent="."]
+
+[node name="Cube" type="StaticBody3D" parent="Obstacles"]
+transform = Transform3D(2.5421, -0.129638, 0, 0.925952, 0.355907, 0, 0, 0, 1, 2.17911, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacles/Cube"]
+shape = SubResource("BoxShape3D_catvi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacles/Cube"]
+mesh = SubResource("BoxMesh_oc0rr")
 
 [editable path="player_cam"]
 [editable path="test_walker"]

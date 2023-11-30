@@ -64,7 +64,7 @@ void InverseKinematicChain::perform_ik() {
         reach += distances_[i];
     }
 
-    UtilityFunctions::print("Reach is ", reach, ". Distance is ", joints_[0].distance_to(target));
+    // UtilityFunctions::print("Reach is ", reach, ". Distance is ", joints_[0].distance_to(target));
 
     if (joints_[0].distance_to(target) > reach) {
         // We can't reach the target, 
@@ -76,7 +76,7 @@ void InverseKinematicChain::perform_ik() {
             joints_[i + 1] = (1.0f - gam_i) * joints_[i] + gam_i * target;
         }
     } else {
-        UtilityFunctions::print("Performing FABRIK");
+        // UtilityFunctions::print("Performing FABRIK");
         // We can reach, so perform FABRIK
         Vector3 initial = joints_[0];
         float dif_a = joints_[joints_.size() - 1].distance_to(target);
@@ -147,7 +147,7 @@ void InverseKinematicChain::update_joint_nodes() {
             // Update previous transform, force update in world-space.
             // Force update will also update children transforms.
             joint_node->set_global_transform(old_global_trans);
-            UtilityFunctions::print("Updating joint: ", joint_node->get_name(), " to have global pos: ", joints_[i]);
+            // UtilityFunctions::print("Updating joint: ", joint_node->get_name(), " to have global pos: ", joints_[i]);
             // joint_node->force_update_transform();
         }
     }
@@ -163,10 +163,10 @@ void InverseKinematicChain::update_joints() {
             joints_.push_back(start);
         }
     }
-    UtilityFunctions::print("Updated joints:");
-    for (int i = 0; i < joints_.size(); i++) {
-        UtilityFunctions::print("   Joint ", i, ": ", joints_[i]);
-    }
+    // UtilityFunctions::print("Updated joints:");
+    // for (int i = 0; i < joints_.size(); i++) {
+    //     UtilityFunctions::print("   Joint ", i, ": ", joints_[i]);
+    // }
 }
 
 void InverseKinematicChain::update_distances() {
@@ -180,10 +180,10 @@ void InverseKinematicChain::update_distances() {
             distances_.push_back(start.distance_to(end));
         }
     }
-    UtilityFunctions::print("Updated distances:");
-    for (int i = 0; i < distances_.size(); i++) {
-        UtilityFunctions::print("   Distance ", i, " to ", i + 1, ": ", distances_[i]);
-    }
+    // UtilityFunctions::print("Updated distances:");
+    // for (int i = 0; i < distances_.size(); i++) {
+    //     UtilityFunctions::print("   Distance ", i, " to ", i + 1, ": ", distances_[i]);
+    // }
 }
 
 void InverseKinematicChain::set_paused_state(bool is_paused) {
@@ -248,12 +248,20 @@ Node3D* InverseKinematicChain::get_target_pos_node() {
     return target_pos_node_;
 }
 
-bool InverseKinematicChain::is_end_effector_colliding() {
+bool InverseKinematicChain::is_end_effector_colliding() const {
     if (end_effector_collider_ray_ == nullptr) {
         return false;
     }
     end_effector_collider_ray_->force_raycast_update();
     return end_effector_collider_ray_->is_colliding();
+}
+
+float InverseKinematicChain::get_reach() const {
+    float reach = 0;
+    for (int i = 0; i < distances_.size(); i++) {
+        reach += distances_[i];
+    }
+    return reach;
 }
 
 Array InverseKinematicChain::get_joint_paths() const {

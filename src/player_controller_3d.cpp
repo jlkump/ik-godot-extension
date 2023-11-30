@@ -6,6 +6,8 @@
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
+#include "camera_controller_3d.h"
+#include "inverse_kinematic_controller.h"
 #include "game_manager.h"
 
 using namespace godot;
@@ -15,6 +17,7 @@ void PlayerController3D::_bind_methods() {
     ClassDB::bind_method(D_METHOD("on_camera_transform_updated", "transform"), &PlayerController3D::on_camera_transform_updated);
 
     BIND_GETTER_SETTER(PlayerController3D, camera_controller_path, PropertyInfo(Variant::NODE_PATH, "camera_controller_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "CameraController3D"))
+    // BIND_GETTER_SETTER(PlayerController3D, ik_controller_path, PropertyInfo(Variant::NODE_PATH, "ik_controller_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "InverseKinematicController"))
     BIND_GETTER_SETTER(PlayerController3D, move_speed, PropertyInfo(Variant::FLOAT, "move_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.01"));
     BIND_GETTER_SETTER(PlayerController3D, run_speed, PropertyInfo(Variant::FLOAT, "run_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.01"));
     BIND_GETTER_SETTER(PlayerController3D, rotate_speed, PropertyInfo(Variant::FLOAT, "rotate_speed", PROPERTY_HINT_RANGE, "0.01,200.0,0.01"));
@@ -43,6 +46,7 @@ PlayerController3D::PlayerController3D() :
     running_speed_(1.6f),
     rotate_speed_(0.05f),
     camera_controller_(nullptr)
+    // ik_controller_(nullptr)
 {}
 
 PlayerController3D::~PlayerController3D() {}
@@ -126,6 +130,9 @@ void PlayerController3D::_process(double delta) {
     }
 
     set_velocity(move_vector);
+    // if (ik_controller_ != nullptr) {
+    //     ik_controller_->set_current_movement_vec(move_vector * delta);
+    // }
     move_and_slide();
     if (is_on_floor() && player_state_ == JUMP) {
         set_player_state(IDLE);
@@ -155,6 +162,25 @@ void PlayerController3D::set_camera_controller_path(const NodePath path) {
         camera_controller_->connect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
     }
 }
+
+// NodePath PlayerController3D::get_ik_controller_path() const {
+//     return ik_controller_path_;
+// }
+// void PlayerController3D::set_ik_controller_path(const NodePath path) {
+//     ik_controller_path_ = path;
+//     // For future possible signals
+//     // if (ik_controller_ != nullptr) {
+//     //     camera_controller_->disconnect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
+//     // }
+//     ik_controller_ = get_node<InverseKinematicController>(ik_controller_path_);
+//     if (ik_controller_ == nullptr) {
+//         UtilityFunctions::printerr("Player Controller: Could not find IKController at given path: ", path);
+//     }
+//     // Future possible signals
+//     //  else {
+//     //     camera_controller_->connect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
+//     // }
+// }
 
 float PlayerController3D::get_move_speed() const {
     return movement_speed_;

@@ -56,7 +56,8 @@ namespace godot {
         void _process(double delta);
         
         Node3D* get_target_pos_node();
-        bool is_end_effector_colliding();
+        bool is_end_effector_colliding() const;
+        float get_reach() const;
 
         DECLARE_GETTER_SETTER(Array, joint_paths)
         DECLARE_GETTER_SETTER(Array, constraint_mins_horizontal)
