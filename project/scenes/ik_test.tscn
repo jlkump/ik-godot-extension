@@ -30,18 +30,19 @@ albedo_color = Color(1, 0.490196, 0.490196, 1)
 [node name="player_cam" parent="." instance=ExtResource("1_5ly8b")]
 input_lateral_rotation_speed = 0.0501
 input_vertical_rotation_speed = 0.0501
-focus_object_path = NodePath("../Scale/Root/Core/Point/End")
+focus_object_path = NodePath("../PlayerController3D")
 orbit_distance = 6.0
 orbit_angle = 0.201
 orbit_rotation = 1.501
 
 [node name="Camera3D" parent="player_cam" index="0"]
-transform = Transform3D(0.997565, -0.0139235, 0.0683357, 1.44355e-08, 0.979867, 0.199649, -0.0697397, -0.199163, 0.977482, 6.64193, 1.1979, 5.86489)
+transform = Transform3D(0.997565, -0.0139235, 0.0683357, 6.98492e-09, 0.979867, 0.199649, -0.0697397, -0.199163, 0.977482, 6.72686, 1.1979, 5.86489)
 
 [node name="PlayerController3D" type="PlayerController3D" parent="."]
 camera_controller_path = NodePath("../player_cam")
-run_speed = 200.0
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 2.30818, 0, 0)
+move_speed = 3.0
+run_speed = 5.0
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 6.31678, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerController3D"]
 shape = SubResource("BoxShape3D_v2u2l")
@@ -113,6 +114,11 @@ surface_material_override/0 = ExtResource("1_junqn")
 
 [node name="InverseKinematicChain" type="InverseKinematicChain" parent="."]
 target_path = NodePath("../PlayerController3D")
+marker_pos_node_path = NodePath("../Scale")
 ik_joint_paths = [NodePath("../Scale/Root"), NodePath("../Scale/Root/Core"), NodePath("../Scale/Root/Core/Point"), NodePath("../Scale/Root/Core/Point/End")]
+ik_joint_min_rotations_horizontal = [45, 45, 45, 1]
+ik_joint_min_rotations_vertical = [45, 45, 45, 1]
+ik_joint_max_rotations_horizontal = [45, 45, 45, 1]
+ik_joint_max_rotations_vertical = [45, 45, 45, 1]
 
 [editable path="player_cam"]

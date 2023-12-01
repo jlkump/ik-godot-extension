@@ -92,7 +92,9 @@ void InverseKinematicController::_process(double delta) {
             Vector3 desired_pos;
             Vector3 collision_pos = ray->get_collision_point();
             if (ray->is_colliding()) {
-                desired_pos = (collision_pos - previous_colisions_[i]).normalized() * stride_ + collision_pos;
+                desired_pos = (collision_pos - previous_colisions_[i])
+                    .clamp(Vector3(-stride_, 0, -stride_), Vector3(stride_, 0, stride_)) 
+                    + collision_pos;
                 previous_colisions_[i] = collision_pos;
                 // UtilityFunctions::print("change in direction is for joint", i, ": ", (ray->get_collision_point() - previous_colisions_[i]).normalized());
             } else {
