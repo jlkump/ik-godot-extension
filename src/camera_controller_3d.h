@@ -64,6 +64,8 @@ namespace godot {
 
         void set_paused_state(bool is_paused);
 
+        // void rotate_to_lookat(Vector3 look_forward);
+
         DECLARE_GETTER_SETTER(float, cam_move_speed);
         DECLARE_GETTER_SETTER(float, cam_rotation_speed);
         DECLARE_GETTER_SETTER(float, input_lateral_rotation_speed);

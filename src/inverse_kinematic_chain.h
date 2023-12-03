@@ -36,6 +36,7 @@ namespace godot {
         float end_effector_height_offset_;
 
         Vector3 project_point_onto_line(Vector3 point, Vector3 line_dir, Vector3 line_pos);
+        Vector3 recursive_search_point(Vector3 x_basis, Vector3 z_basis, const float a, const float b, Vector3 target, Vector3 cur, Vector3 O, int iter);
         Vector3 apply_rotational_constraint(Vector3 target, Vector3 prev_joint_end, Vector3 prev_joint_start, 
                                             float min_x, float max_x, float min_y, float max_y,
                                             Basis bone_basis);

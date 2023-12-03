@@ -128,6 +128,14 @@ void PlayerController3D::_process(double delta) {
     if (player_state_ != JUMP) {
         rotate_object_local(Vector3(0, 1, 0), rotate_value * rotate_speed_);
     }
+    if (move_vector.x != 0.0f && move_vector.z != 0.0f) {
+        Vector3 y_basis = Vector3(0, 1, 0);
+        Transform3D new_trans = get_global_transform();
+        Vector3 scale = new_trans.get_basis().get_scale();
+        new_trans.set_look_at(get_global_position(), get_global_position() - movement_basis_.xform(Vector3(1, 0, 0)));
+        new_trans.scale_basis(scale);
+        set_global_transform(new_trans);
+    }
 
     set_velocity(move_vector);
     // if (ik_controller_ != nullptr) {

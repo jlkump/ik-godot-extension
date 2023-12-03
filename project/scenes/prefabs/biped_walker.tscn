@@ -1,0 +1,113 @@
+[gd_scene load_steps=9 format=3 uid="uid://cb10fh0jo2d8"]
+
+[ext_resource type="Material" uid="uid://15g7o7r6fe72" path="res://resources/materials/temp_joint.tres" id="1_nfjil"]
+[ext_resource type="Material" uid="uid://beegm71sesr6n" path="res://resources/materials/temp_metal.tres" id="2_yo8sd"]
+[ext_resource type="Material" uid="uid://78j8wsnbhyes" path="res://resources/materials/temp_eye.tres" id="3_6eg0f"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_t137x"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_e3e3c"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ydmq8"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_grpm1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_erpkh"]
+
+[node name="biped_walker" type="Node"]
+
+[node name="LeftLeg" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.75736, 0)
+
+[node name="TopJoint_ll" type="Node3D" parent="LeftLeg"]
+
+[node name="Cylndr" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll"]
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -0.05, 0)
+mesh = SubResource("CylinderMesh_t137x")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_nfjil")
+
+[node name="Bx" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll"]
+transform = Transform3D(0.4, 0, 0, 0, 0.8, 0, 0, 0, 0.1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_e3e3c")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="KneeJoint_ll" type="Node3D" parent="LeftLeg/TopJoint_ll"]
+
+[node name="Cylndr" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -1.00336, 0)
+mesh = SubResource("CylinderMesh_t137x")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_nfjil")
+
+[node name="Bx" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
+transform = Transform3D(0.4, 0, 0, 0, 0.7, 0, 0, 0, 0.1, 0, -1.4, 0)
+mesh = SubResource("BoxMesh_e3e3c")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="Bx2" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
+transform = Transform3D(0.4, 0, 0, 0, -3.0598e-08, -0.1, 0, 0.7, -4.37114e-09, 0, -1.7491, 0)
+mesh = SubResource("BoxMesh_e3e3c")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="RightLeg" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.757, 0)
+
+[node name="TopJoint_rl" type="Node3D" parent="RightLeg"]
+
+[node name="Cylndr" type="MeshInstance3D" parent="RightLeg/TopJoint_rl"]
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -0.05, 0)
+mesh = SubResource("CylinderMesh_t137x")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_nfjil")
+
+[node name="Bx" type="MeshInstance3D" parent="RightLeg/TopJoint_rl"]
+transform = Transform3D(0.4, 0, 0, 0, 0.8, 0, 0, 0, 0.1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_e3e3c")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="KneeJoint_rl" type="Node3D" parent="RightLeg/TopJoint_rl"]
+
+[node name="Cylndr" type="MeshInstance3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -1.00336, 0)
+mesh = SubResource("CylinderMesh_t137x")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_nfjil")
+
+[node name="Bx" type="MeshInstance3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
+transform = Transform3D(0.4, 0, 0, 0, 0.7, 0, 0, 0, 0.1, 0, -1.4, 0)
+mesh = SubResource("BoxMesh_e3e3c")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="Bx2" type="MeshInstance3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
+transform = Transform3D(0.4, 0, 0, 0, -3.0598e-08, -0.1, 0, 0.7, -4.37114e-09, 0, -1.7491, 0)
+mesh = SubResource("BoxMesh_e3e3c")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+
+[node name="base" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_ydmq8")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="Eye" type="Node3D" parent="Head"]
+
+[node name="stalk" type="MeshInstance3D" parent="Head/Eye"]
+transform = Transform3D(0.2, 0, 0, 0, -1.31134e-08, -0.2, 0, 0.3, -8.74228e-09, 0, 0, -0.3)
+mesh = SubResource("CylinderMesh_grpm1")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("3_6eg0f")
+
+[node name="box" type="MeshInstance3D" parent="Head/Eye"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0, -0.5)
+mesh = SubResource("BoxMesh_erpkh")
+surface_material_override/0 = ExtResource("2_yo8sd")

@@ -37,53 +37,69 @@ Vector3 InverseKinematicChain::project_point_onto_line(Vector3 point, Vector3 li
     // Alternative solving for line_dir.dot(result - point) = 0
 }
 
+Vector3 InverseKinematicChain::recursive_search_point(Vector3 x_basis, Vector3 z_basis, const float a, const float b,
+        Vector3 target, Vector3 cur, Vector3 O, int iter) {
+
+    if (iter <= 0) {
+        return cur;
+    }
+    float x_2d = project_point_onto_line(cur, x_basis, O).distance_to(O);
+    float z_2d = project_point_onto_line(cur, z_basis, O).distance_to(O);
+    float degree_to_rad = 3.14 / 180;
+    float val = (z_2d * z_2d) / (a * a) + (x_2d * x_2d) / (b * b);
+    if (val < 1.0f) {
+        // Below so get closer to target
+        cur = cur * 0.5 + target * 0.5;
+        return recursive_search_point(x_basis, z_basis, a, b, target, cur, O, iter - 1);
+    } else if (val > 1.0f) {
+        // Above so get closer to O
+        cur = cur * 0.5 + target * 0.5;
+        return recursive_search_point(x_basis, z_basis, a, b, target, cur, O, iter - 1);
+    } else {
+        return cur;
+    }
+}
+
 Vector3 InverseKinematicChain::apply_rotational_constraint(
         Vector3 target, Vector3 prev_joint_end, Vector3 prev_joint_start, 
         float min_x, float max_x, float min_y, float max_y,
         Basis bone_basis) {
+
     // 1. Get rotational constriants at the current bone
     // 2. Construct the line L_1 that is the point from p_i+1 to p_i
-    UtilityFunctions::print("Initial target: ", target," prev joint end:", prev_joint_end, " prev joint start: ", prev_joint_start);
-    Vector3 L_1_dir = prev_joint_end - prev_joint_start;
-    UtilityFunctions::print("Direction is: ", L_1_dir);
+    Vector3 L_1_dir = (prev_joint_end - prev_joint_start).normalized();
+
     // 3. Project the target onto L_1 to get O
     Vector3 O = project_point_onto_line(target, L_1_dir, prev_joint_start);
-    UtilityFunctions::print("Origin is: ", O);
+
     // 4. Store the distance between O and p_i as S
     //      The ellipsoid is defined by the distances:
-    //      S * tan(min_horizontal), S * tan(max_horizontal), S * tan(min_vertical), S * tan(max_vertical)
-    float S = O.distance_to(prev_joint_start);
-    // 5. Rotate and translate O and target such that O is now at the origin        // HOW?
-    //      The plane is aligned orthogonally to the line L_1
-    // Vector3 y_basis = L_1_dir.normalized();
-    // Vector3 x_basis = y_basis.cross(z_basis_temp);
-    // Vector3 z_basis = y_basis.cross(x_basis);
-    bone_basis.get_rotation_quaternion();
-    UtilityFunctions::print("Basises: ");
-    UtilityFunctions::print("        ", bone_basis);
-    Transform3D transform;
-    transform.origin = O;
-    transform.basis = bone_basis;
-    transform.affine_invert();
+    float S = O.distance_to(prev_joint_end);
 
-    Vector3 O_prime = transform.xform(O);
-    UtilityFunctions::print("This should be zero: ", O_prime);
-    Vector3 target_prime = transform.xform(target);
-    UtilityFunctions::print("Transformed target ", target, " to ", target_prime);
+    // 5. Rotate and translate O and target such that O is now at the origin
+    //      The plane is aligned orthogonally to the line L_1
+
+    Vector3 y_basis = L_1_dir;
+    Vector3 x_basis_temp = bone_basis.inverse().xform(Vector3(1, 0, 0)).normalized();
+    Vector3 z_basis = y_basis.cross(x_basis_temp).normalized();
+    Vector3 x_basis = y_basis.cross(z_basis).normalized();
+
+    float x_2d = project_point_onto_line(target, x_basis, O).distance_to(O);
+    float z_2d = project_point_onto_line(target, z_basis, O).distance_to(O);
 
     // 6. Find which quadrant the point target_prime is in and define the ellipse
     float degree_to_rad = 3.14 / 180;
     float a;
     float b;
-    if (target_prime.x >= 0 && target_prime.y >= 0) {
+    if (x_2d >= 0 && z_2d >= 0) {
         // Quadrant 1
         a = S * tan(max_y * degree_to_rad);
         b = S * tan(max_x * degree_to_rad);
-    } else if (target_prime.x < 0 && target_prime.y >= 0) {
+    } else if (x_2d < 0 && z_2d >= 0) {
         // Quadrant 2
         a = S * tan(max_y * degree_to_rad);
         b = S * tan(min_x * degree_to_rad);
-    } else if (target_prime.x < 0 && target_prime.y < 0) {
+    } else if (x_2d < 0 && z_2d < 0) {
         // Quadrant 3
         a = S * tan(min_y * degree_to_rad);
         b = S * tan(min_x * degree_to_rad);
@@ -94,20 +110,23 @@ Vector3 InverseKinematicChain::apply_rotational_constraint(
     }
 
     // 7. Is the point within the defined ellipse?
-    if ((target_prime.z * target_prime.z) / (a * a) + (target_prime.x * target_prime.x) / (b * b) < 1.0f) {
+    if ((z_2d * z_2d) / (a * a) + (x_2d * x_2d) / (b * b) < 1.0f) {
         // 7.t.1 If true, return target
-        UtilityFunctions::print("Target is inside cone bounds.");
+        // UtilityFunctions::print("Target is inside cone bounds.");
         return target;
     } else {
-        // 7.f.1 If false, map target_prime to the nearest location on the ellipse      // HOW?
-        float q = target_prime.x / target_prime.z;
-        float x = sqrt(1 / ((1 / (a * a)) + (q * q) / (b * b)));
-        float z = sqrt((1 - (x * x) / (a * a)) * b * b);
+        // 7.f.1 If false, map target_prime to the nearest location on the ellipse
+        // float q = z_2d / x_2d;
+        // float x = sqrt(1.0f / ((1.0f / (b * b)) + (q * q) / (a * a)));
+        // if ((1.0f - (x * x) / (b * b)) * a * a < 0.0f)
+        //     UtilityFunctions::printerr("Got negative value for solving z sqrt with x: ", x, " q: ", q, " a: ", a, " b: ", b, " S: ", S, " O: ", O, " x_2d: ", x_2d, " z_2d: ", z_2d);
+        // float z = sqrt((1.0f - (x * x) / (b * b)) * a * a);
         // 7.f.2 Reverse the tranformation of the newly mapped target_prime to get the resulting target. Return that.
-        target_prime.x = x;
-        target_prime.z = z;
-        UtilityFunctions::print("Target is outside cone, bounding to: ", target_prime, " which in worldspace is: ", transform.affine_inverse().xform(target_prime));
-        return transform.affine_inverse().xform(target_prime);
+        // float interp = Vector2(x, z).length();
+        // return target * 0.5 + O * 0.5;
+        return recursive_search_point(x_basis, z_basis, a, b, target, O * 0.5 + target * 0.5, O, 4);
+        // UtilityFunctions::print("Target is outside cone, bounding to: ", target_prime, " which in worldspace is: ", transform.affine_inverse().xform(target_prime));
+        // return transform.affine_inverse().xform(target_prime);
     }
 }
 
@@ -162,10 +181,10 @@ void InverseKinematicChain::perform_ik() {
             // and adjust based on the previous pos of the bone
             // and the desired pos.
             joints_[joints_.size() - 1] = target; 
-            UtilityFunctions::print("############ Starting Forward Reaching ################");
+            // UtilityFunctions::print("############ Starting Forward Reaching ################");
             for (int i = joints_.size() - 2; i >= 0; i--) {
                 Vector3 t = joints_[i];
-                if (false && i != joints_.size() - 2) {
+                if (i != joints_.size() - 2) {
                     t = apply_rotational_constraint(joints_[i], joints_[i + 1], joints_[i + 2], 
                             constraint_mins_horizontal_[i], constraint_maxs_horizontal_[i], 
                             constraint_mins_vertical_[i], constraint_maxs_vertical_[i],
@@ -184,14 +203,14 @@ void InverseKinematicChain::perform_ik() {
             }
             // Backward reaching
             joints_[0] = initial;
-            UtilityFunctions::print("############ Starting Backward Reaching ################");
+            // UtilityFunctions::print("############ Starting Backward Reaching ################");
             for (int i = 0; i < joints_.size() - 1; i++) {
                 Vector3 t = joints_[i + 1];
-                if (false && i != 0) {
+                if (i != 0) {
                     t = apply_rotational_constraint(joints_[i + 1], joints_[i], joints_[i - 1],
                         constraint_mins_horizontal_[i], constraint_maxs_horizontal_[i],
                         constraint_mins_vertical_[i], constraint_maxs_vertical_[i],
-                        ik_joints_[i]->get_basis());
+                        ik_joints_[i + 1]->get_basis());
                 }
                 float r_i = joints_[i].distance_to(t);
                 float gam_i  = distances_[i] / r_i;
@@ -215,7 +234,6 @@ void InverseKinematicChain::update_joint_nodes() {
             Transform3D old_global_trans = joint_node->get_global_transform();
 
             // Construct new basis in world-space
-            Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
             // Vector3 x_basis_temp = Vector3(1, 0, 0);
             // if (y_basis.cross(x_basis_temp).length() <= 0.00001f) {
             //     // Choose a new direction if the cross product isn't working
@@ -224,6 +242,7 @@ void InverseKinematicChain::update_joint_nodes() {
             // Vector3 z_basis = y_basis.cross(x_basis_temp).normalized();
             // Vector3 x_basis = y_basis.cross(z_basis).normalized();
             Basis old_basis = old_global_trans.basis;
+            Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
             Vector3 old_y_basis = old_basis.xform(Vector3(0, 1, 0));
             Quaternion new_rot = Quaternion(old_y_basis, y_basis) * old_basis.get_rotation_quaternion();
 
@@ -249,7 +268,7 @@ void InverseKinematicChain::update_joints() {
     // positions of the ik_joint nodes
     joints_.clear();
     for (int i = 0; i < ik_joints_.size(); i++) {
-        if (ik_joints_[i] != nullptr && ik_joints_[i]->is_node_ready()) {
+        if (ik_joints_[i] != nullptr) {
             Vector3 start =  ik_joints_[i]->get_global_position();
             joints_.push_back(start);
         }
@@ -315,10 +334,13 @@ void InverseKinematicChain::_process(double delta) {
         Engine::get_singleton()->is_editor_hint() || is_paused_ || 
         ik_joints_[ik_joints_.size() - 1] == nullptr) {
 
-        // UtilityFunctions::print("Returing early", joints_.size() <= 1, 
+        // UtilityFunctions::print("Returing early: ", 
+        //         joints_.size() <= 1, 
         //         target_pos_node_ == nullptr, 
+        //         marker_pos_node_ == nullptr, 
         //         ik_joints_.size() <= 1, 
-        //         ik_joints_.size() != joints_.size());
+        //         distances_.size() <= 1, 
+        //         is_paused_);
         return;
     }
 
@@ -332,6 +354,14 @@ void InverseKinematicChain::_process(double delta) {
         if (end_effector_collider_ray_ != nullptr) {
             end_effector_collider_ray_->set_global_position(joints_[joints_.size() - 1]);
         }
+        UtilityFunctions::print("Joints size is: ", joints_.size());
+        UtilityFunctions::print("Target pos node is: ", target_pos_node_);
+        UtilityFunctions::print("Marker pos node is: ", marker_pos_node_);
+        UtilityFunctions::print("IK joints size is: ", ik_joints_.size());
+        UtilityFunctions::print("Distances size is: ", distances_.size());
+    } else {
+        UtilityFunctions::print("End effector ", ik_joints_[ik_joints_.size() - 1], " is at target ", target_pos_node_, " end effector pos: ",  ik_joints_[ik_joints_.size() - 1]->get_global_position(), " target pos: ", target_pos_node_->get_global_position(),
+                " distance is: ", ik_joints_[ik_joints_.size() - 1]->get_global_position().distance_to(target_pos_node_->get_global_position()));
     }
 }
 

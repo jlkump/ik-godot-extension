@@ -1,0 +1,82 @@
+[gd_scene load_steps=4 format=3 uid="uid://cibk2sacobk8q"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_887aa"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_62dvq"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tkp3v"]
+
+[node name="camera_stalk" type="Node"]
+
+[node name="Root_pos" type="Node3D" parent="."]
+
+[node name="base_joint" type="Node3D" parent="Root_pos"]
+
+[node name="cylndr" type="MeshInstance3D" parent="Root_pos/base_joint"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_887aa")
+skeleton = NodePath("../..")
+
+[node name="joint" type="MeshInstance3D" parent="Root_pos/base_joint"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1, 0)
+mesh = SubResource("BoxMesh_62dvq")
+skeleton = NodePath("../..")
+
+[node name="joint1" type="Node3D" parent="Root_pos/base_joint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05444, 0)
+
+[node name="cylndr" type="MeshInstance3D" parent="Root_pos/base_joint/joint1"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_887aa")
+skeleton = NodePath("../..")
+
+[node name="joint" type="MeshInstance3D" parent="Root_pos/base_joint/joint1"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1, 0)
+mesh = SubResource("BoxMesh_62dvq")
+skeleton = NodePath("../..")
+
+[node name="joint2" type="Node3D" parent="Root_pos/base_joint/joint1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01267, 0)
+
+[node name="cylndr" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_887aa")
+skeleton = NodePath("../../../..")
+
+[node name="joint" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1, 0)
+mesh = SubResource("BoxMesh_62dvq")
+skeleton = NodePath("../../../..")
+
+[node name="joint3" type="Node3D" parent="Root_pos/base_joint/joint1/joint2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05444, 0)
+
+[node name="cylndr" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2/joint3"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_887aa")
+skeleton = NodePath("../..")
+
+[node name="joint" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2/joint3"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1, 0)
+mesh = SubResource("BoxMesh_62dvq")
+skeleton = NodePath("../..")
+
+[node name="look_joint" type="Node3D" parent="Root_pos/base_joint/joint1/joint2/joint3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.975444, 0)
+
+[node name="cylndr" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2/joint3/look_joint"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_887aa")
+skeleton = NodePath("../../../..")
+
+[node name="Head" type="Node3D" parent="Root_pos/base_joint/joint1/joint2/joint3/look_joint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.09649, 0)
+
+[node name="head" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2/joint3/look_joint/Head"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+mesh = SubResource("BoxMesh_62dvq")
+skeleton = NodePath("../../../../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Root_pos/base_joint/joint1/joint2/joint3/look_joint/Head"]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+mesh = SubResource("SphereMesh_tkp3v")

@@ -1,0 +1,282 @@
+[gd_scene load_steps=11 format=3 uid="uid://bn48negra2bhv"]
+
+[ext_resource type="Material" uid="uid://dmyli5lcsmfws" path="res://resources/materials/obstacle_mat.tres" id="1_gpfok"]
+[ext_resource type="PackedScene" uid="uid://cmsw1yedwjm4b" path="res://scenes/prefabs/test_walker.tscn" id="2_hd2xi"]
+[ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_nrh3y"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rkpow"]
+size = Vector3(1.9803, 0.0156242, 1.95682)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6xna1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rmbl8"]
+albedo_color = Color(0.184314, 0.2, 0.141176, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tig71"]
+size = Vector3(2.00184, 0.391568, 0.416826)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xngi0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_njtcj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qeqqq"]
+size = Vector3(1, 0.135618, 2.99742)
+
+[node name="creatures_showcase" type="Node"]
+
+[node name="scene" type="Node" parent="."]
+
+[node name="ground_plane" type="StaticBody3D" parent="scene"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/ground_plane"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, -0.0613709, 0)
+shape = SubResource("BoxShape3D_rkpow")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/ground_plane"]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_6xna1")
+surface_material_override/0 = SubResource("StandardMaterial3D_rmbl8")
+
+[node name="obstacles" type="Node" parent="scene"]
+
+[node name="bar_obstacle" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.530348, 0, 0.84778, 0, 1, 0, -0.84778, 0, 0.530348, -2.83482, 0.108088, -2.30642)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle2" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(-0.715156, 0, 0.698965, 0, 1, 0, -0.698965, 0, -0.715156, -1.52325, 0.108088, 0.336383)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle2"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle2"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle3" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0228967, 0, -0.999738, 0, 1, 0, 0.999738, 0, 0.0228967, 2.31026, 0.216176, 1.16051)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle3"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle3"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle3")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle4" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0465833, 0, -0.998914, 0, 1, 0, 0.998914, 0, 0.0465833, 3.0346, 0.183274, 1.1185)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle4"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle4"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle5" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0465833, 0, -0.998914, 0, 1, 0, 0.998914, 0, 0.0465833, 3.8091, 0.183274, 1.1185)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle5"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle5"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle6" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0465833, 0, -0.998914, 0, 1, 0, 0.998914, 0, 0.0465833, 4.78726, 0.183274, 1.1185)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle6"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle6"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle7" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(-0.784873, 0, -0.619655, 0, 1, 0, 0.619655, 0, -0.784873, -4.52959, 0.183274, 4.06927)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle7"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle7"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="ramp" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.677634, 0, -0.7354, 0, 1, 0, 0.7354, 0, 0.677634, 2.024, -0.0191267, -2.46227)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/ramp"]
+transform = Transform3D(1, 0, 0, 0, 0.0979477, -0.60467, 0, 0.0201557, 2.93843, 0, 0.246351, 0)
+mesh = SubResource("BoxMesh_njtcj")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/ramp"]
+transform = Transform3D(1, 0, 0, 0, 0.978981, -0.203949, 0, 0.203949, 0.978981, 0, 0.230905, 0)
+shape = SubResource("BoxShape3D_qeqqq")
+
+[node name="bar_obstacle8" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(-0.691929, 0, 0.721966, 0, 1, 0, -0.721966, 0, -0.691929, 3.44798, 0.360114, -3.97449)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle8"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle8"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="Stairs" type="Node3D" parent="scene/obstacles"]
+transform = Transform3D(0.662215, 0, -0.749314, 0, 1, 0, 0.749314, 0, 0.662215, -4.59699, 0, -5.27978)
+
+[node name="bar_obstacle9" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 0.108088, 2.74408)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle9"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle9"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle10" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 0.521819, 2.33699)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle10"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle10"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle11" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 0.887153, 1.93693)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle11"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle11"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle12" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 1.28258, 1.53824)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle12"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle12"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle13" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 6.58141, 0.287654, 1.28946, 0.0424199)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle13"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle13"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle14" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 0.961313, -1.44047)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle14"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle14"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle15" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.291831, 0.592694, -1.81517)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle15"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle15"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle16" type="StaticBody3D" parent="scene/obstacles/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 0.219027, -2.19036)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/Stairs/bar_obstacle16"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/Stairs/bar_obstacle16"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="lights" type="Node" parent="scene"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="scene/lights"]
+transform = Transform3D(1, 0, 0, 0, 0.318562, 0.947902, 0, -0.947902, 0.318562, -5.31004, 4.01176, 0)
+
+[node name="test_walker" parent="." instance=ExtResource("2_hd2xi")]
+camera_controller_path = NodePath("../player_cam")
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -6.39263, 0.0167499, 3.82494)
+
+[node name="Leg_1" parent="test_walker/InverseKinematicController" index="0"]
+target_path = NodePath("../../../targets/test_walker/t1")
+
+[node name="Leg_2" parent="test_walker/InverseKinematicController" index="1"]
+target_path = NodePath("../../../targets/test_walker/t2")
+
+[node name="Leg_3" parent="test_walker/InverseKinematicController" index="2"]
+target_path = NodePath("../../../targets/test_walker/t3")
+
+[node name="Leg_4" parent="test_walker/InverseKinematicController" index="3"]
+target_path = NodePath("../../../targets/test_walker/t4")
+
+[node name="targets" type="Node" parent="."]
+
+[node name="test_walker" type="Node" parent="targets"]
+
+[node name="t1" type="Node3D" parent="targets/test_walker"]
+
+[node name="t2" type="Node3D" parent="targets/test_walker"]
+
+[node name="t3" type="Node3D" parent="targets/test_walker"]
+
+[node name="t4" type="Node3D" parent="targets/test_walker"]
+
+[node name="player_cam" parent="." instance=ExtResource("3_nrh3y")]
+input_lateral_rotation_speed = 0.0501
+input_vertical_rotation_speed = 0.0501
+focus_object_path = NodePath("../test_walker")
+focus_height_offset = 0.1
+focus_radius_offset = 0.3
+focus_rotation_offset = 1.511
+orbit_distance = 2.0
+orbit_angle = 0.581
+orbit_rotation = 3.141
+
+[editable path="test_walker"]

@@ -36,13 +36,13 @@ orbit_angle = 0.201
 orbit_rotation = 1.501
 
 [node name="Camera3D" parent="player_cam" index="0"]
-transform = Transform3D(0.997565, -0.0139235, 0.0683357, 6.98492e-09, 0.979867, 0.199649, -0.0697397, -0.199163, 0.977482, 6.72686, 1.1979, 5.86489)
+transform = Transform3D(0.997565, -0.0139235, 0.0683356, 4.65661e-10, 0.979867, 0.199649, -0.0697396, -0.199163, 0.977482, 4.61986, 1.1979, 5.86489)
 
 [node name="PlayerController3D" type="PlayerController3D" parent="."]
 camera_controller_path = NodePath("../player_cam")
 move_speed = 3.0
 run_speed = 5.0
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 6.31678, 0, 0)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 4.20982, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerController3D"]
 shape = SubResource("BoxShape3D_v2u2l")
@@ -67,7 +67,7 @@ shape = SubResource("BoxShape3D_63eg7")
 mesh = SubResource("BoxMesh_w4rvg")
 
 [node name="Scale" type="Node3D" parent="."]
-transform = Transform3D(-8.7423e-08, 2.00001, 0, -2.00001, -8.7423e-08, 0, 0, 0, 2, 2.3277, 0, 0)
+transform = Transform3D(1.34086, 1.48396, 0, -1.48396, 1.34086, 0, 0, 0, 2, 2.3277, 0, 0)
 
 [node name="Root" type="Node3D" parent="Scale"]
 
@@ -116,9 +116,9 @@ surface_material_override/0 = ExtResource("1_junqn")
 target_path = NodePath("../PlayerController3D")
 marker_pos_node_path = NodePath("../Scale")
 ik_joint_paths = [NodePath("../Scale/Root"), NodePath("../Scale/Root/Core"), NodePath("../Scale/Root/Core/Point"), NodePath("../Scale/Root/Core/Point/End")]
-ik_joint_min_rotations_horizontal = [45, 45, 45, 1]
-ik_joint_min_rotations_vertical = [45, 45, 45, 1]
-ik_joint_max_rotations_horizontal = [45, 45, 45, 1]
-ik_joint_max_rotations_vertical = [45, 45, 45, 1]
+ik_joint_min_rotations_horizontal = [45, 5, 5, 1]
+ik_joint_min_rotations_vertical = [5, 45, 45, 1]
+ik_joint_max_rotations_horizontal = [45, 5, 5, 1]
+ik_joint_max_rotations_vertical = [5, 45, 45, 1]
 
 [editable path="player_cam"]
