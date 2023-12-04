@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bn48negra2bhv"]
+[gd_scene load_steps=12 format=3 uid="uid://bn48negra2bhv"]
 
 [ext_resource type="Material" uid="uid://dmyli5lcsmfws" path="res://resources/materials/obstacle_mat.tres" id="1_gpfok"]
 [ext_resource type="PackedScene" uid="uid://cmsw1yedwjm4b" path="res://scenes/prefabs/test_walker.tscn" id="2_hd2xi"]
 [ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_nrh3y"]
+[ext_resource type="PackedScene" uid="uid://cb10fh0jo2d8" path="res://scenes/prefabs/biped_walker.tscn" id="4_mi46c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rkpow"]
 size = Vector3(1.9803, 0.0156242, 1.95682)
@@ -145,7 +146,7 @@ mesh = SubResource("BoxMesh_xngi0")
 surface_material_override/0 = ExtResource("1_gpfok")
 
 [node name="Stairs" type="Node3D" parent="scene/obstacles"]
-transform = Transform3D(0.662215, 0, -0.749314, 0, 1, 0, 0.749314, 0, 0.662215, -4.59699, 0, -5.27978)
+transform = Transform3D(0.46732, 0, -0.998849, 0, 0.627449, 0, 0.528785, 0, 0.882744, -4.59699, 0, -5.27978)
 
 [node name="bar_obstacle9" type="StaticBody3D" parent="scene/obstacles/Stairs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.290792, 0.108088, 2.74408)
@@ -242,6 +243,7 @@ transform = Transform3D(1, 0, 0, 0, 0.318562, 0.947902, 0, -0.947902, 0.318562, 
 
 [node name="test_walker" parent="." instance=ExtResource("2_hd2xi")]
 camera_controller_path = NodePath("../player_cam")
+adjustment_threshold = 0.15
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -6.39263, 0.0167499, 3.82494)
 
 [node name="Leg_1" parent="test_walker/InverseKinematicController" index="0"]
@@ -268,6 +270,12 @@ target_path = NodePath("../../../targets/test_walker/t4")
 
 [node name="t4" type="Node3D" parent="targets/test_walker"]
 
+[node name="biped" type="Node" parent="targets"]
+
+[node name="t1" type="Node3D" parent="targets/biped"]
+
+[node name="t2" type="Node3D" parent="targets/biped"]
+
 [node name="player_cam" parent="." instance=ExtResource("3_nrh3y")]
 input_lateral_rotation_speed = 0.0501
 input_vertical_rotation_speed = 0.0501
@@ -279,4 +287,16 @@ orbit_distance = 2.0
 orbit_angle = 0.581
 orbit_rotation = 3.141
 
+[node name="Biped_walker" parent="." instance=ExtResource("4_mi46c")]
+camera_controller_path = NodePath("../player_cam")
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -8.14042, 0.0167502, 2.44187)
+visible = false
+
+[node name="lef" parent="Biped_walker/InverseKinematicController" index="0"]
+target_path = NodePath("../../../targets/biped/t1")
+
+[node name="rig" parent="Biped_walker/InverseKinematicController" index="1"]
+target_path = NodePath("../../../targets/biped/t2")
+
 [editable path="test_walker"]
+[editable path="Biped_walker"]

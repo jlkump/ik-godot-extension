@@ -124,7 +124,8 @@ Vector3 InverseKinematicChain::apply_rotational_constraint(
         // 7.f.2 Reverse the tranformation of the newly mapped target_prime to get the resulting target. Return that.
         // float interp = Vector2(x, z).length();
         // return target * 0.5 + O * 0.5;
-        return recursive_search_point(x_basis, z_basis, a, b, target, O * 0.5 + target * 0.5, O, 4);
+        return target;
+        // return recursive_search_point(x_basis, z_basis, a, b, target, O * 0.5 + target * 0.5, O, 4);
         // UtilityFunctions::print("Target is outside cone, bounding to: ", target_prime, " which in worldspace is: ", transform.affine_inverse().xform(target_prime));
         // return transform.affine_inverse().xform(target_prime);
     }
@@ -354,14 +355,14 @@ void InverseKinematicChain::_process(double delta) {
         if (end_effector_collider_ray_ != nullptr) {
             end_effector_collider_ray_->set_global_position(joints_[joints_.size() - 1]);
         }
-        UtilityFunctions::print("Joints size is: ", joints_.size());
-        UtilityFunctions::print("Target pos node is: ", target_pos_node_);
-        UtilityFunctions::print("Marker pos node is: ", marker_pos_node_);
-        UtilityFunctions::print("IK joints size is: ", ik_joints_.size());
-        UtilityFunctions::print("Distances size is: ", distances_.size());
+        // UtilityFunctions::print("Joints size is: ", joints_.size());
+        // UtilityFunctions::print("Target pos node is: ", target_pos_node_);
+        // UtilityFunctions::print("Marker pos node is: ", marker_pos_node_);
+        // UtilityFunctions::print("IK joints size is: ", ik_joints_.size());
+        // UtilityFunctions::print("Distances size is: ", distances_.size());
     } else {
-        UtilityFunctions::print("End effector ", ik_joints_[ik_joints_.size() - 1], " is at target ", target_pos_node_, " end effector pos: ",  ik_joints_[ik_joints_.size() - 1]->get_global_position(), " target pos: ", target_pos_node_->get_global_position(),
-                " distance is: ", ik_joints_[ik_joints_.size() - 1]->get_global_position().distance_to(target_pos_node_->get_global_position()));
+        // UtilityFunctions::print("End effector ", ik_joints_[ik_joints_.size() - 1], " is at target ", target_pos_node_, " end effector pos: ",  ik_joints_[ik_joints_.size() - 1]->get_global_position(), " target pos: ", target_pos_node_->get_global_position(),
+        //         " distance is: ", ik_joints_[ik_joints_.size() - 1]->get_global_position().distance_to(target_pos_node_->get_global_position()));
     }
 }
 

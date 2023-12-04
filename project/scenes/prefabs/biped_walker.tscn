@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cb10fh0jo2d8"]
+[gd_scene load_steps=11 format=3 uid="uid://cb10fh0jo2d8"]
 
 [ext_resource type="Material" uid="uid://15g7o7r6fe72" path="res://resources/materials/temp_joint.tres" id="1_nfjil"]
 [ext_resource type="Material" uid="uid://beegm71sesr6n" path="res://resources/materials/temp_metal.tres" id="2_yo8sd"]
@@ -8,95 +8,118 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_e3e3c"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_v7d83"]
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_ydmq8"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_grpm1"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_erpkh"]
 
-[node name="biped_walker" type="Node"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_k0hyl"]
+height = 0.967428
+
+[node name="Biped_walker" type="PlayerController3D"]
+falling_ray_path = NodePath("falling")
+leg_colliders = [NodePath("LeftLeg/TopJoint_ll/KneeJoint_ll/Endl/end_lf"), NodePath("RightLeg/TopJoint_rl/KneeJoint_rl/Endr/end_rf")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="LeftLeg" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.75736, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0359643, 1.75736, 0)
 
 [node name="TopJoint_ll" type="Node3D" parent="LeftLeg"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
 
 [node name="Cylndr" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll"]
-transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -0.05, 0)
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, 0.145187, -1.70638e-08)
 mesh = SubResource("CylinderMesh_t137x")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_nfjil")
 
 [node name="Bx" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll"]
-transform = Transform3D(0.4, 0, 0, 0, 0.8, 0, 0, 0, 0.1, 0, -0.5, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.8, 0, 0, 0, 0.1, 0, 0.642609, -9.989e-08)
 mesh = SubResource("BoxMesh_e3e3c")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
 [node name="KneeJoint_ll" type="Node3D" parent="LeftLeg/TopJoint_ll"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04472, -1.73925e-07)
 
 [node name="Cylndr" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
-transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -1.00336, 0)
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -0.0189736, 3.84642e-09)
 mesh = SubResource("CylinderMesh_t137x")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_nfjil")
 
 [node name="Bx" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
-transform = Transform3D(0.4, 0, 0, 0, 0.7, 0, 0, 0, 0.1, 0, -1.4, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.7, -8.88178e-16, 0, 1.42109e-14, 0.1, 0, 0.357197, -6.37148e-08)
 mesh = SubResource("BoxMesh_e3e3c")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
 [node name="Bx2" type="MeshInstance3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
-transform = Transform3D(0.4, 0, 0, 0, -3.0598e-08, -0.1, 0, 0.7, -4.37114e-09, 0, -1.7491, 0)
-mesh = SubResource("BoxMesh_e3e3c")
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 0.754421, -1.28961e-07)
+mesh = SubResource("SphereMesh_v7d83")
 skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("2_yo8sd")
+surface_material_override/0 = ExtResource("3_6eg0f")
+
+[node name="Endl" type="Node3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.795948, -1.50236e-07)
+
+[node name="end_lf" type="RayCast3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll/Endl"]
 
 [node name="RightLeg" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.757, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.3, 1.757, 0)
+visible = false
 
 [node name="TopJoint_rl" type="Node3D" parent="RightLeg"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
 
 [node name="Cylndr" type="MeshInstance3D" parent="RightLeg/TopJoint_rl"]
-transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -0.05, 0)
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, 0.149194, -1.74141e-08)
 mesh = SubResource("CylinderMesh_t137x")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_nfjil")
 
 [node name="Bx" type="MeshInstance3D" parent="RightLeg/TopJoint_rl"]
-transform = Transform3D(0.4, 0, 0, 0, 0.8, 0, 0, 0, 0.1, 0, -0.5, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.8, 0, 0, 0, 0.1, 0, 0.621314, -9.80284e-08)
 mesh = SubResource("BoxMesh_e3e3c")
-skeleton = NodePath("../../..")
+skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
 [node name="KneeJoint_rl" type="Node3D" parent="RightLeg/TopJoint_rl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.938686, -1.7263e-07)
 
 [node name="Cylndr" type="MeshInstance3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
-transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, -1.00336, 0)
+transform = Transform3D(-8.74228e-09, -0.3, 0, 0.2, -1.31134e-08, 0, 0, 0, 0.2, 0, 0.0839204, 0)
 mesh = SubResource("CylinderMesh_t137x")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_nfjil")
 
 [node name="Bx" type="MeshInstance3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
-transform = Transform3D(0.4, 0, 0, 0, 0.7, 0, 0, 0, 0.1, 0, -1.4, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.7, 0, 0, 0, 0.1, 0, 0.484857, -6.97264e-08)
 mesh = SubResource("BoxMesh_e3e3c")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
 [node name="Bx2" type="MeshInstance3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
-transform = Transform3D(0.4, 0, 0, 0, -3.0598e-08, -0.1, 0, 0.7, -4.37114e-09, 0, -1.7491, 0)
+transform = Transform3D(0.4, 0, 0, 0, -3.0598e-08, -0.1, 0, 0.7, -4.37114e-09, 0, 0.901481, -1.36668e-07)
 mesh = SubResource("BoxMesh_e3e3c")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
+[node name="Endr" type="Node3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.943531, -1.57989e-07)
+
+[node name="end_rf" type="RayCast3D" parent="RightLeg/TopJoint_rl/KneeJoint_rl/Endr"]
+
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 2.2, 0)
 
 [node name="base" type="MeshInstance3D" parent="Head"]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_ydmq8")
-skeleton = NodePath("../..")
+skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
 [node name="Eye" type="Node3D" parent="Head"]
@@ -111,3 +134,47 @@ surface_material_override/0 = ExtResource("3_6eg0f")
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 0, 0, -0.5)
 mesh = SubResource("BoxMesh_erpkh")
 surface_material_override/0 = ExtResource("2_yo8sd")
+
+[node name="InverseKinematicController" type="InverseKinematicController" parent="."]
+ik_chain_paths = [NodePath("lef"), NodePath("rig")]
+ik_ray_paths = [NodePath("../left"), NodePath("../right")]
+interp_speed = 5.0
+stride = 1.0
+stride_height = 0.2
+stride_update_distance = 0.2
+
+[node name="lef" type="InverseKinematicChain" parent="InverseKinematicController"]
+marker_pos_node_path = NodePath("../../LeftLeg")
+ik_joint_paths = [NodePath("../../LeftLeg/TopJoint_ll"), NodePath("../../LeftLeg/TopJoint_ll/KneeJoint_ll"), NodePath("../../LeftLeg/TopJoint_ll/KneeJoint_ll/Endl")]
+ik_joint_min_rotations_horizontal = [1, 1, 1]
+ik_joint_min_rotations_vertical = [45, 45, 45]
+ik_joint_max_rotations_horizontal = [45, 45, 45]
+ik_joint_max_rotations_vertical = [45, 45, 45]
+target_threshold = 0.01
+calculation_threshold = 0.01
+
+[node name="rig" type="InverseKinematicChain" parent="InverseKinematicController"]
+marker_pos_node_path = NodePath("../../RightLeg")
+ik_joint_paths = [NodePath("../../RightLeg/TopJoint_rl"), NodePath("../../RightLeg/TopJoint_rl/KneeJoint_rl"), NodePath("../../RightLeg/TopJoint_rl/KneeJoint_rl/Endr")]
+ik_joint_min_rotations_horizontal = [45, 45, 45]
+ik_joint_min_rotations_vertical = [45, 45, 45]
+ik_joint_max_rotations_horizontal = [45, 45, 45]
+ik_joint_max_rotations_vertical = [45, 45, 45]
+target_threshold = 0.01
+calculation_threshold = 0.01
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.21496, 0)
+shape = SubResource("CylinderShape3D_k0hyl")
+
+[node name="falling" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.93346, 0)
+target_position = Vector3(0, -2, 0)
+
+[node name="right" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.345357, 1.59384, 0.164826)
+target_position = Vector3(0, -2.3, 0)
+
+[node name="left" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.300546, 1.58243, 0)
+target_position = Vector3(0, -2.3, 0)
