@@ -51,11 +51,6 @@ void InverseKinematicController::initialize_resting_positions() {
     parametric_deltas_.resize(ik_rays_.size(), 0.0f);
 }
 
-// float InverseKinematicController::calculate_stride() {
-//     float interp = Vector3(current_movement_vec_.x, 0, current_movement_vec_.z).length() / max_movement_speed_;
-//     return interp * max_stride_ + (1.0f - interp) * min_stride_; 
-// }
-
 void InverseKinematicController::set_paused_state(bool is_paused) {
     is_paused_ = is_paused;
 }
@@ -96,7 +91,6 @@ void InverseKinematicController::_process(double delta) {
                     .clamp(Vector3(-stride_, 0, -stride_), Vector3(stride_, 0, stride_)) 
                     + collision_pos;
                 previous_colisions_[i] = collision_pos;
-                // UtilityFunctions::print("change in direction is for joint", i, ": ", (ray->get_collision_point() - previous_colisions_[i]).normalized());
             } else {
                 // Todo: Have the legs hang rather than go to resting
                 // Right now, goes to last valid position
