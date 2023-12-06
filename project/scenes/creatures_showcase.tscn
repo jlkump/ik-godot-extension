@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bn48negra2bhv"]
+[gd_scene load_steps=11 format=3 uid="uid://bn48negra2bhv"]
 
+[ext_resource type="Script" path="res://scripts/showcase.gd" id="1_61dme"]
 [ext_resource type="Material" uid="uid://dmyli5lcsmfws" path="res://resources/materials/obstacle_mat.tres" id="1_gpfok"]
-[ext_resource type="PackedScene" uid="uid://cmsw1yedwjm4b" path="res://scenes/prefabs/test_walker.tscn" id="2_hd2xi"]
 [ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_nrh3y"]
-[ext_resource type="PackedScene" uid="uid://cb10fh0jo2d8" path="res://scenes/prefabs/biped_walker.tscn" id="4_mi46c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rkpow"]
 size = Vector3(1.9803, 0.0156242, 1.95682)
@@ -24,6 +23,7 @@ size = Vector3(2.00184, 0.391568, 0.416826)
 size = Vector3(1, 0.135618, 2.99742)
 
 [node name="creatures_showcase" type="Node"]
+script = ExtResource("1_61dme")
 
 [node name="scene" type="Node" parent="."]
 
@@ -111,7 +111,7 @@ skeleton = NodePath("../../bar_obstacle4")
 surface_material_override/0 = ExtResource("1_gpfok")
 
 [node name="bar_obstacle7" type="StaticBody3D" parent="scene/obstacles"]
-transform = Transform3D(-0.784873, 0, -0.619655, 0, 1, 0, 0.619655, 0, -0.784873, -4.52959, 0.183274, 4.06927)
+transform = Transform3D(0.0293438, 0, -1.00959, 0, 2.3944, 0, 1.49962, 0, 0.0197552, -3.00043, 0.49877, 5.11593)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle7"]
 shape = SubResource("BoxShape3D_tig71")
@@ -236,27 +236,34 @@ transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 mesh = SubResource("BoxMesh_xngi0")
 surface_material_override/0 = ExtResource("1_gpfok")
 
+[node name="bar_obstacle9" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0290552, 0, -4.71883, 0, 5.49881, 0, 1.48486, 0, 0.0923361, -1.43219, 0.49877, 5.11593)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle9"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle9"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle10" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0290552, 0, -4.71883, 0, 9.7881, 0, 1.48486, 0, 0.0923361, 0.975749, 0.452095, 5.11593)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle10"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle10"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
 [node name="lights" type="Node" parent="scene"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="scene/lights"]
 transform = Transform3D(1, 0, 0, 0, 0.318562, 0.947902, 0, -0.947902, 0.318562, -5.31004, 4.01176, 0)
-
-[node name="test_walker" parent="." instance=ExtResource("2_hd2xi")]
-camera_controller_path = NodePath("../player_cam")
-adjustment_threshold = 0.15
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -6.39263, 0.0167499, 3.82494)
-
-[node name="Leg_1" parent="test_walker/InverseKinematicController" index="0"]
-target_path = NodePath("../../../targets/test_walker/t1")
-
-[node name="Leg_2" parent="test_walker/InverseKinematicController" index="1"]
-target_path = NodePath("../../../targets/test_walker/t2")
-
-[node name="Leg_3" parent="test_walker/InverseKinematicController" index="2"]
-target_path = NodePath("../../../targets/test_walker/t3")
-
-[node name="Leg_4" parent="test_walker/InverseKinematicController" index="3"]
-target_path = NodePath("../../../targets/test_walker/t4")
 
 [node name="targets" type="Node" parent="."]
 
@@ -270,16 +277,25 @@ target_path = NodePath("../../../targets/test_walker/t4")
 
 [node name="t4" type="Node3D" parent="targets/test_walker"]
 
-[node name="biped" type="Node" parent="targets"]
+[node name="hopper" type="Node" parent="targets"]
 
-[node name="t1" type="Node3D" parent="targets/biped"]
+[node name="t1" type="Node3D" parent="targets/hopper"]
 
-[node name="t2" type="Node3D" parent="targets/biped"]
+[node name="t2" type="Node3D" parent="targets/hopper"]
+
+[node name="complete_walker" type="Node" parent="targets"]
+
+[node name="t1" type="Node3D" parent="targets/complete_walker"]
+
+[node name="t2" type="Node3D" parent="targets/complete_walker"]
+
+[node name="t3" type="Node3D" parent="targets/complete_walker"]
+
+[node name="t4" type="Node3D" parent="targets/complete_walker"]
 
 [node name="player_cam" parent="." instance=ExtResource("3_nrh3y")]
 input_lateral_rotation_speed = 0.0501
 input_vertical_rotation_speed = 0.0501
-focus_object_path = NodePath("../test_walker")
 focus_height_offset = 0.1
 focus_radius_offset = 0.3
 focus_rotation_offset = 1.511
@@ -287,16 +303,5 @@ orbit_distance = 2.0
 orbit_angle = 0.581
 orbit_rotation = 3.141
 
-[node name="Biped_walker" parent="." instance=ExtResource("4_mi46c")]
-camera_controller_path = NodePath("../player_cam")
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -8.14042, 0.0167502, 2.44187)
-visible = false
-
-[node name="lef" parent="Biped_walker/InverseKinematicController" index="0"]
-target_path = NodePath("../../../targets/biped/t1")
-
-[node name="rig" parent="Biped_walker/InverseKinematicController" index="1"]
-target_path = NodePath("../../../targets/biped/t2")
-
-[editable path="test_walker"]
-[editable path="Biped_walker"]
+[node name="spawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.86238, 0, 3.19484)

@@ -20,6 +20,9 @@ void InverseKinematicController::_bind_methods() {
     BIND_GETTER_SETTER(InverseKinematicController, stride, PropertyInfo(Variant::FLOAT, "stride", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"));
     BIND_GETTER_SETTER(InverseKinematicController, stride_height, PropertyInfo(Variant::FLOAT, "stride_height", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"));
     BIND_GETTER_SETTER(InverseKinematicController, stride_update_dist, PropertyInfo(Variant::FLOAT, "stride_update_distance", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"));
+
+    ClassDB::bind_method(D_METHOD("get_ik_chain_objs"), &InverseKinematicController::get_ik_chain_objs);
+
 }
 
 InverseKinematicController::InverseKinematicController() : 
@@ -177,4 +180,12 @@ float InverseKinematicController::get_stride_height() const {
 }
 void InverseKinematicController::set_stride_height(const float height) {
     stride_height_ = height;
+}
+
+Array InverseKinematicController::get_ik_chain_objs() const {
+    Array res;
+    for (InverseKinematicChain* chain : ik_chains_) {
+        res.push_back(chain);
+    }
+    return res;
 }

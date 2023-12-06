@@ -23,10 +23,14 @@ void PlayerController3D::_bind_methods() {
     BIND_GETTER_SETTER(PlayerController3D, adjustment_speed, PropertyInfo(Variant::FLOAT, "adjustment_speed", PROPERTY_HINT_RANGE, "0.01,10.0,0.01"));
     BIND_GETTER_SETTER(PlayerController3D, adjustment_threshold, PropertyInfo(Variant::FLOAT, "adjustment_threshold", PROPERTY_HINT_RANGE, "0.01,10.0,0.01"));
 
-    // BIND_GETTER_SETTER(PlayerController3D, ik_controller_path, PropertyInfo(Variant::NODE_PATH, "ik_controller_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "InverseKinematicController"))
     BIND_GETTER_SETTER(PlayerController3D, move_speed, PropertyInfo(Variant::FLOAT, "move_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.01"));
     BIND_GETTER_SETTER(PlayerController3D, run_speed, PropertyInfo(Variant::FLOAT, "run_speed", PROPERTY_HINT_RANGE, "0.1,200.0,0.01"));
     BIND_GETTER_SETTER(PlayerController3D, rotate_speed, PropertyInfo(Variant::FLOAT, "rotate_speed", PROPERTY_HINT_RANGE, "0.01,200.0,0.01"));
+
+    BIND_GETTER_SETTER(PlayerController3D, ik_controller_path, PropertyInfo(Variant::NODE_PATH, "ik_controller_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "InverseKinematicController"))
+
+    ClassDB::bind_method(D_METHOD("get_ik_abs_path"), &PlayerController3D::get_absolute_ik_con_path);
+    ClassDB::bind_method(D_METHOD("get_ik_con_obj"), &PlayerController3D::get_ik_con_obj);
 }
 
 bool PlayerController3D::is_valid() {
@@ -173,7 +177,7 @@ void PlayerController3D::_process(double delta) {
         falling_ray_->force_raycast_update();
         if (!falling_ray_->is_colliding() && num_legs_colliding() <= 0) {
             move_vector.y = -9.8;
-            UtilityFunctions::print("falling");
+            // UtilityFunctions::print("falling");
         } else if (move_vector.length() > 0.0f) {
             float target_height = -1000.0f;
             for (int i = 0; i < leg_colliders_.size(); i++) {
@@ -187,13 +191,13 @@ void PlayerController3D::_process(double delta) {
             // UtilityFunctions::print("Target height is: ", target_height, " old height is: ", get_global_position().y);
 
             if (target_height - get_global_position().y < body_adjustment_theshold_) {
-                UtilityFunctions::print("Moving up");
+                // UtilityFunctions::print("Moving up");
                 move_vector.y -= body_adjustment_speed_;
             } else if (target_height - get_global_position().y > body_adjustment_theshold_) {
-                UtilityFunctions::print("Moving down");
+                // UtilityFunctions::print("Moving down");
                 move_vector.y += body_adjustment_speed_;
             } else {
-                UtilityFunctions::print("Not moving");
+                // UtilityFunctions::print("Not moving");
             }
         }
     }
@@ -255,25 +259,6 @@ void PlayerController3D::set_leg_collider_paths(const Array paths) {
     }
 }
 
-// NodePath PlayerController3D::get_ik_controller_path() const {
-//     return ik_controller_path_;
-// }
-// void PlayerController3D::set_ik_controller_path(const NodePath path) {
-//     ik_controller_path_ = path;
-//     // For future possible signals
-//     // if (ik_controller_ != nullptr) {
-//     //     camera_controller_->disconnect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
-//     // }
-//     ik_controller_ = get_node<InverseKinematicController>(ik_controller_path_);
-//     if (ik_controller_ == nullptr) {
-//         UtilityFunctions::printerr("Player Controller: Could not find IKController at given path: ", path);
-//     }
-//     // Future possible signals
-//     //  else {
-//     //     camera_controller_->connect("camera_transform_updated", Callable(this, "on_camera_transform_updated"));
-//     // }
-// }
-
 float PlayerController3D::get_move_speed() const {
     return movement_speed_;
 }
@@ -314,4 +299,23 @@ float PlayerController3D::get_adjustment_threshold() const {
 }
 void PlayerController3D::set_adjustment_threshold(const float theshold) {
     body_adjustment_theshold_ = theshold;
+}
+
+NodePath PlayerController3D::get_ik_controller_path() const {
+    return ik_controller_path_;
+}
+void PlayerController3D::set_ik_controller_path(const NodePath path) {
+    ik_controller_path_ = path;
+}
+
+
+NodePath PlayerController3D::get_absolute_ik_con_path() const {
+    if (get_node<InverseKinematicController>(ik_controller_path_))
+        return get_node<InverseKinematicController>(ik_controller_path_)->get_path();
+    else
+        return NodePath();
+}
+
+Object* PlayerController3D::get_ik_con_obj() const {
+    return get_node<InverseKinematicController>(ik_controller_path_);
 }

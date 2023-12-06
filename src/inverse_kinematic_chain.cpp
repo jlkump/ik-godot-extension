@@ -213,16 +213,15 @@ void InverseKinematicChain::update_joint_nodes() {
             // Get the old global transform, which will be modified to become the new transform.
             Transform3D old_global_trans = joint_node->get_global_transform();
 
-            // Calculate rotation to new orientation
             Basis old_basis = old_global_trans.basis;
             Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
             Vector3 old_y_basis = old_basis.xform(Vector3(0, 1, 0));
-            Quaternion new_rot = Quaternion(old_y_basis, y_basis) * old_basis.get_rotation_quaternion();
-
-            // Update the transform, making sure to keep the scale of the previous basis
+            Vector3 x_basis = y_basis.cross(Vector3(0, 1, 0)).normalized();
+            // Update the basis, making sure to keep the scale of the previous basis
             Vector3 old_scale = old_global_trans.basis.get_scale();
-            old_global_trans.basis = Basis(new_rot);
+            old_global_trans.basis =  Basis(x_basis, y_basis, x_basis.cross(y_basis));
             old_global_trans.basis.scale(old_scale);
+
             old_global_trans.origin = joints_[i];
             joint_node->set_global_transform(old_global_trans);
         }
@@ -291,6 +290,15 @@ void InverseKinematicChain::_process(double delta) {
         ik_joints_.size() <= 1 || distances_.size() + 1 != joints_.size() || 
         Engine::get_singleton()->is_editor_hint() || is_paused_ || 
         ik_joints_[ik_joints_.size() - 1] == nullptr) {
+
+        // UtilityFunctions::print("Returing early: ", 
+        //         joints_.size() <= 1, 
+        //         target_pos_node_ == nullptr, 
+        //         marker_pos_node_ == nullptr, 
+        //         ik_joints_.size() <= 1, 
+        //         distances_.size() <= 1, 
+        //         is_paused_);
+
         return;
     }
 

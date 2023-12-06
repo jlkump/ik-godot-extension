@@ -324,35 +324,19 @@ stride_update_distance = 0.5
 [node name="Leg_1" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../Body/Leg1_pos")
 ik_joint_paths = [NodePath("../../Body/Leg1_pos/Leg1"), NodePath("../../Body/Leg1_pos/Leg1/BodyHinge_L1"), NodePath("../../Body/Leg1_pos/Leg1/BodyHinge_L1/MidHinge_L1"), NodePath("../../Body/Leg1_pos/Leg1/BodyHinge_L1/Point hinge_L1"), NodePath("../../Body/Leg1_pos/Leg1/BodyHinge_L1/Point hinge_L1/Point_L1")]
-ik_joint_min_rotations_horizontal = [-45, -45, -45, -45, -45]
-ik_joint_min_rotations_vertical = [-1, -45, -45, -45, -45]
-ik_joint_max_rotations_horizontal = [45, 45, 45, 45, 45]
-ik_joint_max_rotations_vertical = [45, 45, 45, 45, 45]
 calculation_threshold = 0.01
 
 [node name="Leg_2" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../Body/Leg2_pos")
 ik_joint_paths = [NodePath("../../Body/Leg2_pos/Leg2"), NodePath("../../Body/Leg2_pos/Leg2/BodyHinge_L2"), NodePath("../../Body/Leg2_pos/Leg2/BodyHinge_L2/MidHinge_L2"), NodePath("../../Body/Leg2_pos/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2"), NodePath("../../Body/Leg2_pos/Leg2/BodyHinge_L2/MidHinge_L2/PointHinge_L2/Point_L2")]
-ik_joint_min_rotations_horizontal = [-45, -45, -45, -45, -45]
-ik_joint_min_rotations_vertical = [-45, -45, -45, -45, -45]
-ik_joint_max_rotations_horizontal = [45, 45, 45, 45, 45]
-ik_joint_max_rotations_vertical = [45, 45, 45, 45, 45]
 calculation_threshold = 0.01
 
 [node name="Leg_3" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../Body/Leg3_pos")
 ik_joint_paths = [NodePath("../../Body/Leg3_pos/Leg3"), NodePath("../../Body/Leg3_pos/Leg3/BodyHinge_L3"), NodePath("../../Body/Leg3_pos/Leg3/BodyHinge_L3/MidHinge_L3"), NodePath("../../Body/Leg3_pos/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3"), NodePath("../../Body/Leg3_pos/Leg3/BodyHinge_L3/MidHinge_L3/PointHinge_L3/Point_L3")]
-ik_joint_min_rotations_horizontal = [-45, -45, -45, -45, -45]
-ik_joint_min_rotations_vertical = [-45, -45, -45, -45, -45]
-ik_joint_max_rotations_horizontal = [45, 45, 45, 45, 45]
-ik_joint_max_rotations_vertical = [45, 45, 45, 45, 45]
 calculation_threshold = 0.01
 
 [node name="Leg_4" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../Body/Leg4_pos")
 ik_joint_paths = [NodePath("../../Body/Leg4_pos/Leg4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4/MidHinge_L4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4"), NodePath("../../Body/Leg4_pos/Leg4/BodyHinge_L4/MidHinge_L4/PointHinge_L4/Point_L4")]
-ik_joint_min_rotations_horizontal = [-45, -45, -45, -45, -45]
-ik_joint_min_rotations_vertical = [-45, -45, -45, -45, -45]
-ik_joint_max_rotations_horizontal = [45, 45, 45, 45, 45]
-ik_joint_max_rotations_vertical = [45, 45, 45, 45, 45]
 calculation_threshold = 0.01

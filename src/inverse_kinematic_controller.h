@@ -56,6 +56,8 @@ namespace godot {
         void _ready();
         void _process(double delta);
 
+        Array get_ik_chain_objs() const;
+
         DECLARE_GETTER_SETTER(Array, ik_chain_paths)
         DECLARE_GETTER_SETTER(Array, ik_ray_paths)
         DECLARE_GETTER_SETTER(float, interp_speed)

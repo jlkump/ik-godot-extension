@@ -18,6 +18,8 @@ namespace godot {
         CameraController3D* camera_controller_;
         NodePath camera_controller_path_;
 
+        NodePath ik_controller_path_;
+
         Array leg_collider_paths_;
         std::vector<RayCast3D*> leg_colliders_;
         NodePath falling_ray_path_;
@@ -60,6 +62,7 @@ namespace godot {
 
         void set_paused_state(bool is_paused);
 
+
         DECLARE_GETTER_SETTER(NodePath, camera_controller_path)
         DECLARE_GETTER_SETTER(NodePath, falling_ray_path)
         DECLARE_GETTER_SETTER(Array, leg_collider_paths)
@@ -69,6 +72,10 @@ namespace godot {
         DECLARE_GETTER_SETTER(float, body_height)
         DECLARE_GETTER_SETTER(float, adjustment_speed)
         DECLARE_GETTER_SETTER(float, adjustment_threshold)
+        DECLARE_GETTER_SETTER(NodePath, ik_controller_path)
+
+        NodePath get_absolute_ik_con_path() const;
+        Object* get_ik_con_obj() const;
     };
 }
 

@@ -116,9 +116,5 @@ surface_material_override/0 = ExtResource("1_junqn")
 target_path = NodePath("../PlayerController3D")
 marker_pos_node_path = NodePath("../Scale")
 ik_joint_paths = [NodePath("../Scale/Root"), NodePath("../Scale/Root/Core"), NodePath("../Scale/Root/Core/Point"), NodePath("../Scale/Root/Core/Point/End")]
-ik_joint_min_rotations_horizontal = [45, 5, 5, 1]
-ik_joint_min_rotations_vertical = [5, 45, 45, 1]
-ik_joint_max_rotations_horizontal = [45, 5, 5, 1]
-ik_joint_max_rotations_vertical = [5, 45, 45, 1]
 
 [editable path="player_cam"]

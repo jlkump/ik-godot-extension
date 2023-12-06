@@ -114,7 +114,9 @@ void CameraController3D::_ready() {
 }
 
 void CameraController3D::_process(double delta) {
-    if (!is_valid() || is_paused_) {
+    if (!is_valid() || is_paused_ || !Engine::get_singleton() 
+            || Engine::get_singleton()->is_editor_hint() 
+            || focus_object_ == nullptr) {
         return;
     }
     // if (view_ray_ != nullptr) {
@@ -222,7 +224,7 @@ NodePath CameraController3D::get_focus_object_path() const {
 void CameraController3D::set_focus_object_path(const NodePath path) {
     focus_object_path_ = path;
     if (focus_object_path_.is_empty()) {
-        UtilityFunctions::printerr("Camera Controller: focus_object_path is empty.");
+        focus_object_ = nullptr;
     } else {
         focus_object_ = get_node<Node3D>(focus_object_path_);
         if (focus_object_ == nullptr) {
