@@ -55,21 +55,30 @@ Press 2 for Test Hopper
 Press 3 for Modeled Walker
 "
 
+[node name="Restart" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 306.0
+offset_top = 136.0
+offset_right = 815.0
+offset_bottom = 229.0
+text = "Restart Level"
+
 [node name="Continue" type="Button" parent="Panel"]
 layout_mode = 2
 offset_left = 307.0
-offset_top = 198.0
+offset_top = 250.0
 offset_right = 816.0
-offset_bottom = 291.0
+offset_bottom = 343.0
 text = "Continue"
 
 [node name="Quit" type="Button" parent="Panel"]
 layout_mode = 0
 offset_left = 308.0
-offset_top = 351.0
+offset_top = 419.0
 offset_right = 817.0
-offset_bottom = 444.0
+offset_bottom = 512.0
 text = "Quit"
 
+[connection signal="pressed" from="Panel/Restart" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="Panel/Continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Panel/Quit" to="." method="_on_quit_pressed"]

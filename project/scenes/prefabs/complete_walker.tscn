@@ -14,7 +14,7 @@ size = Vector3(3.50986, 3, 3.40152)
 
 [node name="complete_walker" type="PlayerController3D"]
 falling_ray_path = NodePath("falling")
-leg_colliders = [NodePath("simple_walker/Empty_004/Empty/Empty_005/Empty_006/Empty_007/L1"), NodePath("simple_walker/Empty_004/Empty_001/Empty_002/Empty_003/Empty_008/L2"), NodePath("simple_walker/Empty_004/Empty_009/Empty_010/Empty_011/Empty_012/L3"), NodePath("simple_walker/Empty_004/Empty_013/Empty_014/Empty_015/Empty_016/L4")]
+leg_colliders = [NodePath("InverseKinematicController/leg1/L1"), NodePath("InverseKinematicController/leg2/L2"), NodePath("InverseKinematicController/leg3/L3"), NodePath("InverseKinematicController/leg4/L4")]
 body_height = 0.4
 move_speed = 1.6
 run_speed = 2.0
@@ -50,9 +50,6 @@ surface_material_override/0 = ExtResource("2_cthdf")
 transform = Transform3D(0.600558, 0, 0, 0, 0.600558, 0, 0, 0, 0.600558, 0, 0, 0)
 surface_material_override/0 = ExtResource("2_cthdf")
 
-[node name="L1" type="RayCast3D" parent="simple_walker/Empty_004/Empty/Empty_005/Empty_006/Empty_007" index="0"]
-target_position = Vector3(0, 1, 0)
-
 [node name="Empty_001" parent="simple_walker/Empty_004" index="3"]
 transform = Transform3D(-4.37114e-08, -8.74228e-08, 1, 0, -1, -8.74228e-08, 1, -3.82137e-15, 4.37114e-08, -2.21091, 1.00244, 2.21032)
 
@@ -67,9 +64,6 @@ surface_material_override/0 = ExtResource("2_cthdf")
 [node name="Circle_005" parent="simple_walker/Empty_004/Empty_001/Empty_002/Empty_003" index="0"]
 transform = Transform3D(0.600558, 0, 0, 0, 0.600558, 0, 0, 0, 0.600558, 0, 0, 0)
 surface_material_override/0 = ExtResource("2_cthdf")
-
-[node name="L2" type="RayCast3D" parent="simple_walker/Empty_004/Empty_001/Empty_002/Empty_003/Empty_008" index="0"]
-target_position = Vector3(0, 1, 0)
 
 [node name="Empty_009" parent="simple_walker/Empty_004" index="4"]
 transform = Transform3D(-1, -7.64274e-15, 8.74228e-08, 0, -1, -8.74228e-08, 8.74228e-08, -8.74228e-08, 1, -2.21032, 1.00244, -2.21091)
@@ -86,9 +80,6 @@ surface_material_override/0 = ExtResource("2_cthdf")
 transform = Transform3D(0.600558, 0, 0, 0, 0.600558, 0, 0, 0, 0.600558, 0, 0, 0)
 surface_material_override/0 = ExtResource("2_cthdf")
 
-[node name="L3" type="RayCast3D" parent="simple_walker/Empty_004/Empty_009/Empty_010/Empty_011/Empty_012" index="0"]
-target_position = Vector3(0, 1, 0)
-
 [node name="Empty_013" parent="simple_walker/Empty_004" index="5"]
 transform = Transform3D(-4.37114e-08, 8.74228e-08, -1, 0, -1, -8.74228e-08, -1, -3.82137e-15, 4.37114e-08, 2.21091, 1.00244, -2.21032)
 
@@ -103,9 +94,6 @@ surface_material_override/0 = ExtResource("2_cthdf")
 [node name="Circle_011" parent="simple_walker/Empty_004/Empty_013/Empty_014/Empty_015" index="0"]
 transform = Transform3D(0.600558, 0, 0, 0, 0.600558, 0, 0, 0, 0.600558, 0, 0, 0)
 surface_material_override/0 = ExtResource("2_cthdf")
-
-[node name="L4" type="RayCast3D" parent="simple_walker/Empty_004/Empty_013/Empty_014/Empty_015/Empty_016" index="0"]
-target_position = Vector3(0, 1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.96195, 0)
@@ -142,44 +130,60 @@ transform = Transform3D(-2.18557e-08, 4.37115e-08, -0.5, 0, -0.5, -4.37115e-08, 
 [node name="InverseKinematicController" type="InverseKinematicController" parent="."]
 ik_chain_paths = [NodePath("leg1"), NodePath("leg2"), NodePath("leg3"), NodePath("leg4")]
 ik_ray_paths = [NodePath("../leg1"), NodePath("../leg2"), NodePath("../leg3"), NodePath("../leg4")]
-interp_speed = 10.0
+interp_speed = 3.5
 stride = 1.0
-stride_height = 0.5
 stride_update_distance = 0.4
 
 [node name="leg1" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../marker_leg1")
 ik_joint_paths = [NodePath("../../simple_walker/Empty_004/Empty"), NodePath("../../simple_walker/Empty_004/Empty/Empty_005"), NodePath("../../simple_walker/Empty_004/Empty/Empty_005/Empty_006"), NodePath("../../simple_walker/Empty_004/Empty/Empty_005/Empty_006/Empty_007")]
+end_effector_ray_path = NodePath("L1")
 NOT_FUNCTIONAL_horizontal_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_horizontal_constaint_max = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_max = [45, 45, 45, 45]
+
+[node name="L1" type="RayCast3D" parent="InverseKinematicController/leg1"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.961133, 0.416834, -0.51901)
 
 [node name="leg2" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../marker_leg2")
 ik_joint_paths = [NodePath("../../simple_walker/Empty_004/Empty_001"), NodePath("../../simple_walker/Empty_004/Empty_001/Empty_002"), NodePath("../../simple_walker/Empty_004/Empty_001/Empty_002/Empty_003"), NodePath("../../simple_walker/Empty_004/Empty_001/Empty_002/Empty_003/Empty_008")]
+end_effector_ray_path = NodePath("L2")
 NOT_FUNCTIONAL_horizontal_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_horizontal_constaint_max = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_max = [45, 45, 45, 45]
+
+[node name="L2" type="RayCast3D" parent="InverseKinematicController/leg2"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.51901, 0.416834, 0.961133)
 
 [node name="leg3" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../marker_leg3")
 ik_joint_paths = [NodePath("../../simple_walker/Empty_004/Empty_009"), NodePath("../../simple_walker/Empty_004/Empty_009/Empty_010"), NodePath("../../simple_walker/Empty_004/Empty_009/Empty_010/Empty_011"), NodePath("../../simple_walker/Empty_004/Empty_009/Empty_010/Empty_011/Empty_012")]
+end_effector_ray_path = NodePath("L3")
 NOT_FUNCTIONAL_horizontal_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_horizontal_constaint_max = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_max = [45, 45, 45, 45]
+
+[node name="L3" type="RayCast3D" parent="InverseKinematicController/leg3"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.961133, 0.416834, 0.51901)
 
 [node name="leg4" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../marker_leg4")
 ik_joint_paths = [NodePath("../../simple_walker/Empty_004/Empty_013"), NodePath("../../simple_walker/Empty_004/Empty_013/Empty_014"), NodePath("../../simple_walker/Empty_004/Empty_013/Empty_014/Empty_015"), NodePath("../../simple_walker/Empty_004/Empty_013/Empty_014/Empty_015/Empty_016")]
+end_effector_ray_path = NodePath("L4")
 NOT_FUNCTIONAL_horizontal_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_horizontal_constaint_max = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_min = [45, 45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_max = [45, 45, 45, 45]
 
+[node name="L4" type="RayCast3D" parent="InverseKinematicController/leg4"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.51901, 0.416834, -0.961133)
+
 [node name="falling" type="RayCast3D" parent="."]
-target_position = Vector3(0, -3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48301, 0)
+target_position = Vector3(0, -3.5, 0)
 
 [editable path="simple_walker"]

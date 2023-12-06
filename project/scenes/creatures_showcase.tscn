@@ -112,7 +112,7 @@ skeleton = NodePath("../../bar_obstacle4")
 surface_material_override/0 = ExtResource("1_gpfok")
 
 [node name="bar_obstacle7" type="StaticBody3D" parent="scene/obstacles"]
-transform = Transform3D(0.0293438, 0, -1.00959, 0, 2.3944, 0, 1.49962, 0, 0.0197552, -3.00043, 0.49877, 5.11593)
+transform = Transform3D(0.0293438, 0, -1.00959, 0, 2.3944, 0, 1.49962, 0, 0.0197552, -3.00043, 0.19809, 5.11593)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle7"]
 shape = SubResource("BoxShape3D_tig71")
@@ -238,7 +238,7 @@ mesh = SubResource("BoxMesh_xngi0")
 surface_material_override/0 = ExtResource("1_gpfok")
 
 [node name="bar_obstacle9" type="StaticBody3D" parent="scene/obstacles"]
-transform = Transform3D(0.0290552, 0, -4.71883, 0, 5.49881, 0, 1.48486, 0, 0.0923361, -1.43219, 0.49877, 5.11593)
+transform = Transform3D(0.0290552, 0, -4.71883, 0, 5.49881, 0, 1.48486, 0, 0.0923361, -1.43219, 0.023483, 5.11593)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle9"]
 shape = SubResource("BoxShape3D_tig71")
@@ -250,12 +250,24 @@ skeleton = NodePath("../../bar_obstacle4")
 surface_material_override/0 = ExtResource("1_gpfok")
 
 [node name="bar_obstacle10" type="StaticBody3D" parent="scene/obstacles"]
-transform = Transform3D(0.0290552, 0, -4.71883, 0, 9.7881, 0, 1.48486, 0, 0.0923361, 0.975749, 0.452095, 5.11593)
+transform = Transform3D(0.0290552, 0, -4.71883, 0, 9.7881, 0, 1.48486, 0, 0.0923361, 0.812145, -0.267555, 5.11593)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle10"]
 shape = SubResource("BoxShape3D_tig71")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle10"]
+transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = SubResource("BoxMesh_xngi0")
+skeleton = NodePath("../../bar_obstacle4")
+surface_material_override/0 = ExtResource("1_gpfok")
+
+[node name="bar_obstacle11" type="StaticBody3D" parent="scene/obstacles"]
+transform = Transform3D(0.0290552, 0, -4.71883, 0, 9.7881, 0, 1.48486, 0, 0.0923361, 3.24896, 0.326787, 5.11593)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="scene/obstacles/bar_obstacle11"]
+shape = SubResource("BoxShape3D_tig71")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="scene/obstacles/bar_obstacle11"]
 transform = Transform3D(2, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 mesh = SubResource("BoxMesh_xngi0")
 skeleton = NodePath("../../bar_obstacle4")
@@ -309,3 +321,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.86238, 0, 3.19484)
 
 [node name="pause_screen" parent="." instance=ExtResource("4_oy5qw")]
 visible = false
+
+[connection signal="restart_level_pressed" from="pause_screen" to="." method="_on_pause_screen_restart_level_pressed"]

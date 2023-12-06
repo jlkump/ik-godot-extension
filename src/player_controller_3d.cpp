@@ -60,7 +60,6 @@ void PlayerController3D::on_camera_transform_updated(Transform3D transform) {
 int PlayerController3D::num_legs_colliding() {
     int count = 0;
     for (int i = 0; i < leg_colliders_.size(); i++) {
-        leg_colliders_[i]->set_target_position(leg_colliders_[i]->get_global_transform().xform_inv(leg_colliders_[i]->get_global_position() - Vector3(0, 0.3, 0)));
         leg_colliders_[i]->force_raycast_update();
         if (leg_colliders_[i]->is_colliding()) {
             count++;

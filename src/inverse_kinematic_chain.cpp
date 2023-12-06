@@ -23,8 +23,7 @@ void InverseKinematicChain::_bind_methods() {
     BIND_GETTER_SETTER(InverseKinematicChain, target_threshold, PropertyInfo(Variant::FLOAT, "target_threshold", PROPERTY_HINT_RANGE, "0.001,2.0,0.001"));
     BIND_GETTER_SETTER(InverseKinematicChain, calculation_threshold, PropertyInfo(Variant::FLOAT, "calculation_threshold", PROPERTY_HINT_RANGE, "0.001,2.0,0.001"));
 
-    // Ended up not being needed
-    // BIND_GETTER_SETTER(InverseKinematicChain, end_effector_collider_path, PropertyInfo(Variant::NODE_PATH, "end_effector_collision_area_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
+    BIND_GETTER_SETTER(InverseKinematicChain, end_effector_collider_path, PropertyInfo(Variant::NODE_PATH, "end_effector_ray_path", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "Node3D"));
 
     BIND_GETTER_SETTER(InverseKinematicChain, constraint_mins_horizontal, PropertyInfo(Variant::ARRAY, "NOT_FUNCTIONAL_horizontal_constaint_min", PROPERTY_HINT_ARRAY_TYPE, "Float"));
     BIND_GETTER_SETTER(InverseKinematicChain, constraint_maxs_horizontal, PropertyInfo(Variant::ARRAY, "NOT_FUNCTIONAL_horizontal_constaint_max", PROPERTY_HINT_ARRAY_TYPE, "Float"));
@@ -217,6 +216,9 @@ void InverseKinematicChain::update_joint_nodes() {
             Vector3 y_basis = joints_[i].direction_to(joints_[i + 1]).normalized();
             Vector3 old_y_basis = old_basis.xform(Vector3(0, 1, 0));
             Vector3 x_basis = y_basis.cross(Vector3(0, 1, 0)).normalized();
+            if (x_basis.cross(y_basis).length() == 0) {
+                x_basis = y_basis.cross(Vector3(0, 0, 1)).normalized();
+            }
             // Update the basis, making sure to keep the scale of the previous basis
             Vector3 old_scale = old_global_trans.basis.get_scale();
             old_global_trans.basis =  Basis(x_basis, y_basis, x_basis.cross(y_basis));
@@ -310,7 +312,11 @@ void InverseKinematicChain::_process(double delta) {
         update_joints();
         // Update the end_effector collider (if it exists) to be placed at the end of the bone's position.
         if (end_effector_collider_ray_ != nullptr) {
+            UtilityFunctions::print("Setting ray position to: ", joints_[joints_.size() - 1]);
             end_effector_collider_ray_->set_global_position(joints_[joints_.size() - 1]);
+            end_effector_collider_ray_->set_target_position(end_effector_collider_ray_->get_global_transform()
+                    .xform_inv(end_effector_collider_ray_->get_global_position() - 
+                    Vector3(0, 0.3, 0)));
         }
     }
 }

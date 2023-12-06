@@ -26,7 +26,7 @@ ik_controller_path = NodePath("InverseKinematicController")
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="LeftLeg" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0359643, 1.75736, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1.757, 0)
 
 [node name="TopJoint_ll" type="Node3D" parent="LeftLeg"]
 transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
@@ -68,6 +68,8 @@ surface_material_override/0 = ExtResource("3_6eg0f")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.795948, -1.50236e-07)
 
 [node name="end_lf" type="RayCast3D" parent="LeftLeg/TopJoint_ll/KneeJoint_ll/Endl"]
+transform = Transform3D(1, 0, -3.55271e-15, 0, 1, -7.10543e-15, 3.55271e-15, 7.10543e-15, 1, 0, 0, 0)
+target_position = Vector3(0, -0.3, 0)
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 2.2, 0)
@@ -94,9 +96,8 @@ surface_material_override/0 = ExtResource("2_yo8sd")
 [node name="InverseKinematicController" type="InverseKinematicController" parent="."]
 ik_chain_paths = [NodePath("lef")]
 ik_ray_paths = [NodePath("../left")]
-interp_speed = 5.0
+interp_speed = 4.0
 stride = 1.0
-stride_height = 0.2
 stride_update_distance = 0.2
 
 [node name="lef" type="InverseKinematicChain" parent="InverseKinematicController"]
@@ -104,6 +105,7 @@ marker_pos_node_path = NodePath("../../LeftLeg")
 ik_joint_paths = [NodePath("../../LeftLeg/TopJoint_ll"), NodePath("../../LeftLeg/TopJoint_ll/KneeJoint_ll"), NodePath("../../LeftLeg/TopJoint_ll/KneeJoint_ll/Endl")]
 target_threshold = 0.01
 calculation_threshold = 0.01
+end_effector_ray_path = NodePath("../../LeftLeg/TopJoint_ll/KneeJoint_ll/Endl/end_lf")
 NOT_FUNCTIONAL_horizontal_constaint_min = [45, 45, 45]
 NOT_FUNCTIONAL_horizontal_constaint_max = [45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_min = [45, 45, 45]
@@ -118,5 +120,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.93346, 0)
 target_position = Vector3(0, -2, 0)
 
 [node name="left" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0622421, 1.58243, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00222599, 1.58243, 0)
 target_position = Vector3(0, -2.3, 0)

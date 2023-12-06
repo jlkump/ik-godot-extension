@@ -92,3 +92,8 @@ func spawn_complete_walker():
 					(ik_chains[i] as InverseKinematicChain).set_target_pos_path(target_paths[i].get_path())
 		else:
 			printerr("didnt get ik con")
+
+
+func _on_pause_screen_restart_level_pressed():
+	start_new_game()
+	GameManager.get_singleton().toggle_pause()
