@@ -21,7 +21,8 @@ height = 0.967428
 
 [node name="mono-leg-walker" type="PlayerController3D"]
 falling_ray_path = NodePath("falling")
-leg_colliders = [NodePath("LeftLeg/TopJoint_ll/KneeJoint_ll/Endl/end_lf"), NodePath("")]
+leg_colliders = [NodePath("LeftLeg/TopJoint_ll/KneeJoint_ll/Endl/end_lf")]
+ik_controller_path = NodePath("InverseKinematicController")
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="LeftLeg" type="Node3D" parent="."]
@@ -91,8 +92,8 @@ mesh = SubResource("BoxMesh_erpkh")
 surface_material_override/0 = ExtResource("2_yo8sd")
 
 [node name="InverseKinematicController" type="InverseKinematicController" parent="."]
-ik_chain_paths = [NodePath("lef"), NodePath("rig")]
-ik_ray_paths = [NodePath("../left"), NodePath("")]
+ik_chain_paths = [NodePath("lef")]
+ik_ray_paths = [NodePath("../left")]
 interp_speed = 5.0
 stride = 1.0
 stride_height = 0.2
@@ -107,11 +108,6 @@ NOT_FUNCTIONAL_horizontal_constaint_min = [45, 45, 45]
 NOT_FUNCTIONAL_horizontal_constaint_max = [45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_min = [45, 45, 45]
 NOT_FUNCTIONAL_vertical_constaint_max = [45, 45, 45]
-
-[node name="rig" type="InverseKinematicChain" parent="InverseKinematicController"]
-ik_joint_paths = [NodePath(""), NodePath(""), NodePath("")]
-target_threshold = 0.01
-calculation_threshold = 0.01
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.21496, 0)

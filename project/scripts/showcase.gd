@@ -9,25 +9,45 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("character_walker"):
-		$player_cam.set_focus_object_path(NodePath())
-		player_character.queue_free()
+		print("Character test walker")
+		var old_player_character = player_character
 		spawn_simple_walker()
-		# instantiate walker
-		pass
+		player_character.set_global_position(old_player_character.get_global_position())
+		old_player_character.queue_free()
+		
 	if event.is_action_pressed("character_hopper"):
 		print("Character hopper")
 		$player_cam.set_focus_object_path(NodePath())
-		player_character.queue_free()
+		var old_player_character = player_character
 		spawn_hopper()
-		# instantiate walker
-		pass
+		player_character.set_global_position(old_player_character.get_global_position())
+		old_player_character.queue_free()
+
 	if event.is_action_pressed("character_complete_walker"):
+		print("Character walker")
 		$player_cam.set_focus_object_path(NodePath())
-		player_character.queue_free()
+		var old_player_character = player_character
 		spawn_complete_walker()
+		player_character.set_global_position(old_player_character.get_global_position())
+		old_player_character.queue_free()
 
 func spawn_simple_walker():
-	pass
+	player_character = preload("res://scenes/prefabs/test_walker.tscn").instantiate()
+	if (player_character as PlayerController3D):
+		add_child(player_character)
+		(player_character as PlayerController3D).set_camera_controller_path($player_cam.get_path())
+		$player_cam.set_focus_object_path(player_character.get_path())
+		var ik_con = (player_character as PlayerController3D).get_ik_con_obj()
+		if (ik_con as InverseKinematicController):
+			print("Got ik con")
+			var ik_chains = ik_con.get_ik_chain_objs()
+			for i in ik_chains.size():
+				var target_paths = $targets/test_walker.get_children()
+				if (ik_chains[i] as InverseKinematicChain):
+					print("Got ik chain")
+					(ik_chains[i] as InverseKinematicChain).set_target_pos_path(target_paths[i].get_path())
+		else:
+			printerr("didnt get ik con")
 
 func spawn_hopper():
 	player_character = preload("res://scenes/prefabs/biped_walker.tscn").instantiate()

@@ -23,6 +23,7 @@ body_height = 0.1
 adjustment_threshold = 0.01
 move_speed = 1.4
 run_speed = 2.0
+ik_controller_path = NodePath("InverseKinematicController")
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
