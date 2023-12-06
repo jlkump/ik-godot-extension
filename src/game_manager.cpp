@@ -11,6 +11,9 @@ GameManager* GameManager::instance;
 
 void GameManager::_bind_methods() {
     ADD_SIGNAL(MethodInfo("game_pause", PropertyInfo(Variant::BOOL, "is_game_paused")));
+
+    ClassDB::bind_method(D_METHOD("toggle_pause"), &GameManager::toggle_pause);
+    ClassDB::bind_static_method(StringName("GameManager"), D_METHOD("get_singleton"), &GameManager::get_singleton);
 }
 
 GameManager::GameManager() : game_state_(PLAYING) {

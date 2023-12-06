@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bn48negra2bhv"]
+[gd_scene load_steps=12 format=3 uid="uid://bn48negra2bhv"]
 
 [ext_resource type="Script" path="res://scripts/showcase.gd" id="1_61dme"]
 [ext_resource type="Material" uid="uid://dmyli5lcsmfws" path="res://resources/materials/obstacle_mat.tres" id="1_gpfok"]
 [ext_resource type="PackedScene" uid="uid://dmlanl6sym1x7" path="res://scenes/prefabs/player_cam.tscn" id="3_nrh3y"]
+[ext_resource type="PackedScene" uid="uid://c6ogrtf22tloi" path="res://scenes/prefabs/pause_screen.tscn" id="4_oy5qw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rkpow"]
 size = Vector3(1.9803, 0.0156242, 1.95682)
@@ -13,7 +14,7 @@ size = Vector3(1.9803, 0.0156242, 1.95682)
 albedo_color = Color(0.184314, 0.2, 0.141176, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tig71"]
-size = Vector3(2.00184, 0.391568, 0.416826)
+size = Vector3(2.00184, 0.402087, 0.416826)
 
 [sub_resource type="BoxMesh" id="BoxMesh_xngi0"]
 
@@ -305,3 +306,6 @@ orbit_rotation = 3.141
 
 [node name="spawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.86238, 0, 3.19484)
+
+[node name="pause_screen" parent="." instance=ExtResource("4_oy5qw")]
+visible = false

@@ -3,9 +3,17 @@ extends Node
 var player_character = null
 
 func _ready():
+	start_new_game()
+	GameManager.get_singleton().connect("game_pause", Callable(self, "on_game_paused"))
+
+func on_game_paused(val):
+	$pause_screen.visible = val
+
+func start_new_game():
+	if (player_character != null):
+		player_character.queue_free()
 	spawn_complete_walker()
 	player_character.set_global_position($spawn.get_global_position())
-	pass
 
 func _input(event):
 	if event.is_action_pressed("character_walker"):
