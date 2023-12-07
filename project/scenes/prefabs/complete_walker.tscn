@@ -100,19 +100,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.96195, 0)
 shape = SubResource("BoxShape3D_5ogj5")
 
 [node name="leg1" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.44527, 4.974, 1.69145)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.81956, 4.974, 1.69145)
 target_position = Vector3(0, -8, 0)
 
 [node name="leg2" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1166, 4.974, 1.71089)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.74231, 4.974, 1.71089)
 target_position = Vector3(0, -8, 0)
 
 [node name="leg3" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.92494, 4.974, -1.69145)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55065, 4.974, -1.69145)
 target_position = Vector3(0, -8, 0)
 
 [node name="leg4" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.42585, 4.974, -1.69145)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.80014, 4.974, -1.69145)
 target_position = Vector3(0, -8, 0)
 
 [node name="marker_leg1" type="Node3D" parent="."]

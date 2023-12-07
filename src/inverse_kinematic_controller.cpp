@@ -33,10 +33,10 @@ void InverseKinematicController::update_leg_target(int i) {
     ray->force_raycast_update();
     Vector3 collision_pos = ray->get_collision_point();
 
-    Vector3 extrapolated_speed = (collision_pos - previous_colisions_[i]).normalized() / time_since_update_[i];
-    ray->set_position(extrapolated_speed * stride_ + resting_pos_[i]);
-    ray->force_raycast_update();
-    if (target_pos_[i].distance_to(ray->get_collision_point()) > 0.1f) {
+    // Vector3 extrapolated_speed = (collision_pos - previous_colisions_[i]).normalized() / time_since_update_[i];
+    // ray->set_position(extrapolated_speed * stride_ + resting_pos_[i]);
+    // ray->force_raycast_update();
+    if (target_pos_[i].distance_to(collision_pos) > 0.1f) {
         collision_pos = ray->get_collision_point();
         initial_pos_[i] = target_pos_[i];
         target_pos_[i] = collision_pos;
