@@ -22,6 +22,7 @@ height = 0.967428
 [node name="mono-leg-walker" type="PlayerController3D"]
 falling_ray_path = NodePath("falling")
 leg_colliders = [NodePath("LeftLeg/TopJoint_ll/KneeJoint_ll/Endl/end_lf")]
+body_height = 0.6
 ik_controller_path = NodePath("InverseKinematicController")
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
@@ -97,8 +98,10 @@ surface_material_override/0 = ExtResource("2_yo8sd")
 ik_chain_paths = [NodePath("lef")]
 ik_ray_paths = [NodePath("../left")]
 interp_speed = 4.0
-stride = 1.0
-stride_update_distance = 0.2
+stride = 0.0
+stride_height = 0.2
+stride_update_distance = 0.3
+leg_update_offset = 1
 
 [node name="lef" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../LeftLeg")

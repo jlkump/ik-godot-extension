@@ -62,6 +62,7 @@ namespace godot {
         Node3D* get_target_pos_node();
         bool is_end_effector_colliding() const;
         float get_reach() const;
+        float get_distance_to_target(Vector3 target) const;
 
         DECLARE_GETTER_SETTER(Array, joint_paths)
         DECLARE_GETTER_SETTER(Array, constraint_mins_horizontal)

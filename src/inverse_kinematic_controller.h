@@ -27,6 +27,14 @@ namespace godot {
         float stride_;
         float stride_update_dist_;
         float stride_height_;
+        float return_to_resting_;
+        std::vector<float> time_since_update_;
+
+        int update_offset_;
+        int update_offset_count_;
+
+        void update_leg_target(int index);
+        void interpolate_leg(int index, float delta);
 
         // Resting pos is the local pos of each ray
         std::vector<Vector3> resting_pos_;
@@ -34,11 +42,6 @@ namespace godot {
         std::vector<Vector3> initial_pos_;
         std::vector<Vector3> target_pos_;
         std::vector<float> parametric_deltas_;  // How far along in the interpolation we are
-        // When this exceeds the max for rest time, 
-        // we move the desired position back to the resting pos
-        // This only gets increased when the legs haven't moved and is reset to 0 on every move
-        std::vector<float> time_not_in_resting_;
-        float time_return_to_rest_;
 
         void initialize_resting_positions();
         // inline float calculate_stride();
@@ -64,6 +67,8 @@ namespace godot {
         DECLARE_GETTER_SETTER(float, stride)
         DECLARE_GETTER_SETTER(float, stride_update_dist)
         DECLARE_GETTER_SETTER(float, stride_height)
+        DECLARE_GETTER_SETTER(float, return_to_resting)
+        DECLARE_GETTER_SETTER(int, leg_update_offset)
     };
 }
 

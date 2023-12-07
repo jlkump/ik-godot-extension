@@ -312,7 +312,7 @@ void InverseKinematicChain::_process(double delta) {
         update_joints();
         // Update the end_effector collider (if it exists) to be placed at the end of the bone's position.
         if (end_effector_collider_ray_ != nullptr) {
-            UtilityFunctions::print("Setting ray position to: ", joints_[joints_.size() - 1]);
+            // UtilityFunctions::print("Setting ray position to: ", joints_[joints_.size() - 1]);
             end_effector_collider_ray_->set_global_position(joints_[joints_.size() - 1]);
             end_effector_collider_ray_->set_target_position(end_effector_collider_ray_->get_global_transform()
                     .xform_inv(end_effector_collider_ray_->get_global_position() - 
@@ -339,6 +339,14 @@ float InverseKinematicChain::get_reach() const {
         reach += distances_[i];
     }
     return reach;
+}
+
+float InverseKinematicChain::get_distance_to_target(Vector3 target) const {
+    if (ik_joints_.size() <= 0 || ik_joints_[0] == nullptr) {
+        return 0.0f;
+    } else {
+        return target.distance_to(ik_joints_[0]->get_global_position());
+    }
 }
 
 Array InverseKinematicChain::get_joint_paths() const {

@@ -14,15 +14,51 @@ void InverseKinematicController::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_paused_state", "is_paused"), &InverseKinematicController::set_paused_state);
 
-    BIND_GETTER_SETTER(InverseKinematicController, ik_chain_paths, PropertyInfo(Variant::ARRAY, "ik_chain_paths", PROPERTY_HINT_ARRAY_TYPE, "NodePath"));
-    BIND_GETTER_SETTER(InverseKinematicController, ik_ray_paths, PropertyInfo(Variant::ARRAY, "ik_ray_paths", PROPERTY_HINT_ARRAY_TYPE, "NodePath"));
-    BIND_GETTER_SETTER(InverseKinematicController, interp_speed, PropertyInfo(Variant::FLOAT, "interp_speed", PROPERTY_HINT_RANGE, "0.02,10.0,0.001"));
-    BIND_GETTER_SETTER(InverseKinematicController, stride, PropertyInfo(Variant::FLOAT, "stride", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"));
-    BIND_GETTER_SETTER(InverseKinematicController, stride_height, PropertyInfo(Variant::FLOAT, "stride_height", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"));
-    BIND_GETTER_SETTER(InverseKinematicController, stride_update_dist, PropertyInfo(Variant::FLOAT, "stride_update_distance", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"));
+    BIND_GETTER_SETTER(InverseKinematicController, ik_chain_paths, PropertyInfo(Variant::ARRAY, "ik_chain_paths", PROPERTY_HINT_ARRAY_TYPE, "NodePath"))
+    BIND_GETTER_SETTER(InverseKinematicController, ik_ray_paths, PropertyInfo(Variant::ARRAY, "ik_ray_paths", PROPERTY_HINT_ARRAY_TYPE, "NodePath"))
+    BIND_GETTER_SETTER(InverseKinematicController, interp_speed, PropertyInfo(Variant::FLOAT, "interp_speed", PROPERTY_HINT_RANGE, "0.02,10.0,0.001"))
+    BIND_GETTER_SETTER(InverseKinematicController, stride, PropertyInfo(Variant::FLOAT, "stride", PROPERTY_HINT_RANGE, "0.0,100.0,0.001"))
+    BIND_GETTER_SETTER(InverseKinematicController, stride_height, PropertyInfo(Variant::FLOAT, "stride_height", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"))
+    BIND_GETTER_SETTER(InverseKinematicController, stride_update_dist, PropertyInfo(Variant::FLOAT, "stride_update_distance", PROPERTY_HINT_RANGE, "0.0,100.0,0.001"))
+    BIND_GETTER_SETTER(InverseKinematicController, return_to_resting, PropertyInfo(Variant::FLOAT, "time_return_to_rest", PROPERTY_HINT_RANGE, "0.01,100.0,0.001"))
+
+    BIND_GETTER_SETTER(InverseKinematicController, leg_update_offset, PropertyInfo(Variant::INT, "leg_update_offset", PROPERTY_HINT_RANGE, "0,100,1"))
 
     ClassDB::bind_method(D_METHOD("get_ik_chain_objs"), &InverseKinematicController::get_ik_chain_objs);
 
+}
+
+void InverseKinematicController::update_leg_target(int i) {
+    RayCast3D* ray = ik_rays_[i];
+    ray->force_raycast_update();
+    Vector3 collision_pos = ray->get_collision_point();
+
+    Vector3 extrapolated_speed = (collision_pos - previous_colisions_[i]).normalized() / time_since_update_[i];
+    ray->set_position(extrapolated_speed * stride_ + resting_pos_[i]);
+    ray->force_raycast_update();
+    if (target_pos_[i].distance_to(ray->get_collision_point()) > 0.1f) {
+        collision_pos = ray->get_collision_point();
+        initial_pos_[i] = target_pos_[i];
+        target_pos_[i] = collision_pos;
+
+        UtilityFunctions::print("Ray direction is: ", (collision_pos - previous_colisions_[i]));
+        parametric_deltas_[i] = 0.0f;
+        time_since_update_[i] = 0.0f;
+    }
+    previous_colisions_[i] = collision_pos;
+    ray->set_position(resting_pos_[i]);
+}
+
+void InverseKinematicController::interpolate_leg(int i, float delta) {
+        // Update the actual leg with IK
+        if (parametric_deltas_[i] <= 1.0f) {
+            Vector3 interp_pos = initial_pos_[i].lerp(target_pos_[i], parametric_deltas_[i]);
+            interp_pos.y = initial_pos_[i].y + sin(parametric_deltas_[i] * 3.14) * stride_height_;
+            parametric_deltas_[i] += delta * interp_speed_;
+            ik_chains_[i]->get_target_pos_node()->set_global_position(interp_pos);
+        } else {
+            ik_chains_[i]->get_target_pos_node()->set_global_position(target_pos_[i]);
+        }
 }
 
 InverseKinematicController::InverseKinematicController() : 
@@ -30,7 +66,9 @@ InverseKinematicController::InverseKinematicController() :
     stride_(0.3f),
     stride_update_dist_(0.6f),
     stride_height_(0.3f),
-    is_paused_(false)
+    is_paused_(false),
+    update_offset_(2),
+    return_to_resting_(1.5f)
 {}
 
 InverseKinematicController::~InverseKinematicController() {}
@@ -52,6 +90,8 @@ void InverseKinematicController::initialize_resting_positions() {
         }
     }
     parametric_deltas_.resize(ik_rays_.size(), 0.0f);
+    time_since_update_.resize(ik_rays_.size(), 0.0f);
+
 }
 
 void InverseKinematicController::set_paused_state(bool is_paused) {
@@ -84,44 +124,29 @@ void InverseKinematicController::_process(double delta) {
     }
 
     for (int i = 0; i < ik_rays_.size(); i++) {
-        RayCast3D* ray = ik_rays_[i];
-        if (ray != nullptr && ik_chains_[i]->get_target_pos_node() != nullptr) {
-            ray->force_raycast_update();
-            Vector3 desired_pos;
-            Vector3 collision_pos = ray->get_collision_point();
-            if (ray->is_colliding()) {
-                desired_pos = (collision_pos - previous_colisions_[i])
-                    .clamp(Vector3(-stride_, 0, -stride_), Vector3(stride_, 0, stride_)) 
-                    + collision_pos;
-                previous_colisions_[i] = collision_pos;
-            } else {
-                // Todo: Have the legs hang rather than go to resting
-                // Right now, goes to last valid position
-                desired_pos = initial_pos_[i];
-            }
+        time_since_update_[i] += delta;
+    }
 
-            Vector3 cur_end_pos = ik_chains_[i]->get_target_pos_node()->get_global_position();
-
-            // See if we should move the leg
-            if (collision_pos.distance_to(target_pos_[i]) > stride_update_dist_) {
-                target_pos_[i] = desired_pos;
-                initial_pos_[i] = cur_end_pos; // Need to reset this y pos to the floor
-                initial_pos_[i].y = collision_pos.y;
-                parametric_deltas_[i] = delta * interp_speed_;
-            }
-
-            // Update the actual leg with IK
-            if (parametric_deltas_[i] <= 1.0f) {
-                Vector3 interp_pos = initial_pos_[i].lerp(target_pos_[i], parametric_deltas_[i]);
-                interp_pos.y = initial_pos_[i].y + sin(parametric_deltas_[i] * 3.14) * stride_height_;
-                parametric_deltas_[i] += delta * interp_speed_;
-                ik_chains_[i]->get_target_pos_node()->set_global_position(interp_pos);
-            } else {
-                ik_chains_[i]->get_target_pos_node()->set_global_position(target_pos_[i]);
+    for (int i = 0; i < ik_rays_.size(); i++) {
+        if (ik_chains_[i]->get_target_pos_node() != nullptr && ik_rays_[i] != nullptr) {
+            ik_rays_[i]->force_raycast_update();
+            if ((ik_chains_[i]->get_distance_to_target(target_pos_[i]) > ik_chains_[i]->get_reach() ||
+                 ik_rays_[i]->get_collision_point().distance_to(target_pos_[i]) > stride_update_dist_) ||
+                 time_since_update_[i] > return_to_resting_) {
+                    update_leg_target(i);
             }
         }
-
     }
+
+    for (int i = 0; i < ik_rays_.size(); i++) {
+        if (ik_chains_[i] != nullptr) {
+            interpolate_leg(i, delta);
+        }
+    }
+
+
+    // UtilityFunctions::print("Offset count is: ", update_offset_count_, " with an update offset of ", update_offset_);
+    // update_offset_count_ = (update_offset_count_ + 1) % update_offset_;
 }
 
 
@@ -182,10 +207,24 @@ void InverseKinematicController::set_stride_height(const float height) {
     stride_height_ = height;
 }
 
+float InverseKinematicController::get_return_to_resting() const {
+    return return_to_resting_;
+}
+void InverseKinematicController::set_return_to_resting(const float time) {
+    return_to_resting_ = time;
+}
+
 Array InverseKinematicController::get_ik_chain_objs() const {
     Array res;
     for (InverseKinematicChain* chain : ik_chains_) {
         res.push_back(chain);
     }
     return res;
+}
+
+int InverseKinematicController::get_leg_update_offset() const {
+    return update_offset_;
+}
+void InverseKinematicController::set_leg_update_offset(const int offset) {
+    update_offset_ = offset;
 }
