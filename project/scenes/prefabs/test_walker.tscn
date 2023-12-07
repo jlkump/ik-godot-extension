@@ -318,6 +318,8 @@ target_position = Vector3(0, -1.3, 0)
 ik_chain_paths = [NodePath("Leg_1"), NodePath("Leg_2"), NodePath("Leg_3"), NodePath("Leg_4")]
 ik_ray_paths = [NodePath("../Leg1_ray"), NodePath("../Leg2_ray"), NodePath("../Leg3_ray"), NodePath("../Leg4_ray")]
 interp_speed = 5.0
+stride = 0.1
+stride_update_distance = 0.2
 
 [node name="Leg_1" type="InverseKinematicChain" parent="InverseKinematicController"]
 marker_pos_node_path = NodePath("../../Body/Leg1_pos")

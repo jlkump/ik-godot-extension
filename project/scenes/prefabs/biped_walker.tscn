@@ -98,9 +98,7 @@ surface_material_override/0 = ExtResource("2_yo8sd")
 ik_chain_paths = [NodePath("lef")]
 ik_ray_paths = [NodePath("../left")]
 interp_speed = 4.0
-stride = 0.0
 stride_height = 0.2
-stride_update_distance = 0.3
 leg_update_offset = 1
 
 [node name="lef" type="InverseKinematicChain" parent="InverseKinematicController"]
