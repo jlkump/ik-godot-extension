@@ -1,7 +1,8 @@
 # Overview
 This is my Inverse Kinematics project built as an extension to Godot. It allows for a variable
-number of joints in a chain of joints for IK to be performed on. It also allows for the chain
-itself to be moved around by defining a marker node.
+number of joints in a chain of joints for IK. It also allows for the chain
+itself to be moved around by defining a marker node. For a walkthrough
+on how this project was done, follow this link[https://jlkump.github.io/projects/inverse-kinematics-godot.html]
 
 ## Build the example project
 If you would like to see the example project for yourself, follow the steps below:
