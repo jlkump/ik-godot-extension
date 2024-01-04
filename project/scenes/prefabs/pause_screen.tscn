@@ -11,13 +11,31 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7u3an")
 
-[node name="Panel" type="Panel" parent="."]
-modulate = Color(1, 1, 1, 0.756863)
-layout_mode = 0
-offset_right = 1154.0
-offset_bottom = 648.0
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0.756863)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.047
@@ -29,22 +47,22 @@ offset_top = -0.0240059
 offset_right = 0.546021
 offset_bottom = 0.18396
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Game Paused"
 horizontal_alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/MarginContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Panel/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 alignment = 1
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/Panel/MarginContainer/VBoxContainer2"]
 layout_mode = 2
 text = "WASD for movement
 Q/E for rotation
@@ -55,7 +73,7 @@ Press 2 for Test Hopper
 Press 3 for Modeled Walker
 "
 
-[node name="Restart" type="Button" parent="Panel"]
+[node name="Restart" type="Button" parent="VBoxContainer/Panel"]
 layout_mode = 0
 offset_left = 306.0
 offset_top = 136.0
@@ -63,7 +81,7 @@ offset_right = 815.0
 offset_bottom = 229.0
 text = "Restart Level"
 
-[node name="Continue" type="Button" parent="Panel"]
+[node name="Continue" type="Button" parent="VBoxContainer/Panel"]
 layout_mode = 2
 offset_left = 307.0
 offset_top = 250.0
@@ -71,7 +89,7 @@ offset_right = 816.0
 offset_bottom = 343.0
 text = "Continue"
 
-[node name="Quit" type="Button" parent="Panel"]
+[node name="Quit" type="Button" parent="VBoxContainer/Panel"]
 layout_mode = 0
 offset_left = 308.0
 offset_top = 419.0
@@ -79,6 +97,6 @@ offset_right = 817.0
 offset_bottom = 512.0
 text = "Quit"
 
-[connection signal="pressed" from="Panel/Restart" to="." method="_on_restart_pressed"]
-[connection signal="pressed" from="Panel/Continue" to="." method="_on_continue_pressed"]
-[connection signal="pressed" from="Panel/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="VBoxContainer/Panel/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="VBoxContainer/Panel/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Panel/Quit" to="." method="_on_quit_pressed"]
